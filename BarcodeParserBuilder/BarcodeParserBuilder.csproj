@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net5.0;netcoreapp3.1;netstandard2.1;net47</TargetFrameworks>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<Title>BarcodeParserBuilder</Title>
+    <Version>0.0.1</Version>
+    <Authors>DacoTaco</Authors>
+    <Company></Company>
+    <Description>.NET library to parse and build barcode strings.
+
+
+The library allows .NET applications to throw any barcode string to it and receive an class object back that contains all the barcode data like 
+type, product code , product code type/schema, expiration date etc etc...
+
+The library also verifies all data when parsing &amp; setting properties so that it follows the specifications of the barcode type.
+ A barcode can be parsed and builded in less than 4 lines of code.
+
+Currently supports GS1, GS1-128, EAN/UPC, PPN, MSI &amp; HIBC.
+  
+When combined with barcode imaging projects like Zxing you can scan, parse, build &amp; create any barcode to your needs.
+</Description>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <Copyright>2021 DacoTaco</Copyright>
+    <PackageProjectUrl>https://github.com/DacoTaco/BarcodeParserBuilder</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DacoTaco/BarcodeParserBuilder</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -16,7 +16,7 @@ namespace BarcodeParserBuilder.GS1
             var objString = obj.Value.ToString(CultureInfo.InvariantCulture);
             var location = objString.IndexOf('.');
             objString = objString.Replace(".", "");
-            if (location < 0)
+            if (location < 0 || location > 9)
                 location = 0;
             else
                 location = objString.Length - location;

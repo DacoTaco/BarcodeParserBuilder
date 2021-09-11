@@ -56,7 +56,12 @@ namespace BarcodeParserBuilder.GS1
             new GS1Field("35"),
             new GS1Field("36"),
             new GS1Field("37"),
-            new GS1Field("39"),
+            new GS1Field("390"),
+            new GS1Field("391"),
+            new GS1Field<double?>("392", 1, 16),
+            new GS1Field("393"),
+            new GS1Field("394"),
+            new GS1Field("395"),
             new GS1Field("40"),
             new GS1Field("41"),
             new GS1Field("42"),
@@ -116,6 +121,12 @@ namespace BarcodeParserBuilder.GS1
         {
             get => (double?)BarcodeFields["320"].Value;
             set => BarcodeFields["320"].SetValue(value);
+        }
+
+        public double? Price
+        {
+            get => (double?)BarcodeFields["392"].Value;
+            set => BarcodeFields["392"].SetValue(value);
         }
     }
 

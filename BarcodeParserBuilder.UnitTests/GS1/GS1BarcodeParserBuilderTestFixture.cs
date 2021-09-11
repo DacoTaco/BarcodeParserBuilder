@@ -36,6 +36,11 @@ namespace BarcodeParserBuilder.UnitTests.GS1
                 result.NetWeightInPounds.Value.Should().BeApproximately(expectedBarcode.NetWeightInPounds.Value, 0.000001d);
             else
                 result.NetWeightInPounds.Should().BeNull();
+
+            if(expectedBarcode.Price.HasValue)
+                result.Price.Value.Should().BeApproximately(expectedBarcode.Price.Value, 0.000000000000001d);
+            else
+                result.Price.Should().BeNull();
         }
 
         [Theory]
@@ -220,6 +225,21 @@ namespace BarcodeParserBuilder.UnitTests.GS1
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
                     ProductionDate = null,
                     NetWeightInPounds = 3.54777d
+                }
+            };
+
+            //Price
+            yield return new object[]
+            {
+                $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226{GroupSeparator}3929123456789012345",
+                new GS1Barcode()
+                {
+                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    BatchNumber = "1724847.1",
+                    SerialNumber = "118165795226",
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
+                    ProductionDate = null,
+                    Price = 123456.789012345d
                 }
             };
         }

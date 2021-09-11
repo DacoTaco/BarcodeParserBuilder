@@ -17,7 +17,7 @@ namespace BarcodeParserBuilder.UnitTests.GS1
             var result = "";
 
             //Act
-            Action parseAction = () => result = (string)fieldParserBuilder.Parse(acceptedCharacters, null);
+            Action parseAction = () => result = (string)fieldParserBuilder.Parse(acceptedCharacters, null, null);
 
             //Assert
             parseAction.Should().NotThrow();
@@ -32,7 +32,7 @@ namespace BarcodeParserBuilder.UnitTests.GS1
             var rejectedString = $"!\"$012^3456789ABCDEF{(char)0x01}KL#MTU Vh{Environment.NewLine}i";
 
             //Act
-            Action parseAction = () => fieldParserBuilder.Parse(rejectedString, null);
+            Action parseAction = () => fieldParserBuilder.Parse(rejectedString, null, null);
 
             //Assert
             parseAction.Should()

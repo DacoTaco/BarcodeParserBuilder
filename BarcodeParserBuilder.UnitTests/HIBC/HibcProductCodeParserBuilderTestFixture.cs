@@ -18,7 +18,7 @@ namespace BarcodeParserBuilder.UnitTests.HIBC
             ProductCode result = null;
 
             //Act
-            Action parseAction = () => result = (ProductCode)fieldParserBuilder.Parse(productCode, null);
+            Action parseAction = () => result = (ProductCode)fieldParserBuilder.Parse(productCode, null, null);
 
             //Assert
             parseAction.Should().NotThrow();
@@ -38,7 +38,7 @@ namespace BarcodeParserBuilder.UnitTests.HIBC
             var fieldParserBuilder = new HibcProductCodeParserBuilder();
 
             //Act
-            Action parseAction = () => fieldParserBuilder.Parse(productCode, null);
+            Action parseAction = () => fieldParserBuilder.Parse(productCode, null, null);
 
             //Assert
             parseAction.Should()

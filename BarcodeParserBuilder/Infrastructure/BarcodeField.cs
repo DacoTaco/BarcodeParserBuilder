@@ -64,14 +64,14 @@ namespace BarcodeParserBuilder.Infrastructure
             if (!ValidateLength(value))
                 throw new ValidateException($"Invalid value Length {value?.Length ?? 0}. Expected {(FixedLength? null : "Max ")}{MaxLength} Bytes.");
 
-            Value = FieldParserBuilder.Parse(value, MaxLength);
+            Value = FieldParserBuilder.Parse(value, MinLength, MaxLength);
         }
 
         public string Build() => FieldParserBuilder.Build(Value);
 
         public void SetValue(object obj)
         {
-            Value = FieldParserBuilder.Parse(obj);
+            Value = FieldParserBuilder.Parse(obj, MinLength, MaxLength);
         }
     }
 }

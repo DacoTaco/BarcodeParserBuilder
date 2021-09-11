@@ -23,6 +23,8 @@ namespace BarcodeParserBuilder.GS1
             new FixedLengthGS1Field<BarcodeDateTime>("16", 6),
             new FixedLengthGS1Field<BarcodeDateTime>("17", 6),
             new FixedLengthGS1Field("20", 2),
+            new FixedLengthGS1Field<double?>("310", 7),
+            new FixedLengthGS1Field<double?>("320", 7),
 
             new GS1Field("10", 20),
             new GS1Field("21", 20),
@@ -34,8 +36,21 @@ namespace BarcodeParserBuilder.GS1
             new GS1Field("243", 20),
             new GS1Field("25"),
             new GS1Field("30"),
-            new GS1Field("31"),
-            new GS1Field("32"),
+            new GS1Field("311"),
+            new GS1Field("312"),
+            new GS1Field("313"),
+            new GS1Field("314"),
+            new GS1Field("315"),
+            new GS1Field("316"),
+            new GS1Field("321"),
+            new GS1Field("322"),
+            new GS1Field("323"),
+            new GS1Field("324"),
+            new GS1Field("325"),
+            new GS1Field("326"),
+            new GS1Field("327"),
+            new GS1Field("328"),
+            new GS1Field("329"),
             new GS1Field("33"),
             new GS1Field("34"),
             new GS1Field("35"),
@@ -89,6 +104,18 @@ namespace BarcodeParserBuilder.GS1
         {
             get => string.IsNullOrWhiteSpace((string)BarcodeFields["21"].Value) ? null : (string)BarcodeFields["21"].Value;
             set => BarcodeFields["21"].SetValue(value);
+        }
+
+        public double? NetWeightInKg
+        {
+            get => (double?)BarcodeFields["310"].Value;
+            set => BarcodeFields["310"].SetValue(value);
+        }
+
+        public double? NetWeightInPounds
+        {
+            get => (double?)BarcodeFields["320"].Value;
+            set => BarcodeFields["320"].SetValue(value);
         }
     }
 

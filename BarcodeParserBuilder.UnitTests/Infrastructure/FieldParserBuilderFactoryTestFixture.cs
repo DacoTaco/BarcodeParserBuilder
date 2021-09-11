@@ -18,6 +18,7 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
         [InlineData(BarcodeType.GS1, typeof(string), typeof(GS1StringParserBuilder))] //GS1 stringParserBuilder
         [InlineData(BarcodeType.GS1, typeof(ProductCode), typeof(GS1ProductCodeParserBuilder))] //GS1 ProductCodeParserBuilder
         [InlineData(BarcodeType.GS1, typeof(BarcodeDateTime), typeof(GS1DateParserBuilder))] //GS1 BarcodeDateTimeParserBuilder
+        [InlineData(BarcodeType.GS1, typeof(double?), typeof(GS1DoubleParserBuilder))] //GS1 GS1NullableDoubleParserBuilder
         [InlineData(BarcodeType.EAN, typeof(ProductCode), typeof(EanProductCodeParserBuilder))] //EAN ProductCodeParserBuilder
         [InlineData(BarcodeType.PPN, typeof(string), typeof(PpnStringParserBuilder))] //PPN stringParserBuilder
         [InlineData(BarcodeType.PPN, typeof(ProductCode), typeof(PpnProductCodeParserBuilder))] //PPN ProductCodeParserBuilder

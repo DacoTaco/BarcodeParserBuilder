@@ -18,6 +18,14 @@ namespace BarcodeParserBuilder.Infrastructure
             if (string.IsNullOrWhiteSpace(nameSpace))
                 throw new ArgumentException($"Failed to find Barcode class for barcode type {barcodeType}.");
 
+            //get base object type, not its nullable version
+            //Currently unused. not sure if we want nullable and not nullable to be parsed by the same parser
+            /*
+            objectType = Nullable.GetUnderlyingType(objectType) ?? objectType;
+            var nullableObjectType = (objectType.IsValueType)
+                ? typeof(Nullable<>).MakeGenericType(objectType)
+                : objectType;*/
+
             var parserBuilderType = AssemblyTypes.SingleOrDefault(t => t.IsClass &&
                             !t.IsAbstract &&
                             t.Namespace == nameSpace &&

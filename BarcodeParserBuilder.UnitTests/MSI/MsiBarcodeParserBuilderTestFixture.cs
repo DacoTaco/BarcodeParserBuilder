@@ -119,7 +119,7 @@ namespace BarcodeParserBuilder.UnitTests.MSI
             yield return new object[]
             {
                 $"91",
-                $"Failed to parse MSI Barcode :{Environment.NewLine}Invalid MSI value '91'."
+                $"Failed to parse MSI Barcode :{Environment.NewLine}Invalid string value '91' : Too small (2/3)."
             };
 
             //Invalid CheckDigit

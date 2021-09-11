@@ -19,7 +19,7 @@ namespace BarcodeParserBuilder.UnitTests.GS1
             ProductCode result = null;
 
             //Act
-            Action parseAction = () => result = (ProductCode)fieldParserBuilder.Parse(productCode, null);
+            Action parseAction = () => result = (ProductCode)fieldParserBuilder.Parse(productCode, null, null);
 
             //Assert
             parseAction.Should().NotThrow();
@@ -39,7 +39,7 @@ namespace BarcodeParserBuilder.UnitTests.GS1
             var fieldParserBuilder = new GS1ProductCodeParserBuilder();
 
             //Act
-            Action parseAction = () => fieldParserBuilder.Parse(productCode, null);
+            Action parseAction = () => fieldParserBuilder.Parse(productCode, null, null);
 
             //Assert
             parseAction.Should()

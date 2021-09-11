@@ -213,7 +213,7 @@ namespace BarcodeParserBuilder.UnitTests.PPN
             yield return new object[]
             {
                 $"{Prefix}9N111{Suffix}",
-                $"Failed to parse PPN Barcode :{Environment.NewLine}9N : Invalid PPN value '111'."
+                $"Failed to parse PPN Barcode :{Environment.NewLine}9N : Invalid string value '111' : Too small (3/4)."
             };
 
             //Missing AI

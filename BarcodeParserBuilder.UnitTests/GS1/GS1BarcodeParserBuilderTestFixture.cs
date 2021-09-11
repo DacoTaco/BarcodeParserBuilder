@@ -26,6 +26,16 @@ namespace BarcodeParserBuilder.UnitTests.GS1
             parsed.Should().BeTrue();
             parseAction.Should().NotThrow();
             CompareBarcodeObjects(expectedBarcode, result);
+
+            if (expectedBarcode.NetWeightInKg.HasValue)
+                result.NetWeightInKg.Value.Should().BeApproximately(expectedBarcode.NetWeightInKg.Value, 0.000001d);
+            else
+                result.NetWeightInKg.Should().BeNull();
+
+            if (expectedBarcode.NetWeightInPounds.HasValue)
+                result.NetWeightInPounds.Value.Should().BeApproximately(expectedBarcode.NetWeightInPounds.Value, 0.000001d);
+            else
+                result.NetWeightInPounds.Should().BeNull();
         }
 
         [Theory]
@@ -180,6 +190,36 @@ namespace BarcodeParserBuilder.UnitTests.GS1
                     SerialNumber = "118165795226",
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
                     ProductionDate = null
+                }
+            };
+
+            //NetWeight in Kg
+            yield return new object[]
+            {
+                $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226{GroupSeparator}3105354777",
+                new GS1Barcode()
+                {
+                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    BatchNumber = "1724847.1",
+                    SerialNumber = "118165795226",
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
+                    ProductionDate = null,
+                    NetWeightInKg = 3.54777d
+                }
+            };
+
+            //NetWeight in Pounds
+            yield return new object[]
+            {
+                $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226{GroupSeparator}3205354777",
+                new GS1Barcode()
+                {
+                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    BatchNumber = "1724847.1",
+                    SerialNumber = "118165795226",
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
+                    ProductionDate = null,
+                    NetWeightInPounds = 3.54777d
                 }
             };
         }

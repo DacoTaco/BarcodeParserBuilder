@@ -44,10 +44,7 @@ namespace BarcodeParserBuilder
 
         public ReadOnlyFieldCollection(KeyedCollection<string, IBarcodeField> innerCollection) : base(innerCollection)
         {
-            if(innerCollection == null)
-                throw new ArgumentException("innerCollection should not be null");
-
-            this.innerCollection = innerCollection;
+            this.innerCollection = innerCollection ?? throw new ArgumentException("innerCollection should not be null");
         }
 
         public IBarcodeField this[string identifier] => innerCollection[identifier];

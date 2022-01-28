@@ -48,25 +48,17 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             if (char.IsLetter(character))
                 return character - 55;
 
-            switch (character)
+            return character switch
             {
-                case '-':
-                    return 36;
-                case '.':
-                    return 37;
-                case ' ':
-                    return 38;
-                case '$':
-                    return 39;
-                case '/':
-                    return 40;
-                case '+':
-                    return 41;
-                case '%':
-                    return 42;
-            }
-
-            throw new HIBCValidateException($"Invalid character '{character}'.");
+                '-' => 36,
+                '.' => 37,
+                ' ' => 38,
+                '$' => 39,
+                '/' => 40,
+                '+' => 41,
+                '%' => 42,
+                _ => throw new HIBCValidateException($"Invalid character '{character}'."),
+            };
         }
 
         private static char GetCharacter(int weight)
@@ -77,25 +69,17 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             if (weight < 36)
                 return (char)(55 + weight);
 
-            switch (weight)
+            return weight switch
             {
-                case 36:
-                    return '-';
-                case 37:
-                    return '.';
-                case 38:
-                    return ' ';
-                case 39:
-                    return '$';
-                case 40:
-                    return '/';
-                case 41:
-                    return '+';
-                case 42:
-                    return '%';
-            }
-
-            throw new HIBCValidateException($"Invalid character index '{weight}'.");
+                36 => '-',
+                37 => '.',
+                38 => ' ',
+                39 => '$',
+                40 => '/',
+                41 => '+',
+                42 => '%',
+                _ => throw new HIBCValidateException($"Invalid character index '{weight}'."),
+            };
         }
     }
 }

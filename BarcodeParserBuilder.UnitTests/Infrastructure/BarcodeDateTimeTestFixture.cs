@@ -1,4 +1,4 @@
-﻿using BarcodeParserBuilder.HIBC;
+﻿using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
 using System;

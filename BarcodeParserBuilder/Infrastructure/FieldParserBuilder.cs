@@ -1,14 +1,8 @@
-﻿using BarcodeParserBuilder.Exceptions;
+﻿using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Exceptions;
 
 namespace BarcodeParserBuilder.Infrastructure
 {
-    public interface IFieldParserBuilder
-    {
-        object Parse(object obj, int? minimumLength, int? maximumLength);
-        object Parse(string value, int? minimumLength, int? maximumLength);
-        string Build(object obj);
-    }
-
     internal abstract class BaseFieldParserBuilder<T> : IFieldParserBuilder
     {
         public object Parse(object obj, int? minimumLength, int? maximumLength) => ValidateAndReTypeObject(obj, minimumLength, maximumLength);

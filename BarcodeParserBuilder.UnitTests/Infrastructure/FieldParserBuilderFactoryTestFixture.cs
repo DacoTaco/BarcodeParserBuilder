@@ -1,9 +1,9 @@
-﻿using BarcodeParserBuilder.EAN;
-using BarcodeParserBuilder.GS1;
-using BarcodeParserBuilder.HIBC;
+﻿using BarcodeParserBuilder.Barcodes.EAN;
+using BarcodeParserBuilder.Barcodes.GS1;
+using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Infrastructure;
-using BarcodeParserBuilder.MSI;
-using BarcodeParserBuilder.PPN;
+using BarcodeParserBuilder.Barcodes.MSI;
+using BarcodeParserBuilder.Barcodes.PPN;
 using FluentAssertions;
 using System;
 using System.Linq;

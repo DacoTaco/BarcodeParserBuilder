@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Barcodes;
+using System.Collections.Generic;
 
 namespace BarcodeParserBuilder.Infrastructure
 {
-    public interface IBarcodeParserBuilder { }
-    public abstract class BaseBarcodeParserBuilder<T> : IBarcodeParserBuilder
-        where T : Barcode
+    public abstract class BaseBarcodeParserBuilder<T> : IBaseBarcodeParserBuilder where T : Barcode
     {
         internal static int ParsingOrderNumber => 0;
 

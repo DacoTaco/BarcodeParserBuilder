@@ -1,20 +1,10 @@
-﻿using BarcodeParserBuilder.Exceptions;
+﻿using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Exceptions;
 using System;
 using System.IO;
 
 namespace BarcodeParserBuilder.Infrastructure
 {
-    public interface IBarcodeField
-    {
-        string Identifier { get; }
-        object Value { get; }
-        bool FixedLength { get; }
-        void Parse(string value);
-        void Parse(StringReader codeStream);
-        string Build();
-        void SetValue(object obj);
-    }
-
     internal class BarcodeField<T> : IBarcodeField
     {
         public BarcodeField(BarcodeType barcodeType, string identifier, int length) : this(barcodeType, identifier, length, length) { }

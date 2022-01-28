@@ -14,7 +14,7 @@ When combined with barcode imaging projects like Zxing you can scan, parse, buil
 ## Parsing Example  
 The following code  
 ```C#
-bool isSuccessful = ParserBuilder.TryParse($"0134567890123457103456789{(char)0x1D}213456789-012", out Barcode barcode);  
+bool isSuccessful = new BarcodeParserBuilder().TryParse($"0134567890123457103456789{(char)0x1D}213456789-012", out Barcode barcode);  
 Console.WriteLine($"The barcode was {(isSuccessful ? "parsed" : "unparsed")}!");  
 Console.WriteLine($"Barcode Type : {barcode.BarcodeType}");  
 Console.WriteLine($"Object Type : {barcode.GetType().Name}");  
@@ -43,7 +43,7 @@ GS1Barcode barcode = New GS1Barcode();
 barcode.ProductCode = ProductCode.ParseGtin("34567890123457");  
 barcode.BatchNumber = "3456789";  
 barcode.SerialNumber = "3456789-012";  
-string barcodeString = ParserBuilder.Build(barcode);  
+string barcodeString = new BarcodeParserBuilder().Build(barcode);  
 Console.WriteLine($"barcode String : {barcodeString}");  
 ```
 

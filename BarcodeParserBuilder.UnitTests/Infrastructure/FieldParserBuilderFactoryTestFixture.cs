@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Xunit;
+using BarcodeParserBuilder.Abstraction;
 
 namespace BarcodeParserBuilder.UnitTests.Infrastructure
 {

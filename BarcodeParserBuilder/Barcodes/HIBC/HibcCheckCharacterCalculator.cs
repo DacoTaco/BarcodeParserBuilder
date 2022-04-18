@@ -8,12 +8,12 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
     {
         public static string AllowedCharacterRegex = @"^[A-Z0-9-. $/+%]*$";
 
-        public static bool ValidateSegment(string value, char? linkCharacter = null)
+        public static bool ValidateSegment(string? value, char? linkCharacter = null)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if ( linkCharacter.HasValue && !Regex.IsMatch(linkCharacter.ToString(), AllowedCharacterRegex))
+            if ( linkCharacter.HasValue && !Regex.IsMatch(linkCharacter?.ToString() ?? "", AllowedCharacterRegex))
                 throw new HIBCValidateException("Invalid input to validate check character on.");
 
             var input = value.Substring(0, value.Length - 1);
@@ -28,7 +28,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             return true;
         }
 
-        public static char CalculateSegmentCheckCharacter(string value)
+        public static char CalculateSegmentCheckCharacter(string? value)
         {
             if(string.IsNullOrWhiteSpace(value))
                 throw new HIBCValidateException("Can not calculate check character for an empty string.");

@@ -16,7 +16,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
     public class ProductCode
     {
-        protected ProductCode(string value, ProductCodeType schema)
+        internal ProductCode(string value, ProductCodeType schema)
         {
             Code = value;
             Type = schema;
@@ -25,7 +25,7 @@ namespace BarcodeParserBuilder.Infrastructure
         public string Code { get; protected set; }
         public ProductCodeType Type { get; protected set; }
 
-        public static ProductCode ParseGtin(string value)
+        public static ProductCode? ParseGtin(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;
@@ -59,7 +59,7 @@ namespace BarcodeParserBuilder.Infrastructure
         }
 
         //Specs : https://www.ifaffm.de/mandanten/1/documents/04_ifa_coding_system/IFA-Info_Check_Digit_Calculations_PZN_PPN_UDI_EN.pdf
-        public static ProductCode ParsePpn(string value)
+        public static ProductCode? ParsePpn(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;
@@ -89,7 +89,7 @@ namespace BarcodeParserBuilder.Infrastructure
         ///Modulo 11 : https://en.wikipedia.org/wiki/MSI_Barcode#Mod_11_Check_Digit
         ///Modulo 1010 & 1110 : Combination of Mod 10/11 + mod 10
         ///Thankfully, we can apparently validate them all by doing a luhn/mod10 validation?
-        public static ProductCode ParseMsi(string value)
+        public static ProductCode? ParseMsi(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;
@@ -120,7 +120,7 @@ namespace BarcodeParserBuilder.Infrastructure
             return new ProductCode(value, ProductCodeType.MSI);
         }
 
-        public static ProductCode ParseHibc(string value)
+        public static ProductCode? ParseHibc(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;

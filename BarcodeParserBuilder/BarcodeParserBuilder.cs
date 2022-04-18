@@ -10,7 +10,7 @@ namespace BarcodeParserBuilder
 {
     public class BarcodeParserBuilder : IBarcodeParserBuilder
     {
-        internal static IEnumerable<Type> ParserBuilders { get; set; } = null;
+        internal static IEnumerable<Type> ParserBuilders { get; set; } = null!;
 
         public BarcodeParserBuilder()
         {
@@ -19,7 +19,10 @@ namespace BarcodeParserBuilder
 
         private static int GetParserBuilderOrderNumber(Type type)
         {
-            PropertyInfo property = type.GetProperty(nameof(GS1BarcodeParserBuilder.ParsingOrderNumber), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            if (type == null)
+                return 0;
+
+            var property = type.GetProperty(nameof(GS1BarcodeParserBuilder.ParsingOrderNumber), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             var value = property?.GetValue(null, null) as int?;
             if (!value.HasValue && type.BaseType != null)
                 value = GetParserBuilderOrderNumber(type.BaseType);
@@ -29,7 +32,7 @@ namespace BarcodeParserBuilder
         internal static IEnumerable<Type> CompileParserBuildersList()
         {
             var parserBuilders = Assembly
-                        .GetAssembly(typeof(IBaseBarcodeParserBuilder))
+                        .GetAssembly(typeof(IBaseBarcodeParserBuilder))?
                         .GetTypes()
                         .Where(c => c.IsClass &&
                                     !c.IsAbstract &&
@@ -41,8 +44,7 @@ namespace BarcodeParserBuilder
                         .ToList();
 
             var parserBuilderList = new List<Type>();
-
-            foreach (var parserBuilder in parserBuilders)
+            foreach (var parserBuilder in parserBuilders ?? Enumerable.Empty<Type>())
             {
                 //validate parse method
                 var methodInfo = parserBuilder.GetMethod(nameof(GS1BarcodeParserBuilder.TryParse));
@@ -69,7 +71,7 @@ namespace BarcodeParserBuilder
 
                 if (parserBuilder == null ||
                     methodInfo == null || methodInfo.IsStatic == false || methodInfo.IsPublic == false || methodInfo.ReturnType != typeof(string) ||
-                    parameters.Count != 1 || !parameters.First().ParameterType.IsSubclassOf(typeof(Barcode)))
+                    parameters == null || parameters.Count != 1 || !parameters.First().ParameterType.IsSubclassOf(typeof(Barcode)))
                     continue;
 
 
@@ -80,8 +82,8 @@ namespace BarcodeParserBuilder
         }
 
 
-        public bool TryParse(string barcodeString, out Barcode barcode) => TryParse(barcodeString, out barcode, out var _ );
-        public bool TryParse(string barcodeString, out Barcode barcode, out string feedback)
+        public bool TryParse(string? barcodeString, out Barcode? barcode) => TryParse(barcodeString, out barcode, out var _ );
+        public bool TryParse(string? barcodeString, out Barcode? barcode, out string? feedback)
         {
             try
             {
@@ -94,9 +96,11 @@ namespace BarcodeParserBuilder
                 foreach(var parserBuilder in ParserBuilders)
                 {
                     var methodInfo = parserBuilder.GetMethod(nameof(GS1BarcodeParserBuilder.TryParse));
+                    if (methodInfo == null)
+                        continue;
 
                     //setup parameters and execute the method
-                    var tryParseParameters = new object[2];
+                    var tryParseParameters = new object?[2];
                     tryParseParameters[0] = barcodeString;
                     tryParseParameters[1] = barcode;
                     var returnValue = methodInfo.Invoke(null, tryParseParameters);
@@ -105,7 +109,7 @@ namespace BarcodeParserBuilder
                         continue;
 
                     //retrieve output parameter and return true
-                    barcode = (Barcode)tryParseParameters[1];
+                    barcode = (Barcode?)tryParseParameters[1];
                     return true;
                 }
 
@@ -118,7 +122,7 @@ namespace BarcodeParserBuilder
                 return false;
             }
         }
-        public string Build(Barcode barcode)
+        public string? Build(Barcode? barcode)
         {
             if (barcode == null)
                 return null;
@@ -132,7 +136,7 @@ namespace BarcodeParserBuilder
             var buildParameters = new object[] { barcode };
             var returnValue = methodInfo.Invoke(null, buildParameters);
 
-            return (string)returnValue;
+            return (string?)returnValue;
         }
     }
 }

@@ -25,18 +25,19 @@ namespace BarcodeParserBuilder.Infrastructure
         public int MinLength { get; }
         public int? MaxLength { get; }
         public bool FixedLength => MinLength == (MaxLength ?? -1);
-        public object Value { get; private set; }
+        public object? Value { get; private set; }
         private IFieldParserBuilder FieldParserBuilder { get; set; }
 
-        private bool ValidateLength(string value)
+        private bool ValidateLength(string? value)
         {
             if(!FixedLength && string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if (!FixedLength && MaxLength.HasValue && value.Length > MaxLength)
+            var valueLength = (value?.Length ?? 0);
+            if (!FixedLength && MaxLength.HasValue && valueLength > MaxLength)
                 return false;
 
-            if (FixedLength && value.Length != MinLength)
+            if (FixedLength && valueLength != MinLength)
                 return false;
 
             return true;
@@ -49,7 +50,7 @@ namespace BarcodeParserBuilder.Infrastructure
             Parse(value);
         }
 
-        public void Parse(string value)
+        public void Parse(string? value)
         {
             if (!ValidateLength(value))
                 throw new ValidateException($"Invalid value Length {value?.Length ?? 0}. Expected {(FixedLength? null : "Max ")}{MaxLength} Bytes.");
@@ -57,9 +58,9 @@ namespace BarcodeParserBuilder.Infrastructure
             Value = FieldParserBuilder.Parse(value, MinLength, MaxLength);
         }
 
-        public string Build() => FieldParserBuilder.Build(Value);
+        public string? Build() => FieldParserBuilder.Build(Value);
 
-        public void SetValue(object obj)
+        public void SetValue(object? obj)
         {
             Value = FieldParserBuilder.Parse(obj, MinLength, MaxLength);
         }

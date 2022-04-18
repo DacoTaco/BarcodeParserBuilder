@@ -8,7 +8,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
 {
     internal class GS1DoubleParserBuilder : BaseFieldParserBuilder<double?>
     {
-        protected override string Build(double? obj)
+        protected override string? Build(double? obj)
         {
             if (!obj.HasValue)
                 return null;
@@ -24,13 +24,13 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return $"{location}{objString.TrimStart('0').PadLeft(6, '0')}";
         }
 
-        protected override double? Parse(string value)
+        protected override double? Parse(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;
 
             var location = int.Parse(value.First().ToString());
-            value = value.Substring(1);
+            value = value[1..];
 
             return double.Parse(value) * Math.Pow(10, -location);
         }
@@ -40,12 +40,15 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             if (!obj.HasValue)
                 return true;
 
-            var valueString = obj.Value.ToString(CultureInfo.InvariantCulture).Replace(".", "").TrimStart('0');
+            var valueString = obj.Value
+                .ToString(CultureInfo.InvariantCulture)
+                .Replace(".", "")
+                .TrimStart('0');
 
             return valueString.Length <= (maximumLength ?? int.MaxValue) && valueString.Length >= (minimumLength ?? 0);
         }
 
-        protected override bool Validate(string value)
+        protected override bool Validate(string? value)
         {
             if (string.IsNullOrEmpty(value))
                 return true;

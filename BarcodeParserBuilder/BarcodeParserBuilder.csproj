@@ -27,6 +27,7 @@ When combined with barcode imaging projects like Zxing you can scan, parse, buil
     <RepositoryUrl>https://github.com/DacoTaco/BarcodeParserBuilder</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
+    <Nullable>enable</Nullable>
 
   </PropertyGroup>
 

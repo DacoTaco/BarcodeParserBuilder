@@ -13,7 +13,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
         //Overwrite the internal orderNumber to be a high number. this should make it last when ordered
         internal new static int ParsingOrderNumber => 0xFF;
 
-        public static bool TryParse(string barcode, out GS1Barcode gs1Barcode)
+        public static bool TryParse(string barcode, out GS1Barcode? gs1Barcode)
         {
             try
             {
@@ -27,13 +27,13 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return false;
         }
 
-        public static GS1Barcode Parse(string barcode)
+        public static GS1Barcode? Parse(string? barcode)
         {
             var parserBuider = new GS1BarcodeParserBuilder();
             return parserBuider.ParseString(barcode);
         }
 
-        public static string Build(GS1Barcode barcode)
+        public static string? Build(GS1Barcode? barcode)
         {
             if (barcode == null)
                 return null;
@@ -46,7 +46,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
     public abstract class BaseGS1BarcodeParserBuilder<T> : BaseBarcodeParserBuilder<T>
         where T : GS1Barcode
     {
-        protected override string BuildString(T barcode)
+        protected override string? BuildString(T? barcode)
         {
             if (barcode == null)
                 return "";
@@ -73,7 +73,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return barcodeString;
         }
 
-        protected override T ParseString(string barcodeString)
+        protected override T? ParseString(string? barcodeString)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                     return default;
 
                 if (barcodeString.First() == GS1Barcode.GroupSeparator)
-                    barcodeString = barcodeString.Substring(1);
+                    barcodeString = barcodeString[1..];
 
                 var barcode = Activator.CreateInstance<T>();
                 var codeStream = new StringReader(barcodeString);

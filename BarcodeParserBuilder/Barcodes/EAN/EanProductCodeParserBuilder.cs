@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.EAN
 {
-    internal class EanProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode>
+    internal class EanProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode?>
     {
-        protected override ProductCode Parse(string value) => ProductCode.ParseGtin(value);
-        protected override string Build(ProductCode obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj.Code;
+        protected override ProductCode? Parse(string? value) => ProductCode.ParseGtin(value);
+        protected override string? Build(ProductCode? obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj.Code;
 
-        protected override bool Validate(string value)
+        protected override bool Validate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;
@@ -20,7 +20,7 @@ namespace BarcodeParserBuilder.Barcodes.EAN
             return true;
         }
 
-        protected override bool ValidateObject(ProductCode obj)
+        protected override bool ValidateObject(ProductCode? obj)
         {
             if (obj == null)
                 return true;

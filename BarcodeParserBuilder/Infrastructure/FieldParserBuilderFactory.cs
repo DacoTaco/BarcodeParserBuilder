@@ -7,13 +7,16 @@ namespace BarcodeParserBuilder.Infrastructure
 {
     internal static class FieldParserBuilderFactory
     {
+        //array cache, this way the factory doesn't loop over the assembly every time, which is slow
+        private static Type[]? _assemblyTypes { get; set; } = null;
+
         public static IFieldParserBuilder CreateFieldParserBuilder(BarcodeType barcodeType, Type objectType)
         {
-            var AssemblyTypes = Assembly
-                .GetAssembly(typeof(IFieldParserBuilder))
+            _assemblyTypes ??= Assembly
+                .GetAssembly(typeof(IFieldParserBuilder))?
                 .GetTypes();
 
-            var nameSpace = AssemblyTypes.SingleOrDefault(t => t.IsClass &&
+            var nameSpace = _assemblyTypes?.SingleOrDefault(t => t.IsClass &&
                                                         !t.IsAbstract &&
                                                         t.Name.Equals($"{barcodeType}Barcode", StringComparison.OrdinalIgnoreCase))?.Namespace;
             if (string.IsNullOrWhiteSpace(nameSpace))
@@ -27,7 +30,7 @@ namespace BarcodeParserBuilder.Infrastructure
                 ? typeof(Nullable<>).MakeGenericType(objectType)
                 : objectType;*/
 
-            var parserBuilderType = AssemblyTypes.SingleOrDefault(t => t.IsClass &&
+            var parserBuilderType = _assemblyTypes?.SingleOrDefault(t => t != null && t.IsClass &&
                             !t.IsAbstract &&
                             t.Namespace == nameSpace &&
                             t.GetInterfaces().Contains(typeof(IFieldParserBuilder)) &&
@@ -36,7 +39,11 @@ namespace BarcodeParserBuilder.Infrastructure
             if (parserBuilderType == null)
                 throw new ArgumentException($"Failed to find FieldParserBuilder for barcode type {barcodeType} and variable type {objectType.Name}.");
 
-            return (IFieldParserBuilder)Activator.CreateInstance(parserBuilderType);
+            var fieldParserBuilder = Activator.CreateInstance(parserBuilderType);
+            if (fieldParserBuilder as IFieldParserBuilder == null)
+                throw new ArgumentException($"Failed to create field parser builder od type {parserBuilderType}");
+
+            return (IFieldParserBuilder)fieldParserBuilder;
         }
     }
 }

@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.PPN
 {
-    internal class PpnStringParserBuilder : BaseFieldParserBuilder<string>
+    internal class PpnStringParserBuilder : BaseFieldParserBuilder<string?>
     {
-        protected override string Build(string obj) => string.IsNullOrWhiteSpace(obj) ? null : obj;
-        protected override string Parse(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
+        protected override string? Build(string? obj) => string.IsNullOrWhiteSpace(obj) ? null : obj;
+        protected override string? Parse(string? value) => string.IsNullOrWhiteSpace(value) ? null : value;
 
-        protected override bool Validate(string value)
+        protected override bool Validate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;

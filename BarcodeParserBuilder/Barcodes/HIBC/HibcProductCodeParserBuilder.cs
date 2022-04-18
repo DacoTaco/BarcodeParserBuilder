@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.HIBC
 {
-    internal class HibcProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode>
+    internal class HibcProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode?>
     {
-        protected override string Build(ProductCode obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj.Code;
+        protected override string? Build(ProductCode? obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj.Code;
 
-        protected override ProductCode Parse(string value) => ProductCode.ParseHibc(value);
+        protected override ProductCode? Parse(string? value) => ProductCode.ParseHibc(value);
 
-        protected override bool Validate(string value)
+        protected override bool Validate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;
@@ -24,7 +24,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             return true;
         }
 
-        protected override bool ValidateObject(ProductCode obj)
+        protected override bool ValidateObject(ProductCode? obj)
         {
             if (obj != null && obj.Type != ProductCodeType.HIBC)
                 throw new HIBCValidateException($"Invalid ProductCode type '{obj.Type}'.");

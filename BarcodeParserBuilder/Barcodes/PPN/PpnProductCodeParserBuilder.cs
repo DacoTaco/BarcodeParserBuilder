@@ -4,12 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace BarcodeParserBuilder.Barcodes.PPN
 {
-    internal class PpnProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode>
+    internal class PpnProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode?>
     {
-        protected override string Build(ProductCode obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj.Code;
-        protected override ProductCode Parse(string value) => ProductCode.ParsePpn(value);
+        protected override string? Build(ProductCode? obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj.Code;
+        protected override ProductCode? Parse(string? value) => ProductCode.ParsePpn(value);
 
-        protected override bool Validate(string value)
+        protected override bool Validate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;
@@ -21,7 +21,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             return true;
         }
 
-        protected override bool ValidateObject(ProductCode obj)
+        protected override bool ValidateObject(ProductCode? obj)
         {
             if (obj == null)
                 return true;

@@ -25,13 +25,13 @@ namespace BarcodeParserBuilder.Barcodes
                 return _fields;
             }
         }
-        private ReadOnlyFieldCollection _fields = null;
+        private ReadOnlyFieldCollection? _fields = null;
         public abstract BarcodeType BarcodeType { get; }
-        public abstract ProductCode ProductCode { get; set; }
-        public abstract BarcodeDateTime ExpirationDate { get; set; }
-        public abstract BarcodeDateTime ProductionDate { get; set; }
-        public abstract string BatchNumber { get; set; }
-        public abstract string SerialNumber { get; set; }
+        public abstract ProductCode? ProductCode { get; set; }
+        public abstract BarcodeDateTime? ExpirationDate { get; set; }
+        public abstract BarcodeDateTime? ProductionDate { get; set; }
+        public abstract string? BatchNumber { get; set; }
+        public abstract string? SerialNumber { get; set; }
     }
 
     public class FieldCollection : KeyedCollection<string, IBarcodeField>
@@ -41,15 +41,15 @@ namespace BarcodeParserBuilder.Barcodes
 
     public class ReadOnlyFieldCollection : ReadOnlyCollection<IBarcodeField>
     {
-        readonly KeyedCollection<string, IBarcodeField> innerCollection;
+        private readonly KeyedCollection<string, IBarcodeField> _innerCollection;
 
-        public ReadOnlyFieldCollection(KeyedCollection<string, IBarcodeField> innerCollection) : base(innerCollection)
+        public ReadOnlyFieldCollection(KeyedCollection<string, IBarcodeField> collection) : base(collection)
         {
-            this.innerCollection = innerCollection ?? throw new ArgumentException("innerCollection should not be null");
+            _innerCollection = collection ?? throw new ArgumentException($"{nameof(collection)} should not be null");
         }
 
-        public IBarcodeField this[string identifier] => innerCollection[identifier];
+        public IBarcodeField this[string identifier] => _innerCollection[identifier];
 
-        internal bool Contains(string identifier) => innerCollection.Contains(identifier);
+        internal bool Contains(string identifier) => _innerCollection.Contains(identifier);
     }
 }

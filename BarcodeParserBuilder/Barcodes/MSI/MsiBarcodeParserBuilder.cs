@@ -8,7 +8,7 @@ namespace BarcodeParserBuilder.Barcodes.MSI
     {
         protected MsiBarcodeParserBuilder() { }
 
-        public static string Build(MsiBarcode barcode)
+        public static string? Build(MsiBarcode? barcode)
         {
             if (barcode == null)
                 return null;
@@ -17,7 +17,7 @@ namespace BarcodeParserBuilder.Barcodes.MSI
             return parserBuider.BuildString(barcode);       
         }
 
-        public static bool TryParse(string barcode, out MsiBarcode msiBarcode)
+        public static bool TryParse(string? barcode, out MsiBarcode? msiBarcode)
         {
             try
             {
@@ -31,13 +31,13 @@ namespace BarcodeParserBuilder.Barcodes.MSI
             return false;
         }
 
-        public static MsiBarcode Parse(string barcode)
+        public static MsiBarcode? Parse(string? barcode)
         {
             var parserBuider = new MsiBarcodeParserBuilder();
             return parserBuider.ParseString(barcode);
         }
 
-        protected override string BuildString(MsiBarcode barcode)
+        protected override string? BuildString(MsiBarcode? barcode)
         {
             if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code))
                 return null;
@@ -45,7 +45,7 @@ namespace BarcodeParserBuilder.Barcodes.MSI
             return barcode.Fields[nameof(barcode.ProductCode)].Build();
         }
 
-        protected override MsiBarcode ParseString(string barcodeString)
+        protected override MsiBarcode? ParseString(string? barcodeString)
         {
             try
             {

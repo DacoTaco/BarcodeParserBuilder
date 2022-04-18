@@ -9,7 +9,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
     {
         protected GS1128BarcodeParserBuilder() { }
 
-        public static bool TryParse(string barcode, out GS1128Barcode gs1128Barcode)
+        public static bool TryParse(string? barcode, out GS1128Barcode? gs1128Barcode)
         {
             try
             {
@@ -23,13 +23,13 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return false;
         }
 
-        public static GS1128Barcode Parse(string barcode)
+        public static GS1128Barcode? Parse(string? barcode)
         {
             var parserBuider = new GS1128BarcodeParserBuilder();
             return parserBuider.ParseString(barcode);
         }
 
-        public static string Build(GS1128Barcode barcode)
+        public static string? Build(GS1128Barcode? barcode)
         {
             if (barcode == null)
                 return null;
@@ -38,9 +38,9 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return parserBuider.BuildString(barcode);
         }
 
-        public static IList<string> BuildList(GS1128Barcode barcode) => new GS1128BarcodeParserBuilder().BuildBarcodes(barcode);
+        public static IList<string> BuildList(GS1128Barcode? barcode) => new GS1128BarcodeParserBuilder().BuildBarcodes(barcode);
 
-        protected override GS1128Barcode ParseString(string barcodeString)
+        protected override GS1128Barcode? ParseString(string? barcodeString)
         {
             try
             {
@@ -59,9 +59,11 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             }
         }
 
-        protected override IList<string> BuildBarcodes(GS1128Barcode barcode)
+        protected override IList<string> BuildBarcodes(GS1128Barcode? barcode)
         {
             var list = new List<string>();
+            if (barcode == null)
+                return list;
 
             foreach (var field in barcode.Fields.OrderBy(f => f.Identifier))
             {
@@ -76,7 +78,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return list;
         }
 
-        protected override string BuildString(GS1128Barcode barcode)
+        protected override string? BuildString(GS1128Barcode? barcode)
         {
             var list = BuildBarcodes(barcode);
             var barcodeString = list.Select(s => s).Aggregate((i, s) => i + s);

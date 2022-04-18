@@ -10,7 +10,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
     {
         protected PpnBarcodeParserBuilder() { }
 
-        public static bool TryParse(string barcode, out PpnBarcode ppnBarcode)
+        public static bool TryParse(string? barcode, out PpnBarcode? ppnBarcode)
         {
             try
             {
@@ -24,13 +24,13 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             return false;
         }
 
-        public static PpnBarcode Parse(string barcode)
+        public static PpnBarcode? Parse(string? barcode)
         {
             var parserBuider = new PpnBarcodeParserBuilder();
             return parserBuider.ParseString(barcode);
         }
 
-        public static string Build(PpnBarcode barcode)
+        public static string? Build(PpnBarcode? barcode)
         {
             if (barcode == null)
                 return null;
@@ -39,11 +39,14 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             return parserBuider.BuildString(barcode);
         }
 
-        protected override string BuildString(PpnBarcode barcode)
+        protected override string? BuildString(PpnBarcode? barcode)
         {
-            var barcodeString = "";
 
-            foreach(var field in barcode.Fields)
+            if (barcode == null)
+                return null;
+
+            var barcodeString = "";
+            foreach (var field in barcode.Fields)
             {
                 var value = field.Build();
 
@@ -56,7 +59,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             return $"{PpnBarcode.Prefix}{barcodeString}{PpnBarcode.Suffix}";
         }
 
-        protected override PpnBarcode ParseString(string barcodeString)
+        protected override PpnBarcode? ParseString(string? barcodeString)
         {
             try
             {
@@ -65,7 +68,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
 
                 if (!barcodeString.StartsWith(PpnBarcode.Prefix, StringComparison.Ordinal) || 
                     !barcodeString.EndsWith(PpnBarcode.Suffix, StringComparison.Ordinal) ||
-                    (barcodeString?.Length ?? 0) < (PpnBarcode.Prefix.Length + PpnBarcode.Suffix.Length) )
+                    barcodeString.Length < (PpnBarcode.Prefix.Length + PpnBarcode.Suffix.Length) )
                     throw new PPNParseException("Invalid PPN Barcode Prefix/Suffix/Size");
 
                 

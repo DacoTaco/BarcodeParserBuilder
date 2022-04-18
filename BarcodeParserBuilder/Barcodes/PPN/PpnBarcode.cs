@@ -22,9 +22,9 @@ namespace BarcodeParserBuilder.Barcodes.PPN
 
         public PpnBarcode() : base() { }
         public override BarcodeType BarcodeType => BarcodeType.PPN;
-        public override ProductCode ProductCode
+        public override ProductCode? ProductCode
         {
-            get => (ProductCode)(BarcodeFields["9N"].Value ?? BarcodeFields["8P"].Value);
+            get => (ProductCode?)(BarcodeFields["9N"].Value ?? BarcodeFields["8P"].Value);
             set 
             {
                 if(value == null)
@@ -46,38 +46,38 @@ namespace BarcodeParserBuilder.Barcodes.PPN
                 }
             }
         }
-        public override BarcodeDateTime ExpirationDate 
+        public override BarcodeDateTime? ExpirationDate 
         {
-            get => (BarcodeDateTime)BarcodeFields["D"].Value;
+            get => (BarcodeDateTime?)BarcodeFields["D"].Value;
             set => BarcodeFields["D"].SetValue(value);
         }
-        public override BarcodeDateTime ProductionDate 
+        public override BarcodeDateTime? ProductionDate 
         {
-            get => (BarcodeDateTime)BarcodeFields["16D"].Value;
+            get => (BarcodeDateTime?)BarcodeFields["16D"].Value;
             set => BarcodeFields["16D"].SetValue(value);
         }
-        public override string BatchNumber 
+        public override string? BatchNumber 
         {
-            get => string.IsNullOrWhiteSpace((string)BarcodeFields["1T"].Value) ? null : (string)BarcodeFields["1T"].Value;
+            get => string.IsNullOrWhiteSpace((string?)BarcodeFields["1T"].Value) ? null : (string?)BarcodeFields["1T"].Value;
             set => BarcodeFields["1T"].SetValue(value);
         }
-        public override string SerialNumber
+        public override string? SerialNumber
         {
-            get => string.IsNullOrWhiteSpace((string)BarcodeFields["S"].Value) ? null : (string)BarcodeFields["S"].Value;
+            get => string.IsNullOrWhiteSpace((string?)BarcodeFields["S"].Value) ? null : (string?)BarcodeFields["S"].Value;
             set => BarcodeFields["S"].SetValue(value);
         }
 
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()
         {
-            new PpnField<ProductCode>("9N", 4, 22),
-            new FixedLengthGS1Field<ProductCode>("8P", 14),
+            new PpnField<ProductCode?>("9N", 4, 22),
+            new FixedLengthGS1Field<ProductCode?>("8P", 14),
 
             new PpnField("1T", 20),
             new PpnField("S", 20),
             new PpnField("Q", 8), 
             new PpnField("27Q", 20),
-            new FixedLengthPpnField<BarcodeDateTime>("D", 6),
-            new FixedLengthPpnField<BarcodeDateTime>("16D", 8)
+            new FixedLengthPpnField<BarcodeDateTime?>("D", 6),
+            new FixedLengthPpnField<BarcodeDateTime?>("16D", 8)
         };
 
         internal class PpnField<T> : BarcodeField<T>
@@ -118,12 +118,12 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             public FixedLengthPpnField(string identifier, int length) : base(identifier, length) { }
         }
 
-        internal class PpnField : PpnField<string>
+        internal class PpnField : PpnField<string?>
         {
             public PpnField(string identifier, int? maxLength = null) : base(identifier, maxLength) { }
         }
 
-        internal class FixedLengthPpnField : FixedLengthPpnField<string>
+        internal class FixedLengthPpnField : FixedLengthPpnField<string?>
         {
             public FixedLengthPpnField(string identifier, int length) : base(identifier, length) { }
         }

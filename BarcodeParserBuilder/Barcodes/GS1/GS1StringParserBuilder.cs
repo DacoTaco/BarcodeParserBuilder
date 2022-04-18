@@ -4,12 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {
-    internal class GS1StringParserBuilder : BaseFieldParserBuilder<string>
+    internal class GS1StringParserBuilder : BaseFieldParserBuilder<string?>
     {
-        protected override string Build(string obj) => string.IsNullOrWhiteSpace(obj) ? null : obj;
-        protected override string Parse(string value) => value;
+        protected override string? Build(string? obj) => string.IsNullOrWhiteSpace(obj) ? null : obj;
+        protected override string? Parse(string? value) => value;
 
-        protected override bool Validate(string value)
+        protected override bool Validate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;

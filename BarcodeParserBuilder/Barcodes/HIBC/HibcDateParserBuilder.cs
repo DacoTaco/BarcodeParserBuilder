@@ -5,12 +5,12 @@ using System;
 
 namespace BarcodeParserBuilder.Barcodes.HIBC
 {
-    internal class HibcDateParserBuilder : BaseFieldParserBuilder<BarcodeDateTime>
+    internal class HibcDateParserBuilder : BaseFieldParserBuilder<BarcodeDateTime?>
     {
-        protected override BarcodeDateTime Parse(string value) => throw new NotImplementedException("Impossible to Parse HIBC Date from string.");
-        protected override string Build(BarcodeDateTime obj) => obj?.StringValue;
+        protected override BarcodeDateTime? Parse(string? value) => throw new NotImplementedException("Impossible to Parse HIBC Date from string.");
+        protected override string? Build(BarcodeDateTime? obj) => obj?.StringValue;
 
-        protected override bool Validate(string value)
+        protected override bool Validate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;
@@ -21,7 +21,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             return true;
         }
 
-        protected override bool ValidateObject(BarcodeDateTime obj)
+        protected override bool ValidateObject(BarcodeDateTime? obj)
         {
             if (obj == null)
                 return true;

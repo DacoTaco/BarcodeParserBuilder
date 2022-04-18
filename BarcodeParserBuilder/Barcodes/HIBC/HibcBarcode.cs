@@ -14,46 +14,46 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
         public override BarcodeType BarcodeType => BarcodeType.HIBC;
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()
         {
-            new HibcField<ProductCode>(nameof(ProductCode), 18),
+            new HibcField<ProductCode?>(nameof(ProductCode), 18),
             new FixedLengthHibcField(nameof(LabelerIdentificationCode), 4),
             new FixedLengthHibcField<int?>(nameof(UnitOfMeasure), 1),
-            new HibcField<BarcodeDateTime>("14D", 8),
-            new HibcField<BarcodeDateTime>("16D", 8),
+            new HibcField<BarcodeDateTime?>("14D", 8),
+            new HibcField<BarcodeDateTime?>("16D", 8),
             new HibcField("S", 18),
             new HibcField("B", 18),
             new HibcField<int?>("Q", 5),
         };
 
-        public override ProductCode ProductCode 
+        public override ProductCode? ProductCode 
         {
-            get => (ProductCode)BarcodeFields[nameof(ProductCode)].Value;
+            get => (ProductCode?)BarcodeFields[nameof(ProductCode)].Value;
             set => BarcodeFields[nameof(ProductCode)].SetValue(value);
         }
-        public override BarcodeDateTime ExpirationDate
+        public override BarcodeDateTime? ExpirationDate
         {
-            get => (BarcodeDateTime)BarcodeFields["14D"].Value;
+            get => (BarcodeDateTime?)BarcodeFields["14D"].Value;
             set => BarcodeFields["14D"].SetValue(value);
         }
-        public override BarcodeDateTime ProductionDate
+        public override BarcodeDateTime? ProductionDate
         {
-            get => (BarcodeDateTime)BarcodeFields["16D"].Value;
+            get => (BarcodeDateTime?)BarcodeFields["16D"].Value;
             set => BarcodeFields["16D"].SetValue(value);
         }
-        public override string BatchNumber
+        public override string? BatchNumber
         {
-            get => (string)BarcodeFields["B"].Value;
+            get => (string?)BarcodeFields["B"].Value;
             set => BarcodeFields["B"].SetValue(value);
         }
-        public override string SerialNumber 
+        public override string? SerialNumber 
         {
-            get => (string)BarcodeFields["S"].Value;
+            get => (string?)BarcodeFields["S"].Value;
             set => BarcodeFields["S"].SetValue(value);
         }
 
         //HIBC Specific's
-        public string LabelerIdentificationCode
+        public string? LabelerIdentificationCode
         {
-            get => (string)BarcodeFields[nameof(LabelerIdentificationCode)].Value;
+            get => (string?)BarcodeFields[nameof(LabelerIdentificationCode)].Value;
             set => BarcodeFields[nameof(LabelerIdentificationCode)].SetValue(value);
         }
 
@@ -87,12 +87,12 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
         public FixedLengthHibcField(string identifier, int length) : base(identifier, length, length) { }
     }
 
-    internal class HibcField : HibcField<string>
+    internal class HibcField : HibcField<string?>
     {
         public HibcField(string identifier, int? maxLength = null) : base(identifier, maxLength) { }
     }
 
-    internal class FixedLengthHibcField : FixedLengthHibcField<string>
+    internal class FixedLengthHibcField : FixedLengthHibcField<string?>
     {
         public FixedLengthHibcField(string identifier, int length) : base(identifier, length) { }
     }

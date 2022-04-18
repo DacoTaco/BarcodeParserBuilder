@@ -7,7 +7,7 @@ namespace BarcodeParserBuilder.Barcodes.ISBT128
     {
         protected ISBT128BarcodeParserBuilder() { }
 
-        public static bool TryParse(string barcode, out ISBT128Barcode isbt128Barcode)
+        public static bool TryParse(string? barcode, out ISBT128Barcode? isbt128Barcode)
         {
             try
             {
@@ -21,13 +21,13 @@ namespace BarcodeParserBuilder.Barcodes.ISBT128
             return false;
         }
 
-        public static ISBT128Barcode Parse(string barcode)
+        public static ISBT128Barcode? Parse(string? barcode)
         {
             var parserBuider = new ISBT128BarcodeParserBuilder();
             return parserBuider.ParseString(barcode);
         }
 
-        public static string Build(ISBT128Barcode barcode)
+        public static string? Build(ISBT128Barcode? barcode)
         {
             if (barcode == null)
                 return null;
@@ -36,12 +36,12 @@ namespace BarcodeParserBuilder.Barcodes.ISBT128
             return parserBuider.BuildString(barcode);
         }
 
-        protected override string BuildString(ISBT128Barcode barcode)
+        protected override string? BuildString(ISBT128Barcode? barcode)
         {
             throw new NotImplementedException();
         }
 
-        protected override ISBT128Barcode ParseString(string barcodeString)
+        protected override ISBT128Barcode ParseString(string? barcodeString)
         {
             throw new NotImplementedException();
         }

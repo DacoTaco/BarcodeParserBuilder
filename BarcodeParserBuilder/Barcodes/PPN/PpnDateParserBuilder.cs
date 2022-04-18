@@ -4,12 +4,20 @@ using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.PPN
 {
-    internal class PpnDateParserBuilder : BaseFieldParserBuilder<BarcodeDateTime>
+    internal class PpnDateParserBuilder : BaseFieldParserBuilder<BarcodeDateTime?>
     {
-        protected override BarcodeDateTime Parse(string value) => value.Length == 8 ? BarcodeDateTime.PpnDate(value) : BarcodeDateTime.Gs1Date(value);
-        protected override string Build(BarcodeDateTime obj) => obj?.StringValue;
+        protected override BarcodeDateTime? Parse(string? value)
+        {
+            if (value == null)
+                return null;
 
-        protected override bool Validate(string value)
+            return value.Length == 8 
+                ? BarcodeDateTime.PpnDate(value) 
+                : BarcodeDateTime.Gs1Date(value);
+        }
+        protected override string? Build(BarcodeDateTime? obj) => obj?.StringValue;
+
+        protected override bool Validate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;
@@ -20,7 +28,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             return true;
         }
 
-        protected override bool ValidateObject(BarcodeDateTime obj)
+        protected override bool ValidateObject(BarcodeDateTime? obj)
         {
             if (obj == null)
                 return true;

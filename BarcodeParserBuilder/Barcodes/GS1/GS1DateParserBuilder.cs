@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {
-    internal class GS1DateParserBuilder : BaseFieldParserBuilder<BarcodeDateTime>
+    internal class GS1DateParserBuilder : BaseFieldParserBuilder<BarcodeDateTime?>
     {
-        protected override BarcodeDateTime Parse(string value) => BarcodeDateTime.Gs1Date(value);
-        protected override string Build(BarcodeDateTime obj) => string.IsNullOrWhiteSpace(obj?.StringValue) ? null : obj.StringValue;
+        protected override BarcodeDateTime? Parse(string? value) => BarcodeDateTime.Gs1Date(value);
+        protected override string? Build(BarcodeDateTime? obj) => string.IsNullOrWhiteSpace(obj?.StringValue) ? null : obj.StringValue;
 
-        protected override bool Validate(string value)
+        protected override bool Validate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;
@@ -20,7 +20,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return true;
         }
 
-        protected override bool ValidateObject(BarcodeDateTime obj)
+        protected override bool ValidateObject(BarcodeDateTime? obj)
         {
             if (obj == null)
                 return true;

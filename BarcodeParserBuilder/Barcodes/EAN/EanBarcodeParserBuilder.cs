@@ -8,13 +8,13 @@ namespace BarcodeParserBuilder.Barcodes.EAN
     {
         protected EanBarcodeParserBuilder() { }
 
-        public static string Build(EanBarcode barcode)
+        public static string? Build(EanBarcode? barcode)
         {
             var parserBuider = new EanBarcodeParserBuilder();
             return parserBuider.BuildString(barcode);       
         }
 
-        public static bool TryParse(string barcode, out EanBarcode eanBarcode)
+        public static bool TryParse(string? barcode, out EanBarcode? eanBarcode)
         {
             try
             {
@@ -28,13 +28,13 @@ namespace BarcodeParserBuilder.Barcodes.EAN
             return false;
         }
 
-        public static EanBarcode Parse(string barcode)
+        public static EanBarcode? Parse(string? barcode)
         {
             var parserBuider = new EanBarcodeParserBuilder();
             return parserBuider.ParseString(barcode);
         }
 
-        protected override string BuildString(EanBarcode barcode)
+        protected override string? BuildString(EanBarcode? barcode)
         {
             if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code))
                 return null;
@@ -42,7 +42,7 @@ namespace BarcodeParserBuilder.Barcodes.EAN
             return barcode.Fields[nameof(barcode.ProductCode)].Build();
         }
 
-        protected override EanBarcode ParseString(string barcodeString)
+        protected override EanBarcode? ParseString(string? barcodeString)
         {
             try
             {

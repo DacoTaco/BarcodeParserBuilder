@@ -14,14 +14,14 @@ namespace BarcodeParserBuilder.Barcodes.GS1
         public override BarcodeType BarcodeType => BarcodeType.GS1;
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()
         {
-            new FixedLengthGS1Field<ProductCode>("01", 14),
-            new FixedLengthGS1Field<ProductCode>("02", 14),
-            new FixedLengthGS1Field<BarcodeDateTime>("11", 6),
-            new FixedLengthGS1Field<BarcodeDateTime>("12", 6),
-            new FixedLengthGS1Field<BarcodeDateTime>("13", 6),
-            new FixedLengthGS1Field<BarcodeDateTime>("15", 6),
-            new FixedLengthGS1Field<BarcodeDateTime>("16", 6),
-            new FixedLengthGS1Field<BarcodeDateTime>("17", 6),
+            new FixedLengthGS1Field<ProductCode?>("01", 14),
+            new FixedLengthGS1Field<ProductCode?>("02", 14),
+            new FixedLengthGS1Field<BarcodeDateTime?>("11", 6),
+            new FixedLengthGS1Field<BarcodeDateTime?>("12", 6),
+            new FixedLengthGS1Field<BarcodeDateTime?>("13", 6),
+            new FixedLengthGS1Field<BarcodeDateTime?>("15", 6),
+            new FixedLengthGS1Field<BarcodeDateTime?>("16", 6),
+            new FixedLengthGS1Field<BarcodeDateTime?>("17", 6),
             new FixedLengthGS1Field("20", 2),
             new FixedLengthGS1Field<double?>("310", 7),
             new FixedLengthGS1Field<double?>("320", 7),
@@ -84,30 +84,30 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             new GS1Field("99", 90),
         };
 
-        public override ProductCode ProductCode 
+        public override ProductCode? ProductCode 
         {
-            get => (ProductCode)BarcodeFields["01"].Value;
+            get => (ProductCode?)BarcodeFields["01"].Value;
             set => BarcodeFields["01"].SetValue(value);
         }
-        public override BarcodeDateTime ProductionDate
+        public override BarcodeDateTime? ProductionDate
         {
-            get => (BarcodeDateTime)BarcodeFields["11"].Value;
+            get => (BarcodeDateTime?)BarcodeFields["11"].Value;
             set => BarcodeFields["11"].SetValue(value);
         }
-        public override BarcodeDateTime ExpirationDate 
+        public override BarcodeDateTime? ExpirationDate 
         {
-            get => (BarcodeDateTime)BarcodeFields["17"].Value;
+            get => (BarcodeDateTime?)BarcodeFields["17"].Value;
             set => BarcodeFields["17"].SetValue(value);
         }
 
-        public override string BatchNumber
+        public override string? BatchNumber
         {
-            get => string.IsNullOrWhiteSpace((string)BarcodeFields["10"].Value) ? null : (string)BarcodeFields["10"].Value;
+            get => string.IsNullOrWhiteSpace((string?)BarcodeFields["10"].Value) ? null : (string?)BarcodeFields["10"].Value;
             set => BarcodeFields["10"].SetValue(value);
         }
-        public override string SerialNumber
+        public override string? SerialNumber
         {
-            get => string.IsNullOrWhiteSpace((string)BarcodeFields["21"].Value) ? null : (string)BarcodeFields["21"].Value;
+            get => string.IsNullOrWhiteSpace((string?)BarcodeFields["21"].Value) ? null : (string?)BarcodeFields["21"].Value;
             set => BarcodeFields["21"].SetValue(value);
         }
 
@@ -167,12 +167,12 @@ namespace BarcodeParserBuilder.Barcodes.GS1
         public FixedLengthGS1Field(string identifier, int length) : base(identifier, length, length) { }
     }
 
-    internal class GS1Field : GS1Field<string>
+    internal class GS1Field : GS1Field<string?>
     {
         public GS1Field(string identifier, int? maxLength = null) : base(identifier, maxLength) { }
     }
 
-    internal class FixedLengthGS1Field : FixedLengthGS1Field<string>
+    internal class FixedLengthGS1Field : FixedLengthGS1Field<string?>
     {
         public FixedLengthGS1Field(string identifier, int length) : base(identifier, length) { }
     }

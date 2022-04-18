@@ -38,39 +38,53 @@ namespace BarcodeParserBuilder.Infrastructure
         internal static string HIBCShortYearJulianDay => "yyJJJ";
         internal static string HIBCShortYearJulianDayHour => "yyJJJHH";
 
+#pragma warning disable CS8603 // Possible null reference return.
         public static BarcodeDateTime Gs1Date(DateTime date) => BuildDateString(date, GS1Format);
-        public static BarcodeDateTime Gs1Date(string value)
+#pragma warning restore CS8603 // Possible null reference return.
+        public static BarcodeDateTime? Gs1Date(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;
 
             ParseDateString(value, GS1Format, out var year, out var month, out var day, out var _);
-            if (day.Value == 0)
+            if (year == null || month == null)
+                return null;
+
+            if (!day.HasValue || day.Value == 0)
                 day = DateTime.DaysInMonth(year.Value, month.Value);
 
             return new BarcodeDateTime(new DateTime(year.Value, month.Value, day.Value), value, GS1Format);
         }
 
+#pragma warning disable CS8603 // Possible null reference return.
         public static BarcodeDateTime PpnDate(DateTime date) => BuildDateString(date, PPNFormat);
-        public static BarcodeDateTime PpnDate(string value)
+#pragma warning restore CS8603 // Possible null reference return.
+        public static BarcodeDateTime? PpnDate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;
 
             ParseDateString(value, PPNFormat, out var year, out var month, out var day, out var _);
-            if (day.Value == 0)
+            if (year == null || month == null)
+                return null;
+
+            if (!day.HasValue || day.Value == 0)
                 day = DateTime.DaysInMonth(year.Value, month.Value);
 
             return new BarcodeDateTime(new DateTime(year.Value, month.Value, day.Value), value, PPNFormat);
         }
-
-        public static BarcodeDateTime HibcDate(string value, string format)
+        public static BarcodeDateTime? HibcDate(string? value, string format)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;
 
             ValidateHibcFormat(format);
             ParseDateString(value, format, out var year, out var month, out var day, out var hour);
+
+            if (year == null)
+                return null;
+
+            month ??= 1;
 
             //if we have a Julian format we need to just add the days to Jan 1st
             if (format.Any(c => c == 'J'))
@@ -83,14 +97,14 @@ namespace BarcodeParserBuilder.Infrastructure
 
             return new BarcodeDateTime(new DateTime(year.Value, month.Value, day ?? 1, hour ?? 0, 0, 0), value, format);
         }
-        public static BarcodeDateTime HibcDate(DateTime date) => HibcDate(date, date.Hour > 0 ? HIBCShortYearMonthDayHour : HIBCYearMonthDay);
-        public static BarcodeDateTime HibcDate(DateTime date, string format)
+        public static BarcodeDateTime? HibcDate(DateTime date) => HibcDate(date, date.Hour > 0 ? HIBCShortYearMonthDayHour : HIBCYearMonthDay);
+        public static BarcodeDateTime? HibcDate(DateTime date, string format)
         {
             ValidateHibcFormat(format);
             return BuildDateString(date, format);
         }
 
-        private static void ValidateHibcFormat(string format)
+        private static void ValidateHibcFormat(string? format)
         {
             if( !string.Equals(format, HIBCMonthShortYear, StringComparison.OrdinalIgnoreCase) &&
                 !string.Equals(format, HIBCShortYearMonthDayHour, StringComparison.OrdinalIgnoreCase) &&
@@ -101,7 +115,7 @@ namespace BarcodeParserBuilder.Infrastructure
                 !string.Equals(format, HIBCShortYearJulianDayHour, StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException($"Invalid Hibc date format '{(string.IsNullOrWhiteSpace(format) ? "(null)" : format)}'.");
         }
-        private static void ParseDateString(string input, string format, out int? year, out int? month, out int? day, out int? hour)
+        private static void ParseDateString(string? input, string? format, out int? year, out int? month, out int? day, out int? hour)
         {
             year = null;
             month = null;
@@ -117,12 +131,12 @@ namespace BarcodeParserBuilder.Infrastructure
             if (input.Length != format.Length || input.Any(c => !char.IsDigit(c)))
                 throw new ArgumentException($"Invalid datetime value '{input}' for format '{format}'.");
 
-            foreach (Match match in Regex.Matches(format, @"([a-zA-Z])\1*", RegexOptions.IgnoreCase))
+            foreach (Match? match in Regex.Matches(format, @"([a-zA-Z])\1*", RegexOptions.IgnoreCase))
             {
                 if (string.IsNullOrWhiteSpace(match?.Value))
                     continue;
 
-                int number = int.Parse(input.Substring(0, match.Value.Length));
+                int number = int.Parse(input[..match.Value.Length]);
                 input = input.Remove(0, match.Value.Length);
                 switch (match.Value.ToUpper().First())
                 {
@@ -149,13 +163,13 @@ namespace BarcodeParserBuilder.Infrastructure
 
             return;
         }
-        private static BarcodeDateTime BuildDateString(DateTime input, string format)
+        private static BarcodeDateTime? BuildDateString(DateTime input, string format)
         {
             if (string.IsNullOrWhiteSpace(format) || !Regex.IsMatch(format, DateFormatRegex, RegexOptions.IgnoreCase))
                 throw new ArgumentException($"Invalid format '{(string.IsNullOrWhiteSpace(format) ? "(null)" : format)}' given.");
 
-            string value = null;
-            foreach (Match match in Regex.Matches(format, @"([a-zA-Z])\1*", RegexOptions.IgnoreCase))
+            string? value = null;
+            foreach (Match? match in Regex.Matches(format, @"([a-zA-Z])\1*", RegexOptions.IgnoreCase))
             {
                 if (string.IsNullOrWhiteSpace(match?.Value))
                     continue;

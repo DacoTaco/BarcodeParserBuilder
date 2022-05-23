@@ -9,17 +9,23 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
 {
     public class EanProductCodeParserBuilderTestFixture
     {
+        private readonly EanProductCodeParserBuilder _parserBuilder;
+
+        public EanProductCodeParserBuilderTestFixture()
+        {
+            _parserBuilder = new EanProductCodeParserBuilder();
+        }
+
         [Theory]
         [InlineData("1118999881193")] //Ean13      
         [InlineData("45861734")] //Ean8
         public void FieldParserBuilderAcceptsValidProductCodes(string productCode)
         {
             //Arrange
-            var fieldParserBuilder = new EanProductCodeParserBuilder();
             ProductCode result = null;
 
             //Act
-            Action parseAction = () => result = (ProductCode)fieldParserBuilder.Parse(productCode, null, null);
+            Action parseAction = () => result = (ProductCode)_parserBuilder.Parse(productCode, null, null);
 
             //Assert
             parseAction.Should().NotThrow();
@@ -35,11 +41,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
         [InlineData("07038319110380")] //GTIN (EAN13)
         public void FieldParserBuilderRejectsInvalidProductCodes(string productCode)
         {
-            //Arrange
-            var fieldParserBuilder = new EanProductCodeParserBuilder();
-
-            //Act
-            Action parseAction = () => fieldParserBuilder.Parse(productCode, null, null);
+            //Arrange & Act
+            Action parseAction = () => _parserBuilder.Parse(productCode, null, null);
 
             //Assert
             parseAction.Should()
@@ -54,11 +57,10 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
         public void FieldParserBuilderBuildsCorrectString(string code, string expectedOutput)
         {
             //Arrange
-            var fieldParserBuilder = new EanProductCodeParserBuilder();
             var productCode = ProductCode.ParseGtin(code);
 
             //Act
-            var output = fieldParserBuilder.Build(productCode);
+            var output = _parserBuilder.Build(productCode);
 
             //Assert
             output.Should().Be(expectedOutput);
@@ -68,11 +70,10 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
         public void FieldParserBuilderRejectsWrongProductCode()
         {
             //Arrange
-            var fieldParserBuilder = new EanProductCodeParserBuilder();
             var productCode = ProductCode.ParseGtin("91197253403428");
 
             //Act
-            Action buildAction = () => fieldParserBuilder.Build(productCode);
+            Action buildAction = () => _parserBuilder.Build(productCode);
 
             //Assert
             buildAction.Should()

@@ -44,7 +44,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
             yield return new object[] 
             { 
                 $"5420046520228",
-                new EanBarcode()
+                new EanBarcode
                 {
                     ProductCode = new TestProductCode("5420046520228", ProductCodeType.EAN),
                 } 
@@ -54,9 +54,22 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
             yield return new object[]
             {
                 $"045496730086",
-                new EanBarcode()
+                new EanBarcode
                 {
-                    ProductCode = new TestProductCode("045496730086", ProductCodeType.EAN),
+                    CompanyPrefix = "45496",
+                    ProductCode = new TestProductCode("73008", ProductCodeType.EAN),
+                }
+            };
+
+            //UPC-A / NDC
+            yield return new object[]
+            {
+                $"300450449108",
+                new EanBarcode
+                {
+                    CompanyPrefix = null,
+                    ProductCode = new TestProductCode("0045044910", ProductCodeType.NDC),
+                    ProductSystem = new EanProductSystem(EanProductSystemScheme.NationalDrugCode, 3)
                 }
             };
 
@@ -64,9 +77,9 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
             yield return new object[]
             {
                 $"27066027",
-                new EanBarcode()
+                new EanBarcode
                 {
-                    ProductCode = new TestProductCode("27066027", ProductCodeType.EAN),
+                    ProductCode = new TestProductCode("2706602", ProductCodeType.EAN),
                 }
             };
 
@@ -74,7 +87,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
             yield return new object[]
             {
                 $"9780316029186",
-                new EanBarcode()
+                new EanBarcode
                 {
                     ProductCode = new TestProductCode("9780316029186", ProductCodeType.EAN),
                 }
@@ -100,22 +113,22 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
             //ProductCode Too Short
             yield return new object[]
             {
-                $"9119725",
-                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid Ean value '9119725'."
+                $"9119727",
+                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid value Length 7. Expected 8, 12 or 13 Bytes."
             };
 
             //ProductCode Too long
             yield return new object[]
             {
-                $"91197254896418",
-                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid value Length 14. Expected Max 13 Bytes."
+                $"91197254896410",
+                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid value Length 14. Expected 8, 12 or 13 Bytes."
             };
 
             //Invalid CheckDigit
             yield return new object[]
             {
                 $"27066028",
-                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid GTIN CheckDigit '8', Expected '7'."
+                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid Ean CheckDigit '8', Expected '7'."
             };
 
             //Bogus Data

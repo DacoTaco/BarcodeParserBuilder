@@ -19,7 +19,26 @@ namespace BarcodeParserBuilder.Barcodes.EAN
         public override ProductCode? ProductCode 
         {
             get => (ProductCode?)BarcodeFields[nameof(ProductCode)].Value;
-            set => BarcodeFields[nameof(ProductCode)].SetValue(value);
+            set
+            {
+                if(value != null)
+                {
+                    switch(value.Type)
+                    {
+                        case ProductCodeType.NDC:
+                            if (ProductSystem?.Scheme != EanProductSystemScheme.NationalDrugCode)
+                                ProductSystem = EanProductSystem.Create(EanProductSystemScheme.NationalDrugCode);
+                            break;
+                        default:
+                            if (ProductSystem == null)
+                                ProductSystem = EanProductSystem.Create(EanProductSystemScheme.Reserved);
+                            else if (ProductSystem.Scheme == EanProductSystemScheme.NationalDrugCode)
+                                ProductSystem = EanProductSystem.Create(EanProductSystemScheme.Reserved);
+                            break;
+                    }
+                }
+                BarcodeFields[nameof(ProductCode)].SetValue(value);
+            }
         }
 
         public EanProductSystem? ProductSystem

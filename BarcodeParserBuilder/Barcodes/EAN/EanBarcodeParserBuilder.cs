@@ -40,7 +40,9 @@ namespace BarcodeParserBuilder.Barcodes.EAN
             if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code))
                 return null;
 
-            var barcodeString = $"{barcode.ProductSystem?.Value.ToString()}{barcode.CompanyPrefix}{barcode.ProductCode.Code}";
+            var barcodeString = (barcode.ProductCode.Code.Length != 7 && barcode.ProductCode.Code.Length < 11)
+                ? $"{barcode.ProductSystem?.Value.ToString()}{barcode.CompanyPrefix}{barcode.ProductCode.Code}"
+                : $"{barcode.ProductCode.Code}";
 
             if (barcodeString.Length < 12 && barcodeString.Length > 8)
                 barcodeString = barcodeString.PadLeft(11, '0');
@@ -50,7 +52,8 @@ namespace BarcodeParserBuilder.Barcodes.EAN
                 var checkDigit = EanCheckDigitCalculator.CalculateCheckDigit(barcodeString);
                 barcodeString = $"{barcodeString}{checkDigit}";
             }
-            else if (barcodeString.Length > 13)
+            
+            if (barcodeString.Length != 8 && barcodeString.Length != 12 && barcodeString.Length != 13)
                 throw new ArgumentException("Invalid Ean barcode to be generated.");
 
             return barcodeString;

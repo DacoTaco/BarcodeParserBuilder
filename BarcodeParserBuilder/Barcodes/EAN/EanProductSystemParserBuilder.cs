@@ -1,4 +1,5 @@
-﻿using BarcodeParserBuilder.Exceptions.EAN;
+﻿using BarcodeParserBuilder.Exceptions;
+using BarcodeParserBuilder.Exceptions.EAN;
 using BarcodeParserBuilder.Infrastructure;
 using System.Linq;
 
@@ -12,7 +13,7 @@ namespace BarcodeParserBuilder.Barcodes.EAN
                 return null;
 
             if (!value.All(char.IsDigit) || !int.TryParse(value, out var number) || number > 9 || number < 0)
-                throw new EanParseException($"Invalid EanProductSystem '{value}'");
+                throw new EanParseException($"Invalid EanProductSystem '{value}'.");
 
             return EanProductSystem.Create(number);
         }
@@ -24,7 +25,7 @@ namespace BarcodeParserBuilder.Barcodes.EAN
                 return true;
 
             if (!value.All(char.IsDigit) || !int.TryParse(value, out var number) || number > 9 || number < 0)
-                throw new EanParseException($"Invalid EanProductSystem '{value}'");
+                throw new ValidateException($"Invalid EanProductSystem '{value}'.");
 
             return true;
         }

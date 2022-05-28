@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.EAN
 {
@@ -14,7 +15,7 @@ namespace BarcodeParserBuilder.Barcodes.EAN
 
     public class EanProductSystem
     {
-        private static Dictionary<int, EanProductSystemScheme> _eanProductSystems = new Dictionary<int, EanProductSystemScheme>
+        private readonly static Dictionary<int, EanProductSystemScheme> _eanProductSystems = new Dictionary<int, EanProductSystemScheme>
         {
             //0-1 & 6-9 -> Manufacturer & Product
             { 0, EanProductSystemScheme.ManufacturerAndProduct },
@@ -45,6 +46,14 @@ namespace BarcodeParserBuilder.Barcodes.EAN
                 throw new ArgumentException($"invalid Ean Product system '{numberSystem}'");
 
             return new EanProductSystem(_eanProductSystems[numberSystem], numberSystem);
+        }
+
+        public static EanProductSystem Create(EanProductSystemScheme scheme)
+        {
+            if (!_eanProductSystems.ContainsValue(scheme))
+                throw new ArgumentException($"invalid Ean Product system '{scheme}'");
+
+            return new EanProductSystem(scheme, _eanProductSystems.First(eps => eps.Value == scheme).Key);
         }
     }
 }

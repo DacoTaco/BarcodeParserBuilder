@@ -47,6 +47,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 new EanBarcode
                 {
                     ProductCode = new TestProductCode("5420046520228", ProductCodeType.EAN),
+                    ProductSystem = EanProductSystem.Create(5),
                 } 
             };
 
@@ -58,6 +59,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 {
                     CompanyPrefix = "45496",
                     ProductCode = new TestProductCode("73008", ProductCodeType.EAN),
+                    ProductSystem = EanProductSystem.Create(0),
                 }
             };
 
@@ -69,7 +71,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 {
                     CompanyPrefix = null,
                     ProductCode = new TestProductCode("0045044910", ProductCodeType.NDC),
-                    ProductSystem = new EanProductSystem(EanProductSystemScheme.NationalDrugCode, 3)
+                    ProductSystem = EanProductSystem.Create(EanProductSystemScheme.NationalDrugCode),
                 }
             };
 
@@ -80,6 +82,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 new EanBarcode
                 {
                     ProductCode = new TestProductCode("2706602", ProductCodeType.EAN),
+                    ProductSystem = EanProductSystem.Create(2),
                 }
             };
 
@@ -90,6 +93,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 new EanBarcode
                 {
                     ProductCode = new TestProductCode("9780316029186", ProductCodeType.EAN),
+                    ProductSystem = EanProductSystem.Create(9),
                 }
             };
         }

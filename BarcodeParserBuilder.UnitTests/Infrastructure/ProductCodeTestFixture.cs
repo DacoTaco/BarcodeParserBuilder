@@ -11,9 +11,7 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
         [InlineData("91197253403428", ProductCodeType.GTIN)] //GTIN
         [InlineData("07038319110380", ProductCodeType.GTIN)] //GTIN (EAN13)
         [InlineData("1118999881193", ProductCodeType.EAN)] //EAN13/GTIN-13/GLN
-        [InlineData("911972534038", ProductCodeType.EAN)] //GTIN-12/EAN-12/UPC-12
-        [InlineData("45861734", ProductCodeType.EAN)] //GTIN-8/EAN-8
-        public void CanParseGtinAndEan(string value, ProductCodeType expectedSchema)
+        public void CanParseGtin(string value, ProductCodeType expectedSchema)
         {
             //Arrange & Act
             var result = ProductCode.ParseGtin(value);
@@ -36,6 +34,54 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
             //Arrange & Act
             ProductCode result = null;
             Action parseAction = () => result = ProductCode.ParseGtin(value);
+
+            //Assert
+            parseAction.Should()
+                .Throw<ArgumentException>()
+                .WithMessage(expectedMessage);
+            result.Should().BeNull();
+        }
+
+        [Theory]
+        [InlineData("3831911038", ProductCodeType.EAN)] //GTIN (EAN13)
+        [InlineData("1899988119", ProductCodeType.EAN)] //EAN13/GTIN-13/GLN
+        [InlineData("1197253403", ProductCodeType.EAN)] //GTIN-12/EAN-12/UPC-12
+        [InlineData("586173", ProductCodeType.EAN)] //GTIN-8/EAN-8
+        public void CanParseEan(string value, ProductCodeType expectedSchema)
+        {
+            //Arrange & Act
+            var result = ProductCode.ParseEan(value);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Type.Should().Be(expectedSchema);
+            result.Code.Should().Be(value);
+        }
+
+        [Theory]
+        [InlineData("3831911038", ProductCodeType.NDC)]
+        [InlineData("1899988119", ProductCodeType.NDC)]
+        public void CanParseNdc(string value, ProductCodeType expectedSchema)
+        {
+            //Arrange & Act
+            var result = ProductCode.ParseNdc(value);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Type.Should().Be(expectedSchema);
+            result.Code.Should().Be(value);
+        }
+
+        [Theory]
+        [InlineData("11189#", "Invalid Ean Product Code '11189#'.")] //EAN - Invalid Character
+        [InlineData("91197253403428", "Invalid Ean Product Code '91197253403428'.")] //EAN - Value too long
+        [InlineData("NONUMBERS", "Invalid Ean Product Code 'NONUMBERS'.")] //EAN - Only Letters
+        [InlineData("\0", "Invalid Ean Product Code '\0'.")] //EAN - null character
+        public void CanDetectInvalidEan(string value, string expectedMessage)
+        {
+            //Arrange & Act
+            ProductCode result = null;
+            Action parseAction = () => result = ProductCode.ParseEan(value);
 
             //Assert
             parseAction.Should()

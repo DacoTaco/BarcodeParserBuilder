@@ -1,0 +1,46 @@
+﻿using System;
+using System.Linq;
+
+namespace BarcodeParserBuilder.Infrastructure
+{
+    public partial class ProductCode
+    {
+        ///MSI can have multiple ways to calculate check digits ... *sigh*
+        ///Most common is luhn/Mod 10 - from right to left add all numbers together. numbers in even positions need to be multiplied by 2 and added together to make 1 digit. then modulo by 10
+        ///See : https://en.wikipedia.org/wiki/Luhn_algorithm#Example_for_validating_check_digit
+        ///Least common : no check digit. we don't support those, because wtf?
+        ///Modulo 11 : https://en.wikipedia.org/wiki/MSI_Barcode#Mod_11_Check_Digit
+        ///Modulo 1010 & 1110 : Combination of Mod 10/11 + mod 10
+        ///Thankfully, we can apparently validate them all by doing a luhn/mod10 validation?
+        public static ProductCode? ParseMsi(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
+
+            if (value.Any(c => !char.IsDigit(c)) || value.Length < 3)
+                throw new ArgumentException($"Invalid MSI value '{value}'.");
+
+            var productCode = value
+                .Reverse()
+                .ToList();
+
+            var sum = 0;
+            for (int index = 0; index < productCode.Count; index++)
+            {
+                var character = productCode[index];
+                var digit = index % 2 == 0 ? int.Parse(character.ToString()) : int.Parse(character.ToString()) * 2;
+
+                //only 1 digit allowed. add numbers together, or subtract it with 9. 18 -> 9, 16 -> 7 etc etc.
+                if (digit > 9)
+                    digit -= 9;
+
+                sum += digit;
+            }
+
+            if (sum % 10 != 0)
+                throw new ArgumentException($"Invalid MSI CheckDigit '{value.Last()}'.");
+
+            return new ProductCode(value, ProductCodeType.MSI);
+        }
+    }
+}

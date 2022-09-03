@@ -1,50 +1,29 @@
-﻿using BarcodeParserBuilder.Barcodes.EAN;
+﻿using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
 using Xunit;
 
-namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
+namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
 {
     public class EanProductSystemTestFixture : BaseBarcodeTestFixture
     {
         [Theory]
-        [InlineData(0, EanProductSystemScheme.ManufacturerAndProduct)]
-        [InlineData(1, EanProductSystemScheme.ManufacturerAndProduct)]
-        [InlineData(2, EanProductSystemScheme.Reserved)]
-        [InlineData(3, EanProductSystemScheme.NationalDrugCode)]
-        [InlineData(4, EanProductSystemScheme.ReservedCoupons)]
-        [InlineData(5, EanProductSystemScheme.Coupons)]
-        [InlineData(6, EanProductSystemScheme.ManufacturerAndProduct)]
-        [InlineData(7, EanProductSystemScheme.ManufacturerAndProduct)]
-        [InlineData(8, EanProductSystemScheme.ManufacturerAndProduct)]
-        [InlineData(9, EanProductSystemScheme.ManufacturerAndProduct)]
-        public void CanCreateProductSystemFromNumber(int number, EanProductSystemScheme expectedSchema)
+        [InlineData(0, GtinProductScheme.ManufacturerAndProduct)]
+        [InlineData(1, GtinProductScheme.ManufacturerAndProduct)]
+        [InlineData(2, GtinProductScheme.Reserved)]
+        [InlineData(3, GtinProductScheme.NationalDrugCode)]
+        [InlineData(4, GtinProductScheme.ReservedCoupons)]
+        [InlineData(5, GtinProductScheme.Coupons)]
+        [InlineData(6, GtinProductScheme.ManufacturerAndProduct)]
+        [InlineData(7, GtinProductScheme.ManufacturerAndProduct)]
+        [InlineData(8, GtinProductScheme.ManufacturerAndProduct)]
+        [InlineData(9, GtinProductScheme.ManufacturerAndProduct)]
+        public void CanCreateProductSystemFromNumber(int number, GtinProductScheme expectedSchema)
         {
-
             //Act
-            var result = EanProductSystem.Create(number);
+            var result = GtinProductCode.EanProductSystems[number];
 
             //Assert
-            result.Should().NotBeNull();
-            result.Value.Should().Be(number);
-            result.Scheme.Should().Be(expectedSchema);
-        }
-
-        [Theory]
-        [InlineData(0, EanProductSystemScheme.ManufacturerAndProduct)]
-        [InlineData(2, EanProductSystemScheme.Reserved)]
-        [InlineData(3, EanProductSystemScheme.NationalDrugCode)]
-        [InlineData(4, EanProductSystemScheme.ReservedCoupons)]
-        [InlineData(5, EanProductSystemScheme.Coupons)]
-        public void CanCreateProductSystemBySchema(int expectedNumber, EanProductSystemScheme schema)
-        {
-
-            //Act
-            var result = EanProductSystem.Create(schema);
-
-            //Assert
-            result.Should().NotBeNull();
-            result.Value.Should().Be(expectedNumber);
-            result.Scheme.Should().Be(schema);
+            result.Should().Be(expectedSchema);
         }
     }
 }

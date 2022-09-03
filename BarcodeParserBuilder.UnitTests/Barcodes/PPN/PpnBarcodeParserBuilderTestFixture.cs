@@ -55,7 +55,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
                 $"{Prefix}9N111234568408{GroupSeparator}SHAHASERIAL12385{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
                 new PpnBarcode()
                 {
-                    ProductCode = new TestProductCode("111234568408", ProductCodeType.PPN),
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
                     BatchNumber = "ANDSOMEBatchNumber20",
                     SerialNumber = "HAHASERIAL12385"
                 }
@@ -67,7 +67,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
                 $"{Prefix}SHAHASERIAL12385{GroupSeparator}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
                 new PpnBarcode()
                 {
-                    ProductCode = new TestProductCode("111234568408", ProductCodeType.PPN),
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
                     BatchNumber = "ANDSOMEBatchNumber20",
                     SerialNumber = "HAHASERIAL12385"
                 }
@@ -93,7 +93,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
             //GTIN ProductCode + Unused AI's
             var barcode = new PpnBarcode()
             {
-                ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) => 
+                { 
+                    productCode.Type = ProductCodeType.GTIN;
+                    productCode.Value = "357466145194";
+                }),
                 BatchNumber = null,
                 SerialNumber = null
             };
@@ -110,7 +114,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
                 $"{Prefix}9N111234568408{Suffix}",
                 new PpnBarcode()
                 {
-                    ProductCode = new TestProductCode("111234568408", ProductCodeType.PPN),
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
                     BatchNumber = null,
                     SerialNumber = null
                 }
@@ -122,7 +126,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
                 $"{Prefix}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{GroupSeparator}SHAHASERIAL12385{Suffix}",
                 new PpnBarcode()
                 {
-                    ProductCode = new TestProductCode("111234568408", ProductCodeType.PPN),
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
                     BatchNumber = "ANDSOMEBatchNumber20",
                     SerialNumber = "HAHASERIAL12385"
                 }
@@ -134,7 +138,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
                 $"{Prefix}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{GroupSeparator}SHAHASERIAL12385{GroupSeparator}D201220{Suffix}",
                 new PpnBarcode()
                 {
-                    ProductCode = new TestProductCode("111234568408", ProductCodeType.PPN),
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
                     BatchNumber = "ANDSOMEBatchNumber20",
                     SerialNumber = "HAHASERIAL12385",
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 12, 20), "201220", GS1BarcodeParserBuilderTestFixture.GS1DateFormat)
@@ -147,7 +151,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
                 $"{Prefix}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{GroupSeparator}SHAHASERIAL12385{GroupSeparator}D201220{GroupSeparator}16D20201231{Suffix}",
                 new PpnBarcode()
                 {
-                    ProductCode = new TestProductCode("111234568408", ProductCodeType.PPN),
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
                     BatchNumber = "ANDSOMEBatchNumber20",
                     SerialNumber = "HAHASERIAL12385",
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 12, 20), "201220", GS1BarcodeParserBuilderTestFixture.GS1DateFormat),

@@ -52,7 +52,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
                 $"1446921",
                 new MsiBarcode()
                 {
-                    ProductCode = new TestProductCode("1446921", ProductCodeType.MSI),
+                    ProductCode = TestProductCode.CreateProductCode<MsiProductCode>("1446921"),
                 }
             };
 
@@ -62,7 +62,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
                 $"3339355",
                 new MsiBarcode()
                 {
-                    ProductCode = new TestProductCode("3339355", ProductCodeType.MSI),
+                    ProductCode = TestProductCode.CreateProductCode<MsiProductCode>("3339355"),
                 }
             };
 
@@ -72,7 +72,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
                 $"12345674",
                 new MsiBarcode()
                 {
-                    ProductCode = new TestProductCode("12345674", ProductCodeType.MSI),
+                    ProductCode = TestProductCode.CreateProductCode<MsiProductCode>("12345674"),
                 }
             };
 
@@ -82,7 +82,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
                 $"80523",
                 new MsiBarcode()
                 {
-                    ProductCode = new TestProductCode("80523", ProductCodeType.MSI),
+                    ProductCode = TestProductCode.CreateProductCode<MsiProductCode>("80523"),
                 }
             };
 
@@ -92,7 +92,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
                 $"123456741",
                 new MsiBarcode()
                 {
-                    ProductCode = new TestProductCode("123456741", ProductCodeType.MSI),
+                    ProductCode = TestProductCode.CreateProductCode<MsiProductCode>("123456741"),
                 }
             };
         }

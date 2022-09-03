@@ -46,9 +46,28 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 $"5420046520228",
                 new EanBarcode
                 {
-                    ProductCode = new TestProductCode("5420046520228", ProductCodeType.EAN),
-                    ProductSystem = EanProductSystem.Create(5),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("5420046520228", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.EAN;
+                        productCode.Schema = GtinProductScheme.Unknown;
+                        productCode.Value = "542004652022";
+                    }),
                 } 
+            };
+
+            //UPC in EAN13
+            yield return new object[]
+            {
+                $"0420046520223",
+                new EanBarcode
+                {
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("0420046520223", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.EAN;
+                        productCode.Schema = GtinProductScheme.ReservedCoupons;
+                        productCode.Value = "2004652022";
+                    }),
+                }
             };
 
             //UPC
@@ -57,9 +76,13 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 $"045496730086",
                 new EanBarcode
                 {
-                    CompanyPrefix = "45496",
-                    ProductCode = new TestProductCode("73008", ProductCodeType.EAN),
-                    ProductSystem = EanProductSystem.Create(0),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("045496730086", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.EAN;
+                        productCode.Schema = GtinProductScheme.ManufacturerAndProduct;
+                        productCode.Value = "73008";
+                        productCode.CompanyIdentifier = "4549";
+                    }),
                 }
             };
 
@@ -69,9 +92,12 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 $"300450449108",
                 new EanBarcode
                 {
-                    CompanyPrefix = null,
-                    ProductCode = new TestProductCode("0045044910", ProductCodeType.NDC),
-                    ProductSystem = EanProductSystem.Create(EanProductSystemScheme.NationalDrugCode),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("300450449108", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.EAN;
+                        productCode.Schema = GtinProductScheme.NationalDrugCode;
+                        productCode.Value = "0045044910";
+                    }),
                 }
             };
 
@@ -81,8 +107,12 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 $"27066027",
                 new EanBarcode
                 {
-                    ProductCode = new TestProductCode("2706602", ProductCodeType.EAN),
-                    ProductSystem = EanProductSystem.Create(2),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("27066027", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.EAN;
+                        productCode.Schema = GtinProductScheme.Unknown;
+                        productCode.Value = "2706602";
+                    }),
                 }
             };
 
@@ -92,8 +122,12 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                 $"9780316029186",
                 new EanBarcode
                 {
-                    ProductCode = new TestProductCode("9780316029186", ProductCodeType.EAN),
-                    ProductSystem = EanProductSystem.Create(9),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("9780316029186", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.EAN;
+                        productCode.Schema = GtinProductScheme.Unknown;
+                        productCode.Value = "978031602918";
+                    }),
                 }
             };
         }
@@ -117,29 +151,29 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
             //ProductCode Too Short
             yield return new object[]
             {
-                $"9119727",
-                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid value Length 7. Expected 8, 12 or 13 Bytes."
+                $"911972",
+                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid GTIN/EAN Length of 6."
             };
 
             //ProductCode Too long
             yield return new object[]
             {
                 $"91197254896410",
-                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid value Length 14. Expected 8, 12 or 13 Bytes."
+                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid ProductCode type 'GTIN'."
             };
 
             //Invalid CheckDigit
             yield return new object[]
             {
                 $"27066028",
-                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid Ean CheckDigit '8', Expected '7'."
+                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid GTIN/EAN CheckDigit '8', Expected '7'."
             };
 
             //Bogus Data
             yield return new object[]
             {
                 $"+$$4BOGUS254",
-                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid Ean value '+$$4BOGUS254'."
+                $"Failed to parse Ean Barcode :{Environment.NewLine}Invalid GTIN/EAN value '+$$4BOGUS254'."
             };
         }
     }

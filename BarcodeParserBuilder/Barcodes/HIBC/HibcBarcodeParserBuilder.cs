@@ -85,7 +85,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             if (barcode.Is2DBarcode && list.Count != 0)
             {
                 var barcodeString = list.Select(s => s).Aggregate((i, s) => i + s);
-                list[list.Count - 1] += HibcCheckCharacterCalculator.CalculateSegmentCheckCharacter(barcodeString).ToString();
+                list[^1] += HibcCheckCharacterCalculator.CalculateSegmentCheckCharacter(barcodeString).ToString();
             }
 
             return list;
@@ -224,8 +224,8 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                     if (!HibcCheckCharacterCalculator.ValidateSegment(barcodeString))
                         throw new HIBCParseException("Invalid HIBC Barcode.");
 
-                    var segment = segments[segments.Count - 1];
-                    segments[segments.Count-1] = segment.Remove(segment.Length - 1, 1);
+                    var segment = segments[^1];
+                    segments[^1] = segment.Remove(segment.Length - 1, 1);
                 }
 
                 var barcode = new HibcBarcode(is2DBarcode);
@@ -254,7 +254,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                     if(isPrimarySegment)
                     {
                         barcode.LabelerIdentificationCode = segmentData[..4];
-                        barcode.ProductCode = ProductCode.ParseHibc(segmentData.Substring(4, segmentData.Length - 5));
+                        barcode.ProductCode = ProductCode.ParseHibc(segmentData[4..^1]);
                         barcode.UnitOfMeasure = int.Parse(segmentData.Last().ToString());
                         continue;
                     }
@@ -267,13 +267,13 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                                 throw new HIBCParseException($"Invalid Segment starts with '{segmentData.First()}'.");
 
                             if (segmentData.StartsWith("16D", StringComparison.Ordinal))
-                                barcode.ProductionDate = BarcodeDateTime.HibcDate(segmentData.Substring(3), BarcodeDateTime.HIBCYearMonthDay);
+                                barcode.ProductionDate = BarcodeDateTime.HibcDate(segmentData[3..], BarcodeDateTime.HIBCYearMonthDay);
                             else if (segmentData.StartsWith("14D", StringComparison.Ordinal))
                             {
                                 if (!string.IsNullOrWhiteSpace(barcode.ExpirationDate?.StringValue))
                                     throw new HIBCParseException($"ExpirationDate already parsed before '{segmentData}'.");
 
-                                barcode.ExpirationDate = BarcodeDateTime.HibcDate(segmentData.Substring(3), BarcodeDateTime.HIBCYearMonthDay);
+                                barcode.ExpirationDate = BarcodeDateTime.HibcDate(segmentData[3..], BarcodeDateTime.HIBCYearMonthDay);
                             }
                             //Old segment standard, no prefix, just YYJJJ[LotNumber]
                             //we fix it by adding a $$5 to it and parsing it as such.
@@ -288,14 +288,14 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                             if (!string.IsNullOrWhiteSpace(barcode.SerialNumber))
                                 throw new HIBCParseException($"Serial already parsed before '{segmentData}'.");
 
-                            barcode.SerialNumber = segmentData.Substring(1);
+                            barcode.SerialNumber = segmentData[1..];
                             break;
                         case '$':
                             var QuantityDateLine = segmentData.StartsWith("$$", StringComparison.Ordinal);
-                            segmentData = segmentData.Substring(QuantityDateLine ? 2 : 1);
+                            segmentData = segmentData[(QuantityDateLine ? 2 : 1)..];
                             var isSerialLine = segmentData.First() == '+';
                             if(isSerialLine)
-                                segmentData = segmentData.Substring(1);
+                                segmentData = segmentData[1..];
 
                             //$$2 - $$6 -> dated batch or serial line
                             //$$7 -> only batch/serial
@@ -304,11 +304,11 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                             if (QuantityDateLine && int.TryParse(segmentData.First().ToString(), out var formatNumber))
                             {
                                 if(formatNumber > 1)
-                                    segmentData = segmentData.Substring(1);
+                                    segmentData = segmentData[1..];
 
                                 var format = HibcBarcodeSegmentFormat.SegmentFormats[formatNumber];
-                                var data = segmentData.Substring(0, format.Length);
-                                segmentData = segmentData.Substring(format.Length);
+                                var data = segmentData[..format.Length];
+                                segmentData = segmentData[format.Length..];
 
                                 if (formatNumber > 7)
                                     barcode.Quantity = int.Parse(data);

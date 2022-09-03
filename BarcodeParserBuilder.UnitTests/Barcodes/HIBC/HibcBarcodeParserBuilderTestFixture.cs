@@ -49,7 +49,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A123BJC5D6E71G+2001510X3GG",
                 new HibcBarcode(false)
                 {
-                    ProductCode = new TestProductCode("BJC5D6E7", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("BJC5D6E7"),
                     LabelerIdentificationCode = "A123",
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 01, 15), "20015", "yyJJJ"),
@@ -64,7 +64,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 new HibcBarcode(false)
                 {
                     LabelerIdentificationCode = "J123",
-                    ProductCode = new TestProductCode("AQ345", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("AQ345"),
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2025, 11, 26), "25330", "yyJJJ"),
                     BatchNumber = "BC34567",
@@ -79,7 +79,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 new HibcBarcode()
                 {
                     LabelerIdentificationCode = "J123",
-                    ProductCode = new TestProductCode("AQ345", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("AQ345"),
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2025, 11, 26), "25330", "yyJJJ"),
                     BatchNumber = "BC34567",
@@ -94,7 +94,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 new HibcBarcode()
                 {
                     LabelerIdentificationCode = "A123",
-                    ProductCode = new TestProductCode("ABCDEFGHI123456789", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("ABCDEFGHI123456789"),
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 02, 02, 16, 00, 00), "20020216", "yyMMddHH"),
                     BatchNumber = "LOT123456789012345",
@@ -109,7 +109,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A99912345/$$81210X3/16D20111212/14D20200906/S77DEFG45$",
                 new HibcBarcode()
                 {
-                    ProductCode = new TestProductCode("1234", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
                     LabelerIdentificationCode = "A999",
                     UnitOfMeasure = 5,
                     SerialNumber = "77DEFG45",
@@ -126,7 +126,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A99912345/$$90234510X3/16D20111212/14D20200906/S77DEFG458",
                 new HibcBarcode()
                 {
-                    ProductCode = new TestProductCode("1234", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
                     LabelerIdentificationCode = "A999",
                     UnitOfMeasure = 5,
                     SerialNumber = "77DEFG45",
@@ -147,7 +147,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 new HibcBarcode()
                 {
                     LabelerIdentificationCode = "A123",
-                    ProductCode = new TestProductCode("ABCDEFGHI123456789", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("ABCDEFGHI123456789"),
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 02, 02, 16, 00, 00), "20020216", "yyMMddHH"),
                     BatchNumber = "LOT123456789012345",
@@ -163,7 +163,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 new HibcBarcode()
                 {
                     LabelerIdentificationCode = "A123",
-                    ProductCode = new TestProductCode("ABCDEFGHI123456789", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("ABCDEFGHI123456789"),
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 02, 02), "20200202", "yyyyMMdd"),
                     BatchNumber = "LOT123456789012345",
@@ -178,7 +178,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A99912345/$$81210X3/$$+320090677DEFG45/16D20111212U",
                 new HibcBarcode()
                 {
-                    ProductCode = new TestProductCode("1234", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
                     LabelerIdentificationCode = "A999",
                     UnitOfMeasure = 5,
                     SerialNumber = "77DEFG45",
@@ -195,7 +195,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A99912345/$$90234510X3/$$+320090677DEFG45/16D20111212%",
                 new HibcBarcode()
                 {
-                    ProductCode = new TestProductCode("1234", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
                     LabelerIdentificationCode = "A999",
                     UnitOfMeasure = 5,
                     SerialNumber = "77DEFG45",
@@ -215,7 +215,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A123BJC5D6E71G+$$52001510X3GD",
                 new HibcBarcode(false)
                 {
-                    ProductCode = new TestProductCode("BJC5D6E7", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("BJC5D6E7"),
                     LabelerIdentificationCode = "A123",
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 01, 15), "20015", "yyJJJ"),
@@ -229,7 +229,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A123BJC5D6E71G+$$710X3G7",
                 new HibcBarcode(false)
                 {
-                    ProductCode = new TestProductCode("BJC5D6E7", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("BJC5D6E7"),
                     LabelerIdentificationCode = "A123",
                     UnitOfMeasure = 1,
                     BatchNumber = "10X3",
@@ -242,7 +242,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A123BJC5D6E71G+$$+52001510X3GB",
                 new HibcBarcode(false)
                 {
-                    ProductCode = new TestProductCode("BJC5D6E7", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("BJC5D6E7"),
                     LabelerIdentificationCode = "A123",
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 01, 15), "20015", "yyJJJ"),
@@ -256,7 +256,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A123BJCMD6E79++$$52001510X3+ ",
                 new HibcBarcode(false)
                 {
-                    ProductCode = new TestProductCode("BJCMD6E7", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("BJCMD6E7"),
                     LabelerIdentificationCode = "A123",
                     UnitOfMeasure = 9,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 01, 15), "20015", "yyJJJ"),
@@ -270,7 +270,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A123BJC5D6E71G",
                 new HibcBarcode(false)
                 {
-                    ProductCode = new TestProductCode("BJC5D6E7", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("BJC5D6E7"),
                     LabelerIdentificationCode = "A123",
                     UnitOfMeasure = 1
                 }
@@ -282,7 +282,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 "+A99912345/$$52025010X3/16D20111212/S77DEFG458",
                 new HibcBarcode()
                 {
-                    ProductCode = new TestProductCode("1234", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
                     LabelerIdentificationCode = "A999",
                     UnitOfMeasure = 5,
                     SerialNumber = "77DEFG45",
@@ -299,7 +299,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 new HibcBarcode()
                 {
                     LabelerIdentificationCode = "J123",
-                    ProductCode = new TestProductCode("AQ345", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("AQ345"),
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2025, 11, 01), "1125", "MMyy"),
                     BatchNumber = "BC34567",
@@ -314,7 +314,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 new HibcBarcode()
                 {
                     LabelerIdentificationCode = "J123",
-                    ProductCode = new TestProductCode("AQ345", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("AQ345"),
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2025, 01, 01), "0125", "MMyy"),
                     BatchNumber = "BC34567",
@@ -329,7 +329,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 new HibcBarcode()
                 {
                     LabelerIdentificationCode = "J123",
-                    ProductCode = new TestProductCode("AQ345", ProductCodeType.HIBC),
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("AQ345"),
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2023, 12, 31), "231231", "yyMMdd"),
                     BatchNumber = "BC34567",

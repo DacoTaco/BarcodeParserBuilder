@@ -1,25 +1,40 @@
-﻿namespace BarcodeParserBuilder.Infrastructure
+﻿using System;
+
+namespace BarcodeParserBuilder.Infrastructure
 {
     public enum ProductCodeType
     {
         Unknown = 0,
         GTIN,
         EAN,
-        NDC,
         PPN,
         MSI,
         HIBC
     }
 
-    public partial class ProductCode
+    public abstract class ProductCode
     {
-        internal ProductCode(string value, ProductCodeType schema)
+        protected ProductCode(string code)
         {
-            Code = value;
-            Type = schema;
+            Code = code;
         }
 
-        public string Code { get; protected set; }
-        public ProductCodeType Type { get; protected set; }
+        /// <summary>
+        /// The Raw Product Code value
+        /// </summary>
+        public string Code { get; internal set; }
+
+        /// <summary>
+        /// Product code type
+        /// </summary>
+        public abstract ProductCodeType Type { get; internal set; }
+
+        //Parse functions
+        public static ProductCode? ParseGtin(string? code) => string.IsNullOrWhiteSpace(code) ? null : new GtinProductCode(code);
+        [Obsolete("Ean is the same as Gtin, Use ParseGtin instead.")]
+        public static ProductCode? ParseEan(string? code) => null;
+        public static ProductCode? ParseHibc(string? code) => string.IsNullOrWhiteSpace(code) ? null : new HibcProductCode(code);
+        public static ProductCode? ParseMsi(string? code) => string.IsNullOrWhiteSpace(code) ? null : new MsiProductCode(code);
+        public static ProductCode? ParsePpn(string? code) => string.IsNullOrWhiteSpace(code) ? null : new PpnProductCode(code);
     }
 }

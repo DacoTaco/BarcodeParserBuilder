@@ -6,7 +6,7 @@ namespace BarcodeParserBuilder.Barcodes.EAN
 {
     internal class EanProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode?>
     {
-        protected override ProductCode? Parse(string? value) => ProductCode.ParseEan(value);
+        protected override ProductCode? Parse(string? value) => ProductCode.ParseGtin(value);
         protected override string? Build(ProductCode? obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj.Code;
 
         protected override bool Validate(string? value)
@@ -25,14 +25,8 @@ namespace BarcodeParserBuilder.Barcodes.EAN
             if (obj == null)
                 return true;
 
-            switch(obj.Type)
-            {
-                case ProductCodeType.EAN:
-                case ProductCodeType.NDC:
-                    break;
-                default:
-                    throw new EanValidateException($"Invalid ProductCode type '{obj.Type}'.");
-            }                
+            if(obj.Type != ProductCodeType.EAN)
+                throw new EanValidateException($"Invalid ProductCode type '{obj.Type}'.");         
 
             return true;
         }

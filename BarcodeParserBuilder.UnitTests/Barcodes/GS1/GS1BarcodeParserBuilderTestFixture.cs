@@ -66,7 +66,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"20BL0103574661451947301{GroupSeparator}9915489{GroupSeparator}9815647{GroupSeparator}24040600199T{GroupSeparator}71025862471",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "357466145194";
+                    }),
                     BatchNumber = null,
                     SerialNumber = null
                 }
@@ -78,7 +82,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"{GroupSeparator}010357466145194721118165795226{GroupSeparator}17210331101724847.1",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "357466145194";
+                    }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
@@ -92,7 +100,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0134567890123457103456789{GroupSeparator}213456789-012{GroupSeparator}",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("34567890123457", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "3456789012345";
+                    }),
                     BatchNumber = "3456789",
                     SerialNumber = "3456789-012"
                 }
@@ -103,7 +115,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
         {
             var gs1Barcode = new GS1Barcode()
             {
-                ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) => 
+                { 
+                    productCode.Type = ProductCodeType.GTIN;
+                    productCode.Value = "357466145194";
+                }),
                 BatchNumber = null,
                 SerialNumber = null,
             };
@@ -127,7 +143,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0103574661451947",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "357466145194";
+                    }),
                     BatchNumber = null,
                     SerialNumber = null
                 }
@@ -139,7 +159,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0134567890123457103456789",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("34567890123457", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = productCode.Code[..^1];
+                    }),
                     BatchNumber = "3456789",
                     SerialNumber = null
                 }
@@ -151,7 +175,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0134567890123457103456789{GroupSeparator}213456789-012",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("34567890123457", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = productCode.Code[..^1];
+                    }),
                     BatchNumber = "3456789",
                     SerialNumber = "3456789-012"
                 }
@@ -163,7 +191,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"013456789012345717991200",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("34567890123457", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = productCode.Code[..^1];
+                    }),
                     BatchNumber = null,
                     SerialNumber = null,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2099, 12, 31), "991200", GS1DateFormat)
@@ -176,7 +208,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0134567890123457103456789{GroupSeparator}11020504213456789-012",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("34567890123457", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = productCode.Code[..^1];
+                    }),
                     BatchNumber = "3456789",
                     SerialNumber = "3456789-012",
                     ExpirationDate = null,
@@ -190,7 +226,30 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "357466145194";
+                    }),
+                    BatchNumber = "1724847.1",
+                    SerialNumber = "118165795226",
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
+                    ProductionDate = null
+                }
+            };
+
+            //UPC-A/EAN12 NDC product in GTIN disguise
+            yield return new object[]
+            {
+                $"0100367457153032101724847.1{GroupSeparator}1721033121118165795226",
+                new GS1Barcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("00367457153032", (productCode) => 
+                    { 
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Schema = GtinProductScheme.NationalDrugCode;
+                        productCode.Value = "6745715303";
+                    }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
@@ -204,7 +263,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226{GroupSeparator}3105354777",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "357466145194";
+                    }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
@@ -219,7 +282,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226{GroupSeparator}3205354777",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "357466145194";
+                    }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
@@ -234,7 +301,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226{GroupSeparator}3929123456789012345",
                 new GS1Barcode()
                 {
-                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "357466145194";
+                    }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
@@ -273,7 +344,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             yield return new object[]
             {
                 $"019119725340342717991200213456789-012{GroupSeparator}103456789",
-                $"Failed to parse GS1 Barcode :{Environment.NewLine}01 : Invalid GTIN CheckDigit '7', Expected '8'."
+                $"Failed to parse GS1 Barcode :{Environment.NewLine}01 : Invalid GTIN/EAN CheckDigit '7', Expected '8'."
             };
 
             //Missing AI

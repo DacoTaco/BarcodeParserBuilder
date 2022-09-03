@@ -60,7 +60,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
         {
             var gs1128Barcode = new GS1128Barcode()
             {
-                ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                {
+                    productCode.Type = ProductCodeType.GTIN;
+                    productCode.Value = "357466145194";
+                }),
                 BatchNumber = null,
                 SerialNumber = null
             };
@@ -94,7 +98,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"{SymbologyPrefix}0103574661451947{SymbologyPrefix}301{SymbologyPrefix}24040600199T{SymbologyPrefix}71025862471",
                 new GS1128Barcode()
                 {
-                    ProductCode = new TestProductCode("03574661451947", ProductCodeType.GTIN),
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "357466145194";
+                    }),
                     BatchNumber = null,
                     SerialNumber = null
                 }

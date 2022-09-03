@@ -19,15 +19,29 @@ namespace BarcodeParserBuilder.UnitTests
             parsedResult.Should().NotBeNull();
             parsedResult.BarcodeType.Should().Be(expectedBarcodeType ?? expectedResult.BarcodeType);
 
-            if(expectedResult.ProductCode == null)
+            var parsedProductCode = parsedResult.ProductCode;
+            var expectedProductCode = expectedResult.ProductCode;
+            if (expectedProductCode == null)
             {
-                parsedResult.ProductCode.Should().BeNull();
+                parsedProductCode.Should().BeNull();
             }
             else
             {
-                parsedResult.ProductCode.Should().NotBeNull();
-                parsedResult.ProductCode.Type.Should().Be(expectedResult.ProductCode.Type);
-                parsedResult.ProductCode.Code.Should().Be(expectedResult.ProductCode.Code);
+                parsedProductCode.Should().NotBeNull();
+                parsedProductCode.Should().BeOfType(expectedProductCode.GetType());
+
+                foreach(var property in expectedProductCode.GetType().GetProperties())
+                {
+                    var actualValue = property.GetValue(parsedProductCode, null);
+                    var expectedValue = property.GetValue(expectedProductCode, null);
+
+                    if (expectedValue == null)
+                        actualValue.Should().BeNull();
+                    else
+                        actualValue.Should().NotBeNull($"{property.Name} should be equal to {expectedValue}.");
+
+                    actualValue.Should().Be(expectedValue, $"{property.Name} should be equal.");
+                }
             }
 
             //Some barcode fields are unused in some types. we still need to compare those though.

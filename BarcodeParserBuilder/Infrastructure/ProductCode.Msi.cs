@@ -3,24 +3,23 @@ using System.Linq;
 
 namespace BarcodeParserBuilder.Infrastructure
 {
-    public partial class ProductCode
+    public class MsiProductCode : ProductCode
     {
-        ///MSI can have multiple ways to calculate check digits ... *sigh*
-        ///Most common is luhn/Mod 10 - from right to left add all numbers together. numbers in even positions need to be multiplied by 2 and added together to make 1 digit. then modulo by 10
-        ///See : https://en.wikipedia.org/wiki/Luhn_algorithm#Example_for_validating_check_digit
-        ///Least common : no check digit. we don't support those, because wtf?
-        ///Modulo 11 : https://en.wikipedia.org/wiki/MSI_Barcode#Mod_11_Check_Digit
-        ///Modulo 1010 & 1110 : Combination of Mod 10/11 + mod 10
-        ///Thankfully, we can apparently validate them all by doing a luhn/mod10 validation?
-        public static ProductCode? ParseMsi(string? value)
+        internal MsiProductCode() : base("") { }
+        public MsiProductCode(string code) : base(code) 
         {
-            if (string.IsNullOrWhiteSpace(value))
-                return null;
+            ///MSI can have multiple ways to calculate check digits ... *sigh*
+            ///Most common is luhn/Mod 10 - from right to left add all numbers together. numbers in even positions need to be multiplied by 2 and added together to make 1 digit. then modulo by 10
+            ///See : https://en.wikipedia.org/wiki/Luhn_algorithm#Example_for_validating_check_digit
+            ///Least common : no check digit. we don't support those, because wtf?
+            ///Modulo 11 : https://en.wikipedia.org/wiki/MSI_Barcode#Mod_11_Check_Digit
+            ///Modulo 1010 & 1110 : Combination of Mod 10/11 + mod 10
+            ///Thankfully, we can apparently validate them all by doing a luhn/mod10 validation?
 
-            if (value.Any(c => !char.IsDigit(c)) || value.Length < 3)
-                throw new ArgumentException($"Invalid MSI value '{value}'.");
+            if (code == null || code.Any(c => !char.IsDigit(c)) || code.Length < 3)
+                throw new ArgumentException($"Invalid MSI value '{code}'.");
 
-            var productCode = value
+            var productCode = code
                 .Reverse()
                 .ToList();
 
@@ -38,9 +37,9 @@ namespace BarcodeParserBuilder.Infrastructure
             }
 
             if (sum % 10 != 0)
-                throw new ArgumentException($"Invalid MSI CheckDigit '{value.Last()}'.");
-
-            return new ProductCode(value, ProductCodeType.MSI);
+                throw new ArgumentException($"Invalid MSI CheckDigit '{code.Last()}'.");
         }
+
+        public override ProductCodeType Type { get => ProductCodeType.MSI; internal set { } }
     }
 }

@@ -18,7 +18,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
 
             yield return new object[]
             {
-                0, "0000000"
+                0d, "0000000"
             };
 
             yield return new object[]

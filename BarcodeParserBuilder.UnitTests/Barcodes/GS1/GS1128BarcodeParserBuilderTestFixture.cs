@@ -64,6 +64,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 {
                     productCode.Type = ProductCodeType.GTIN;
                     productCode.Value = "357466145194";
+                    productCode.Indicator = 0;
                 }),
                 BatchNumber = null,
                 SerialNumber = null
@@ -102,6 +103,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Value = "357466145194";
+                        productCode.Indicator = 0;
                     }),
                     BatchNumber = null,
                     SerialNumber = null

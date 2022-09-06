@@ -97,6 +97,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
                 { 
                     productCode.Type = ProductCodeType.GTIN;
                     productCode.Value = "357466145194";
+                    productCode.Indicator = 0;
                 }),
                 BatchNumber = null,
                 SerialNumber = null

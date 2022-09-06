@@ -86,6 +86,7 @@ namespace BarcodeParserBuilder.UnitTests
                 {
                     productCode.Type = ProductCodeType.GTIN;
                     productCode.Value = "357466145194";
+                    productCode.Indicator = 0;
                 }),
                 BatchNumber = null,
                 SerialNumber = null,
@@ -116,6 +117,7 @@ namespace BarcodeParserBuilder.UnitTests
                     {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Value = "802515300036";
+                        productCode.Indicator = 0;
                     }),
                     BatchNumber = "1096438",
                     SerialNumber = "55H02AE137",
@@ -133,7 +135,8 @@ namespace BarcodeParserBuilder.UnitTests
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
                         productCode.Type = ProductCodeType.GTIN;
-                        productCode.Value = "3456789012345";
+                        productCode.Value = "456789012345";
+                        productCode.Indicator = 3;
                     }),
                     BatchNumber = "3456789",
                     SerialNumber = "3456789-012",

@@ -75,19 +75,18 @@ namespace BarcodeParserBuilder.Infrastructure
             switch (value.Length)
             {
                 case 7: //UPC-E without a leading 0 to make it gtin compatible
-                case 8: //Ean8 or UPC-E
-                case 14:
-                    if (productCode.StartsWith("0") && !productCode.StartsWith("02"))
-                    {
-                        productCode = productCode[1..];
-                        goto case 13;
-                    }
+                case 8: //EAN-8 or UPC-E
+                    Schema = GtinProductScheme.Unknown;
                     Value = productCode;
                     break;
                 case 10: //original ISBN, not converted to GTIN-13
                     productCode = $"000{productCode}";
                     goto case 13;
-                case 13: //Ean13 or Gtin        
+                case 14: // GTIN-14
+                    Indicator = short.Parse(productCode.First().ToString());
+                    productCode = productCode[1..];
+                    goto case 13;
+                case 13: //EAN-13/GTIN-13 or GTIN-14
                     if (productCode.StartsWith("0") && !productCode.StartsWith("02"))
                     {
                         productCode = productCode[1..];
@@ -95,7 +94,7 @@ namespace BarcodeParserBuilder.Infrastructure
                     }
                     Value = productCode;
                     break;
-                case 12: //Ean12 or UPC-A
+                case 12: //EAN-12 or UPC-A
                     var productSchema = int.Parse(productCode.First().ToString());
                     productCode = productCode[1..];
                     Schema = EanProductSystems[productSchema];
@@ -131,6 +130,8 @@ namespace BarcodeParserBuilder.Infrastructure
         /// Gtin Product code value
         /// </summary>
         public string Value { get; internal set; } = null!;
+
+        public short? Indicator { get; internal set; } = null;
 
         public string? CompanyIdentifier { get; internal set; }
     }

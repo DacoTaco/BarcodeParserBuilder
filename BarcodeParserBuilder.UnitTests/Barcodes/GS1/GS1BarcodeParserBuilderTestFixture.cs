@@ -70,6 +70,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Value = "357466145194";
+                        productCode.Indicator = 0;
                     }),
                     BatchNumber = null,
                     SerialNumber = null
@@ -86,6 +87,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Value = "357466145194";
+                        productCode.Indicator = 0;
                     }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
@@ -103,7 +105,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
                         productCode.Type = ProductCodeType.GTIN;
-                        productCode.Value = "3456789012345";
+                        productCode.Value = "456789012345";
+                        productCode.Indicator = 3;
                     }),
                     BatchNumber = "3456789",
                     SerialNumber = "3456789-012"
@@ -119,6 +122,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 { 
                     productCode.Type = ProductCodeType.GTIN;
                     productCode.Value = "357466145194";
+                    productCode.Indicator = 0;
                 }),
                 BatchNumber = null,
                 SerialNumber = null,
@@ -147,6 +151,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Value = "357466145194";
+                        productCode.Indicator = 0;
                     }),
                     BatchNumber = null,
                     SerialNumber = null
@@ -162,7 +167,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
                         productCode.Type = ProductCodeType.GTIN;
-                        productCode.Value = productCode.Code[..^1];
+                        productCode.Value = "456789012345";
+                        productCode.Indicator = 3;
                     }),
                     BatchNumber = "3456789",
                     SerialNumber = null
@@ -178,7 +184,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
                         productCode.Type = ProductCodeType.GTIN;
-                        productCode.Value = productCode.Code[..^1];
+                        productCode.Value = "456789012345";
+                        productCode.Indicator = 3;
                     }),
                     BatchNumber = "3456789",
                     SerialNumber = "3456789-012"
@@ -194,7 +201,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
                         productCode.Type = ProductCodeType.GTIN;
-                        productCode.Value = productCode.Code[..^1];
+                        productCode.Value = "456789012345";
+                        productCode.Indicator = 3;
                     }),
                     BatchNumber = null,
                     SerialNumber = null,
@@ -211,7 +219,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
                         productCode.Type = ProductCodeType.GTIN;
-                        productCode.Value = productCode.Code[..^1];
+                        productCode.Value = "456789012345";
+                        productCode.Indicator = 3;
                     }),
                     BatchNumber = "3456789",
                     SerialNumber = "3456789-012",
@@ -230,6 +239,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Value = "357466145194";
+                        productCode.Indicator = 0;
                     }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
@@ -238,7 +248,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 }
             };
 
-            //UPC-A/EAN12 NDC product in GTIN disguise
+            //UPC-A/EAN12 NDC product in GTIN-14 with indicator 0
             yield return new object[]
             {
                 $"0100367457153032101724847.1{GroupSeparator}1721033121118165795226",
@@ -249,6 +259,27 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Schema = GtinProductScheme.NationalDrugCode;
                         productCode.Value = "6745715303";
+                        productCode.Indicator = 0;
+                    }),
+                    BatchNumber = "1724847.1",
+                    SerialNumber = "118165795226",
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
+                    ProductionDate = null
+                }
+            };
+
+            //UPC-A/EAN12 NDC product in GTIN-14 with indicator 1
+            yield return new object[]
+            {
+                $"0110304094903115101724847.1{GroupSeparator}1721033121118165795226",
+                new GS1Barcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("10304094903115", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Schema = GtinProductScheme.NationalDrugCode;
+                        productCode.Value = "0409490311";
+                        productCode.Indicator = 1;
                     }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
@@ -267,6 +298,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Value = "357466145194";
+                        productCode.Indicator = 0;
                     }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
@@ -286,6 +318,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Value = "357466145194";
+                        productCode.Indicator = 0;
                     }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",
@@ -305,6 +338,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Value = "357466145194";
+                        productCode.Indicator = 0;
                     }),
                     BatchNumber = "1724847.1",
                     SerialNumber = "118165795226",

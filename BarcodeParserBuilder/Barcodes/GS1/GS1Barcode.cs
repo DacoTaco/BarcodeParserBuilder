@@ -14,6 +14,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
         public override BarcodeType BarcodeType => BarcodeType.GS1;
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()
         {
+            new FixedLengthGS1Field("00", 18),
             new FixedLengthGS1Field<ProductCode?>("01", 14),
             new FixedLengthGS1Field<ProductCode?>("02", 14),
             new FixedLengthGS1Field<BarcodeDateTime?>("11", 6),
@@ -35,7 +36,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             new GS1Field("242", 6),
             new GS1Field("243", 20),
             new GS1Field("25"),
-            new GS1Field("30"),
+            new GS1Field<int?>("30", 8),
             new GS1Field("311"),
             new GS1Field("312"),
             new GS1Field("313"),

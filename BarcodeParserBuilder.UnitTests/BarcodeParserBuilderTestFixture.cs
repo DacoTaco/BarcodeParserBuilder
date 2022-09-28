@@ -1,9 +1,10 @@
-﻿using BarcodeParserBuilder.Barcodes.EAN;
+﻿using BarcodeParserBuilder.Barcodes;
+using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
-using BarcodeParserBuilder.Infrastructure;
 using BarcodeParserBuilder.Barcodes.MSI;
 using BarcodeParserBuilder.Barcodes.PPN;
+using BarcodeParserBuilder.Infrastructure;
 using BarcodeParserBuilder.UnitTests.Barcodes.EAN;
 using BarcodeParserBuilder.UnitTests.Barcodes.GS1;
 using BarcodeParserBuilder.UnitTests.Barcodes.HIBC;
@@ -12,8 +13,8 @@ using BarcodeParserBuilder.UnitTests.Barcodes.PPN;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
-using BarcodeParserBuilder.Barcodes;
 
 namespace BarcodeParserBuilder.UnitTests
 {
@@ -23,6 +24,8 @@ namespace BarcodeParserBuilder.UnitTests
         public static string SymbologyPrefix => GS1128BarcodeParserBuilderTestFixture.SymbologyPrefix;
         public static string Prefix => PpnBarcodeParserBuilderTestFixture.Prefix;
         public static string Suffix => PpnBarcodeParserBuilderTestFixture.Suffix;
+
+        public static IEnumerable<object[]> InvalidGs1Barcodes() => GS1BarcodeParserBuilderTestFixture.InValidGs1Barcodes().Select(param => new [] { param[0] });
 
         public static IEnumerable<object[]> ValidGs1Barcodes() => GS1BarcodeParserBuilderTestFixture.ValidGs1Barcodes();
         public static IEnumerable<object[]> ValidGs1128Barcodes() => GS1128BarcodeParserBuilderTestFixture.ValidGs1128Barcodes();
@@ -78,6 +81,18 @@ namespace BarcodeParserBuilder.UnitTests
             result.Should().Be(expectedString);
         }
 
+        [Theory]
+        [MemberData(nameof(InvalidGs1Barcodes))]
+        public void InvalidBarcodeThrowsError(string barcode)
+        {
+            //Arrange & Act
+            var result = _parserBuilder.TryParse(barcode, out var _, out var feedback);
+
+            //Assert
+            result.Should().BeFalse();
+            feedback.Should().Be("Failed to parse barcode : no parser could accept barcode.");
+        }
+
         public static IEnumerable<object[]> ValidBarcodes()
         {
             var gs1Barcode = new GS1Barcode()
@@ -95,7 +110,7 @@ namespace BarcodeParserBuilder.UnitTests
             };
             gs1Barcode.Fields["20"].SetValue("BL");
             gs1Barcode.Fields["240"].SetValue("40600199T");
-            gs1Barcode.Fields["30"].SetValue("1");
+            gs1Barcode.Fields["30"].SetValue(1);
             gs1Barcode.Fields["71"].SetValue("025862471");
             gs1Barcode.Fields["98"].SetValue("15647");
             gs1Barcode.Fields["99"].SetValue("15489");

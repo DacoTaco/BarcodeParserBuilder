@@ -70,7 +70,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 SerialNumber = null
             };
             gs1128Barcode.Fields["240"].SetValue("40600199T");
-            gs1128Barcode.Fields["30"].SetValue("1");
+            gs1128Barcode.Fields["30"].SetValue(1);
             gs1128Barcode.Fields["71"].SetValue("025862471");
 
             //GS1128 - Multiple barcodes in 1 string

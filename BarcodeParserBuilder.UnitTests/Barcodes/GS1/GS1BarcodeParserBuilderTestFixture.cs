@@ -129,7 +129,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             };
             gs1Barcode.Fields["20"].SetValue("BL");           
             gs1Barcode.Fields["240"].SetValue("40600199T");
-            gs1Barcode.Fields["30"].SetValue("1");
+            gs1Barcode.Fields["30"].SetValue(1);
             gs1Barcode.Fields["71"].SetValue("025862471");
             gs1Barcode.Fields["98"].SetValue("15647");
             gs1Barcode.Fields["99"].SetValue("15489");
@@ -442,6 +442,13 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             {
                 $"019119725340342899#$^248BFGD^{GroupSeparator}",
                 $"Failed to parse GS1 Barcode :{Environment.NewLine}99 : Invalid GS1 string value '#$^248BFGD^'."
+            };
+
+            //invalid UPC/EAN
+            yield return new object[]
+            {
+                $"300450549108",
+                $"Failed to parse GS1 Barcode :{Environment.NewLine}30 : Invalid value Length 10. Expected Max 8 Bytes."
             };
         }
     }

@@ -56,9 +56,6 @@ This is why i placed '\<gs>' in the example.
 ## TODO : 
 Our Current Todo exists of adding support for the following barcodes : 
 * ISBT 128
-
-## Donations
-If you like priiloader and wish to support me you can donate on [ko-fi](https://ko-fi.com/dacotaco)
   
 ## Licensing & Rules  
 The project is released under the LGPL license. In short that means that any project can use this library or its released packages for any usage (including commercial usage).  

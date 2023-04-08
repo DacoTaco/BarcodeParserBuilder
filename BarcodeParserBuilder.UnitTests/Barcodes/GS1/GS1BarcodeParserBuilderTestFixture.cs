@@ -112,6 +112,57 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     SerialNumber = "3456789-012"
                 }
             };
+
+            //QR Code Prefix + BatchNumber
+            yield return new object[]
+            {
+                $"]Q30134567890123457103456789",
+                new GS1Barcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "456789012345";
+                        productCode.Indicator = 3;
+                    }),
+                    BatchNumber = "3456789",
+                    SerialNumber = null
+                }
+            };
+
+            //DataMatrix Prefix + BatchNumber
+            yield return new object[]
+            {
+                $"]d20134567890123457103456789",
+                new GS1Barcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "456789012345";
+                        productCode.Indicator = 3;
+                    }),
+                    BatchNumber = "3456789",
+                    SerialNumber = null
+                }
+            };
+
+            //DotCode Prefix + BatchNumber
+            yield return new object[]
+            {
+                $"]J10134567890123457103456789",
+                new GS1Barcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "456789012345";
+                        productCode.Indicator = 3;
+                    }),
+                    BatchNumber = "3456789",
+                    SerialNumber = null
+                }
+            };
         }
 
         public static IEnumerable<object[]> ValidGs1Barcodes()

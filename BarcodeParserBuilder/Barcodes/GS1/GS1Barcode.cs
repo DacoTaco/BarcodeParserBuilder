@@ -8,7 +8,8 @@ namespace BarcodeParserBuilder.Barcodes.GS1
 {
     public class GS1Barcode : Barcode
     {
-        internal static char GroupSeparator => (char)0x1D;
+        internal const char GroupSeparator = (char)0x1D;
+
         public GS1Barcode() : base() { }
 
         public override BarcodeType BarcodeType => BarcodeType.GS1;

@@ -1,6 +1,7 @@
 ﻿using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -46,6 +47,19 @@ namespace BarcodeParserBuilder.Barcodes.GS1
     public abstract class BaseGS1BarcodeParserBuilder<T> : BaseBarcodeParserBuilder<T>
         where T : GS1Barcode
     {
+        //Accepted GS1 prefixes, as described by the GS1 specs : https://www.gs1.org/sites/default/files/eu2018-574requireddatacapturespecifications.pdf
+        internal static IEnumerable<string> Prefixes = new[]
+        {
+            //Group seperator
+            GS1Barcode.GroupSeparator.ToString(),
+            //GS1 DotCode
+            "]J1",
+            //GS1 QRCode
+            "]Q3",
+            //GS1 DataMatrix
+            "]d2"
+        };
+
         protected override string? BuildString(T? barcode)
         {
             if (barcode == null)
@@ -80,8 +94,13 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return default;
 
-                if (barcodeString.First() == GS1Barcode.GroupSeparator)
-                    barcodeString = barcodeString[1..];
+                foreach(var prefix in Prefixes)
+                {
+                    if (barcodeString[0..prefix.Length] != prefix)
+                        continue;
+
+                    barcodeString = barcodeString[prefix.Length..];
+                }
 
                 var barcode = Activator.CreateInstance<T>();
                 var codeStream = new StringReader(barcodeString);

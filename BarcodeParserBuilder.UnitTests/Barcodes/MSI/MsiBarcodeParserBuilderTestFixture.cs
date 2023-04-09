@@ -12,6 +12,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
     {
         [Theory]
         [MemberData(nameof(ValidMsiBarcodes))]
+        [MemberData(nameof(ValidMsiParseBarcodes))]
         public void CanParseBarcodeString(string barcode, MsiBarcode expectedBarcode)
         {
             //Arrange & Act
@@ -93,6 +94,19 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
                 new MsiBarcode()
                 {
                     ProductCode = TestProductCode.CreateProductCode<MsiProductCode>("123456741"),
+                }
+            };
+        }
+
+        public static IEnumerable<object[]> ValidMsiParseBarcodes()
+        {
+            //APB - Dafalgan 500mg
+            yield return new object[]
+            {
+                $"]M033915059",
+                new MsiBarcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<MsiProductCode>("33915059"),
                 }
             };
         }

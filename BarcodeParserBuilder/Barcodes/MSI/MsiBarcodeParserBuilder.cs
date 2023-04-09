@@ -52,6 +52,8 @@ namespace BarcodeParserBuilder.Barcodes.MSI
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return null;
 
+                barcodeString = AimParser.StripBarcodePrefix(barcodeString);
+
                 //technically, a MSI has no size limitation.
                 //however, it tends to clash with GS1 since GS1 has so many fields and MSI's product code can clash with GS1's
                 //so we limit the size to reduce the chances of them being in each other's way

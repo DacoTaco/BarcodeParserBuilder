@@ -22,8 +22,10 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
         public void CanParseBarcodeString(string barcode, Barcode expectedBarcode)
         {
             //Arrange 
-            //prepare the GS1 barcodes by converting the GS to the GS1-128.
+            //prepare the GS1 barcodes by converting the GS & other prefixes to the GS1-128.
             //after that, add the Symbology prefix to the GS1 barcodes
+            if(barcode.StartsWith(']'))
+                barcode = AimParser.StripBarcodePrefix(barcode);
             barcode = barcode.Replace(GroupSeparator.ToString(), SymbologyPrefix);
             if (!barcode.StartsWith(SymbologyPrefix))
                 barcode = $"{SymbologyPrefix}{barcode}";
@@ -108,6 +110,24 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     BatchNumber = null,
                     SerialNumber = null
                 }
+            };
+
+            //GS128 with AIM prefix
+            var gs128barcode = new GS1128Barcode
+            {
+                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("12345678901231", (productCode) =>
+                {
+                    productCode.Type = ProductCodeType.GTIN;
+                    productCode.Value = "234567890123";
+                    productCode.Indicator = 1;
+                    productCode.Code = "12345678901231";
+                }),
+            };
+            gs128barcode.Fields["15"].SetValue(new TestBarcodeDateTime(new DateTime(2099, 12, 31), "991231", GS1BarcodeParserBuilderTestFixture.GS1DateFormat));
+            yield return new object[]
+            {
+                "]C1011234567890123115991231",
+                gs128barcode
             };
         }
 

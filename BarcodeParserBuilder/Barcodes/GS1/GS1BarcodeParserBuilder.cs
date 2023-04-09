@@ -1,6 +1,7 @@
 ﻿using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -80,7 +81,8 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return default;
 
-                if (barcodeString.First() == GS1Barcode.GroupSeparator)
+                barcodeString = AimParser.StripBarcodePrefix(barcodeString);
+                if (barcodeString.FirstOrDefault() == GS1Barcode.GroupSeparator)
                     barcodeString = barcodeString[1..];
 
                 var barcode = Activator.CreateInstance<T>();

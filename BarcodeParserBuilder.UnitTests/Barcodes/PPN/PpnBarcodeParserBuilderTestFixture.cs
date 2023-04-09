@@ -61,10 +61,46 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
                 }
             };
 
+            //Random Order #1 - QRCode
+            yield return new object[]
+            {
+                $"]Q2{Prefix}9N111234568408{GroupSeparator}SHAHASERIAL12385{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
+                new PpnBarcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
+                    BatchNumber = "ANDSOMEBatchNumber20",
+                    SerialNumber = "HAHASERIAL12385"
+                }
+            };
+
             //Random Order #2
             yield return new object[]
             {
                 $"{Prefix}SHAHASERIAL12385{GroupSeparator}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
+                new PpnBarcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
+                    BatchNumber = "ANDSOMEBatchNumber20",
+                    SerialNumber = "HAHASERIAL12385"
+                }
+            };
+
+            //Random Order #2 - DataMatrix
+            yield return new object[]
+            {
+                $"]d1{Prefix}SHAHASERIAL12385{GroupSeparator}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
+                new PpnBarcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
+                    BatchNumber = "ANDSOMEBatchNumber20",
+                    SerialNumber = "HAHASERIAL12385"
+                }
+            };
+
+            //Random Order #2 - aztec
+            yield return new object[]
+            {
+                $"]z5{Prefix}SHAHASERIAL12385{GroupSeparator}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
                 new PpnBarcode()
                 {
                     ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),

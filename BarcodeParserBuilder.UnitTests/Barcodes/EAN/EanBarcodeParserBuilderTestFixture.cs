@@ -12,6 +12,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
     {
         [Theory]
         [MemberData(nameof(ValidEanBarcodes))]
+        [MemberData(nameof(ValidEanParsingBarcodes))]
         public void CanParseBarcodeString(string barcode, EanBarcode expectedBarcode)
         {
             //Arrange & Act
@@ -36,6 +37,39 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
             buildAction.Should().NotThrow($"'{barcode}' should be buildable");
             result.Should().NotBeNull();
             result.Should().Be(expectedString);
+        }
+
+        public static IEnumerable<object[]> ValidEanParsingBarcodes()
+        {
+            //EAN13
+            yield return new object[]
+            {
+                $"]E05420046520228",
+                new EanBarcode
+                {
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("5420046520228", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.EAN;
+                        productCode.Schema = GtinProductScheme.Unknown;
+                        productCode.Value = "542004652022";
+                    }),
+                }
+            };
+
+            //EAN13
+            yield return new object[]
+            {
+                "]E01234567890128",
+                new EanBarcode
+                {
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("1234567890128", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.EAN;
+                        productCode.Value = "123456789012";
+                        productCode.Code = "1234567890128";
+                    }),
+                }
+            };
         }
 
         public static IEnumerable<object[]> ValidEanBarcodes()

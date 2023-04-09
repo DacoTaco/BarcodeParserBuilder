@@ -43,6 +43,7 @@ namespace BarcodeParserBuilder.Barcodes.EAN
                 if (string.IsNullOrWhiteSpace(inputBarcode))
                     return null;
 
+                inputBarcode = AimParser.StripBarcodePrefix(inputBarcode);
                 return new EanBarcode()
                 {
                     ProductCode = new GtinProductCode(inputBarcode)

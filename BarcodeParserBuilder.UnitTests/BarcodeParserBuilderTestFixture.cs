@@ -26,7 +26,6 @@ namespace BarcodeParserBuilder.UnitTests
         public static string Suffix => PpnBarcodeParserBuilderTestFixture.Suffix;
 
         public static IEnumerable<object[]> InvalidGs1Barcodes() => GS1BarcodeParserBuilderTestFixture.InValidGs1Barcodes().Select(param => new [] { param[0] });
-
         public static IEnumerable<object[]> ValidGs1Barcodes() => GS1BarcodeParserBuilderTestFixture.ValidGs1Barcodes();
         public static IEnumerable<object[]> ValidGs1128Barcodes() => GS1128BarcodeParserBuilderTestFixture.ValidGs1128Barcodes();
         public static IEnumerable<object[]> ValidEanBarcodes() => EanBarcodeParserBuilderTestFixture.ValidEanBarcodes();
@@ -43,6 +42,7 @@ namespace BarcodeParserBuilder.UnitTests
 
         [Theory]
         [MemberData(nameof(ValidBarcodes))]
+        [MemberData(nameof(ValidParseBarcodes))]
         [MemberData(nameof(ValidGs1Barcodes))]
         [MemberData(nameof(ValidGs1128Barcodes))]
         [MemberData(nameof(ValidEanBarcodes))]
@@ -92,6 +92,14 @@ namespace BarcodeParserBuilder.UnitTests
             result.Should().BeFalse();
             feedback.Should().Be("Failed to parse barcode : no parser could accept barcode.");
         }
+
+        public static IEnumerable<object[]> ValidParseBarcodes()
+        => EanBarcodeParserBuilderTestFixture.ValidEanParsingBarcodes()
+            .Concat(GS1BarcodeParserBuilderTestFixture.ValidGs1ParsingBarcodes())
+            .Concat(GS1128BarcodeParserBuilderTestFixture.ValidGs1128ParsingBarcodes())
+            .Concat(MsiBarcodeParserBuilderTestFixture.ValidMsiParseBarcodes())
+            .Concat(HibcBarcodeParserBuilderTestFixture.ValidHibcParsingBarcodes())
+            .Concat(PpnBarcodeParserBuilderTestFixture.ValidPpnParsingBarcodes());
 
         public static IEnumerable<object[]> ValidBarcodes()
         {

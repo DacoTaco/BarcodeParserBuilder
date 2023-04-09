@@ -36,11 +36,11 @@ namespace BarcodeParserBuilder.UnitTests
                     var expectedValue = property.GetValue(expectedProductCode, null);
 
                     if (expectedValue == null)
-                        actualValue.Should().BeNull();
+                        actualValue.Should().BeNull($"'{property.Name}' should be null");
                     else
-                        actualValue.Should().NotBeNull($"{property.Name} should be equal to {expectedValue}.");
+                        actualValue.Should().NotBeNull($"'{property.Name}' should be equal to {expectedValue}");
 
-                    actualValue.Should().Be(expectedValue, $"{property.Name} should be equal.");
+                    actualValue.Should().Be(expectedValue, $"'{property.Name}' should be equal");
                 }
             }
 
@@ -80,9 +80,9 @@ namespace BarcodeParserBuilder.UnitTests
             }
 
             if (expectedValue == null)
-                actualValue.Should().BeNull();
+                actualValue.Should().BeNull($"'{propertyName}' should be null");
             else
-                actualValue.Should().NotBeNull();
+                actualValue.Should().NotBeNull($"'{propertyName}' should not be null");
 
             actualValue.Should().Be(expectedValue, because);
         }

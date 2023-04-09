@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BarcodeParserBuilder
 {
@@ -8,9 +10,10 @@ namespace BarcodeParserBuilder
         {
             //add to the collection
             services.AddScoped<IBarcodeParserBuilder, BarcodeParserBuilder>();
+            services.AddSingleton<IAimParser, AimParser>();
 
             //generate our list so its not executed when it needs to.
-            BarcodeParserBuilder.ParserBuilders = BarcodeParserBuilder.CompileParserBuildersList();
+            AimParser.ParserBuilders = AimParser.CompileParserBuildersList();
 
             return services;
         }

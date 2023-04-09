@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Exceptions.EAN;
+﻿using System.Linq;
+using BarcodeParserBuilder.Exceptions.EAN;
 using BarcodeParserBuilder.Infrastructure;
-using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.EAN
 {
@@ -25,8 +25,8 @@ namespace BarcodeParserBuilder.Barcodes.EAN
             if (obj == null)
                 return true;
 
-            if(obj.Type != ProductCodeType.EAN)
-                throw new EanValidateException($"Invalid ProductCode type '{obj.Type}'.");         
+            if (obj.Type != ProductCodeType.EAN)
+                throw new EanValidateException($"Invalid ProductCode type '{obj.Type}'.");
 
             return true;
         }

@@ -1,4 +1,7 @@
-﻿using BarcodeParserBuilder.Barcodes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
@@ -11,9 +14,6 @@ using BarcodeParserBuilder.UnitTests.Barcodes.HIBC;
 using BarcodeParserBuilder.UnitTests.Barcodes.MSI;
 using BarcodeParserBuilder.UnitTests.Barcodes.PPN;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests
@@ -25,7 +25,7 @@ namespace BarcodeParserBuilder.UnitTests
         public static string Prefix => PpnBarcodeParserBuilderTestFixture.Prefix;
         public static string Suffix => PpnBarcodeParserBuilderTestFixture.Suffix;
 
-        public static IEnumerable<object[]> InvalidGs1Barcodes() => GS1BarcodeParserBuilderTestFixture.InValidGs1Barcodes().Select(param => new [] { param[0] });
+        public static IEnumerable<object[]> InvalidGs1Barcodes() => GS1BarcodeParserBuilderTestFixture.InValidGs1Barcodes().Select(param => new[] { param[0] });
         public static IEnumerable<object[]> ValidGs1Barcodes() => GS1BarcodeParserBuilderTestFixture.ValidGs1Barcodes();
         public static IEnumerable<object[]> ValidGs1128Barcodes() => GS1128BarcodeParserBuilderTestFixture.ValidGs1128Barcodes();
         public static IEnumerable<object[]> ValidEanBarcodes() => EanBarcodeParserBuilderTestFixture.ValidEanBarcodes();

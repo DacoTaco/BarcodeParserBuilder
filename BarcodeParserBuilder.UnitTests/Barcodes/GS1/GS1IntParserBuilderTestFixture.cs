@@ -1,8 +1,7 @@
-﻿using BarcodeParserBuilder.Exceptions;
+﻿using System;
 using BarcodeParserBuilder.Barcodes.GS1;
+using BarcodeParserBuilder.Exceptions;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
@@ -16,7 +15,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             { 5, "5" },
             { 2000059, "2000059" }
         };
-        
+
         [Theory]
         [MemberData(nameof(ValidIntCases))]
         public void NullableFieldParserBuilderBuildsStringCorrectly(int? value, string expectedOutput)

@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Exceptions.MSI;
+﻿using System.Linq;
+using BarcodeParserBuilder.Exceptions.MSI;
 using BarcodeParserBuilder.Infrastructure;
-using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.MSI
 {

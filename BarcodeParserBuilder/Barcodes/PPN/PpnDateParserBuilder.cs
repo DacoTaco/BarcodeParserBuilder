@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Exceptions.PPN;
+﻿using System.Linq;
+using BarcodeParserBuilder.Exceptions.PPN;
 using BarcodeParserBuilder.Infrastructure;
-using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.PPN
 {
@@ -11,8 +11,8 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             if (value == null)
                 return null;
 
-            return value.Length == 8 
-                ? BarcodeDateTime.PpnDate(value) 
+            return value.Length == 8
+                ? BarcodeDateTime.PpnDate(value)
                 : BarcodeDateTime.Gs1Date(value);
         }
         protected override string? Build(BarcodeDateTime? obj) => obj?.StringValue;
@@ -33,8 +33,8 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             if (obj == null)
                 return true;
 
-            if (( obj.StringValue.Length == 8 && obj.FormatString != BarcodeDateTime.PPNFormat) ||
-                ( obj.StringValue.Length == 6 && obj.FormatString != BarcodeDateTime.GS1Format) ||
+            if ((obj.StringValue.Length == 8 && obj.FormatString != BarcodeDateTime.PPNFormat) ||
+                (obj.StringValue.Length == 6 && obj.FormatString != BarcodeDateTime.GS1Format) ||
                 !Validate(obj.StringValue))
                 throw new PPNValidateException($"Invalid Barcode Value '{obj.StringValue}'.");
 

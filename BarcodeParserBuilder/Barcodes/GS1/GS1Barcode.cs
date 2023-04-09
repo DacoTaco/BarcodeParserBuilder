@@ -1,8 +1,8 @@
-﻿using BarcodeParserBuilder.Exceptions.GS1;
-using BarcodeParserBuilder.Infrastructure;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using BarcodeParserBuilder.Exceptions.GS1;
+using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {
@@ -86,7 +86,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             new GS1Field("99", 90),
         };
 
-        public override ProductCode? ProductCode 
+        public override ProductCode? ProductCode
         {
             get => (ProductCode?)BarcodeFields["01"].Value;
             set => BarcodeFields["01"].SetValue(value);
@@ -96,7 +96,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             get => (BarcodeDateTime?)BarcodeFields["11"].Value;
             set => BarcodeFields["11"].SetValue(value);
         }
-        public override BarcodeDateTime? ExpirationDate 
+        public override BarcodeDateTime? ExpirationDate
         {
             get => (BarcodeDateTime?)BarcodeFields["17"].Value;
             set => BarcodeFields["17"].SetValue(value);
@@ -134,7 +134,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
 
     internal class GS1Field<T> : BarcodeField<T>
     {
-        public GS1Field(string identifier, int? maxLength = null) : base(BarcodeType.GS1, identifier, 1, maxLength ?? 90){ }
+        public GS1Field(string identifier, int? maxLength = null) : base(BarcodeType.GS1, identifier, 1, maxLength ?? 90) { }
         public GS1Field(string identifier, int minLength, int maxLength) : base(BarcodeType.GS1, identifier, minLength, maxLength) { }
         public override void Parse(StringReader codeStream)
         {
@@ -142,13 +142,13 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                 throw new GS1ParseException($"{Identifier} : Invalid Field size.");
 
             var value = "";
-            while ( codeStream.Peek() > -1 && codeStream.Peek() != GS1Barcode.GroupSeparator )
+            while (codeStream.Peek() > -1 && codeStream.Peek() != GS1Barcode.GroupSeparator)
             {
                 value += (char)codeStream.Read();
 
                 if (FixedLength && value.Length == MinLength)
                     break;
-            }              
+            }
 
             if (value.Any(c => c == GS1Barcode.GroupSeparator))
                 throw new GS1ParseException($"{Identifier} : Invalid GS1 value : value contains a group separator");
@@ -157,7 +157,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             {
                 Parse(value);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new GS1ParseException($"{Identifier} : {e.Message}", e);
             }

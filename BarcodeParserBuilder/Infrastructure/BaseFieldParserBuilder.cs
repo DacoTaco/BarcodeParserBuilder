@@ -42,7 +42,7 @@ namespace BarcodeParserBuilder.Infrastructure
             if (!resultedType.IsAssignableFrom(objType) || (T)obj == null)
                 throw new ValidateException($"Failed to validate object : received {objType.Name} but expected {resultedType.Name}");
 
-            if(!ValidateObject((T)obj) || 
+            if (!ValidateObject((T)obj) ||
                 ((minimumLength.HasValue || maximumLength.HasValue) && !ValidateObjectLength((T)obj, null, null)))
                 throw new ValidateException($"Failed to validate object (value rejected).");
 

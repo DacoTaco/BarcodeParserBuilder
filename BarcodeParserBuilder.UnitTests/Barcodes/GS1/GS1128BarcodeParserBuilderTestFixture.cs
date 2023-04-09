@@ -1,10 +1,10 @@
-﻿using BarcodeParserBuilder.Barcodes;
+﻿using System;
+using System.Collections.Generic;
+using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
@@ -24,7 +24,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             //Arrange 
             //prepare the GS1 barcodes by converting the GS & other prefixes to the GS1-128.
             //after that, add the Symbology prefix to the GS1 barcodes
-            if(barcode.StartsWith(']'))
+            if (barcode.StartsWith(']'))
                 barcode = AimParser.StripBarcodePrefix(barcode);
             barcode = barcode.Replace(GroupSeparator.ToString(), SymbologyPrefix);
             if (!barcode.StartsWith(SymbologyPrefix))
@@ -154,11 +154,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
 
         public static IEnumerable<object[]> InValidGs1Barcodes()
         {
-            foreach(var testCase in GS1BarcodeParserBuilderTestFixture.InValidGs1Barcodes())
+            foreach (var testCase in GS1BarcodeParserBuilderTestFixture.InValidGs1Barcodes())
             {
                 yield return new object[]
                 {
-                    $"{SymbologyPrefix}{testCase[0]}", 
+                    $"{SymbologyPrefix}{testCase[0]}",
                     testCase[1]
                 };
             }

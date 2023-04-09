@@ -1,19 +1,19 @@
-﻿using BarcodeParserBuilder.Exceptions.MSI;
-using BarcodeParserBuilder.Infrastructure;
+﻿using System;
 using BarcodeParserBuilder.Barcodes.MSI;
+using BarcodeParserBuilder.Exceptions.MSI;
+using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
 {
     public class MsiProductCodeParserBuilderTestFixture
     {
-        [Fact] 
+        [Fact]
         public void FieldParserBuilderAcceptsValidProductCodes()
         {
             //Arrange
-            var fieldParserBuilder = new MsiProductCodeParserBuilder();            
+            var fieldParserBuilder = new MsiProductCodeParserBuilder();
             var productCode = "79927398713";
             ProductCode result = null;
 

@@ -14,7 +14,7 @@ namespace BarcodeParserBuilder.Barcodes.EAN
 
         public override BarcodeType BarcodeType => BarcodeType.EAN;
 
-        public override ProductCode? ProductCode 
+        public override ProductCode? ProductCode
         {
             get => (ProductCode?)BarcodeFields[nameof(ProductCode)].Value;
             set

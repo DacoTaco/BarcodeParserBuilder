@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Exceptions.MSI;
+﻿using System;
+using BarcodeParserBuilder.Exceptions.MSI;
 using BarcodeParserBuilder.Infrastructure;
-using System;
 
 namespace BarcodeParserBuilder.Barcodes.MSI
 {
@@ -14,7 +14,7 @@ namespace BarcodeParserBuilder.Barcodes.MSI
                 return null;
 
             var parserBuider = new MsiBarcodeParserBuilder();
-            return parserBuider.BuildString(barcode);       
+            return parserBuider.BuildString(barcode);
         }
 
         public static bool TryParse(string? barcode, out MsiBarcode? msiBarcode)

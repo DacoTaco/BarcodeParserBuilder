@@ -1,9 +1,9 @@
-﻿using BarcodeParserBuilder.Exceptions.PPN;
-using BarcodeParserBuilder.Barcodes.GS1;
-using BarcodeParserBuilder.Infrastructure;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using BarcodeParserBuilder.Barcodes.GS1;
+using BarcodeParserBuilder.Exceptions.PPN;
+using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.PPN
 {
@@ -25,9 +25,9 @@ namespace BarcodeParserBuilder.Barcodes.PPN
         public override ProductCode? ProductCode
         {
             get => (ProductCode?)(BarcodeFields["9N"].Value ?? BarcodeFields["8P"].Value);
-            set 
+            set
             {
-                if(value == null)
+                if (value == null)
                 {
                     BarcodeFields["9N"].SetValue(null);
                     BarcodeFields["8P"].SetValue(null);
@@ -38,7 +38,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
                 {
                     BarcodeFields["8P"].SetValue(value);
                     BarcodeFields["9N"].SetValue(null);
-                }                    
+                }
                 else
                 {
                     BarcodeFields["8P"].SetValue(null);
@@ -46,17 +46,17 @@ namespace BarcodeParserBuilder.Barcodes.PPN
                 }
             }
         }
-        public override BarcodeDateTime? ExpirationDate 
+        public override BarcodeDateTime? ExpirationDate
         {
             get => (BarcodeDateTime?)BarcodeFields["D"].Value;
             set => BarcodeFields["D"].SetValue(value);
         }
-        public override BarcodeDateTime? ProductionDate 
+        public override BarcodeDateTime? ProductionDate
         {
             get => (BarcodeDateTime?)BarcodeFields["16D"].Value;
             set => BarcodeFields["16D"].SetValue(value);
         }
-        public override string? BatchNumber 
+        public override string? BatchNumber
         {
             get => string.IsNullOrWhiteSpace((string?)BarcodeFields["1T"].Value) ? null : (string?)BarcodeFields["1T"].Value;
             set => BarcodeFields["1T"].SetValue(value);
@@ -74,7 +74,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
 
             new PpnField("1T", 20),
             new PpnField("S", 20),
-            new PpnField("Q", 8), 
+            new PpnField("Q", 8),
             new PpnField("27Q", 20),
             new FixedLengthPpnField<BarcodeDateTime?>("D", 6),
             new FixedLengthPpnField<BarcodeDateTime?>("16D", 8)

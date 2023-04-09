@@ -9,7 +9,7 @@ namespace BarcodeParserBuilder.Infrastructure
         internal PpnProductCode() : base("") { }
 
         //Specs : https://www.ifaffm.de/mandanten/1/documents/04_ifa_coding_system/IFA-Info_Check_Digit_Calculations_PZN_PPN_UDI_EN.pdf
-        public PpnProductCode(string code) : base(code) 
+        public PpnProductCode(string code) : base(code)
         {
             var regex = new Regex(@"^[A-Z0-9]*\d{2,2}$");
             if (code == null || !regex.IsMatch(code) || code.Length < 4 || code.Length > 22)

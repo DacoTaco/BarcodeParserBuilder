@@ -98,7 +98,7 @@ namespace BarcodeParserBuilder.Infrastructure
                     var productSchema = int.Parse(productCode.First().ToString());
                     productCode = productCode[1..];
                     Schema = EanProductSystems[productSchema];
-                    switch(Schema)
+                    switch (Schema)
                     {
                         case GtinProductScheme.ManufacturerAndProduct:
                             CompanyIdentifier = productCode[0..4];

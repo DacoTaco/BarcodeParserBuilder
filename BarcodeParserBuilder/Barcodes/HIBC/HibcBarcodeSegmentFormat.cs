@@ -1,7 +1,7 @@
-﻿using BarcodeParserBuilder.Infrastructure;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.HIBC
 {

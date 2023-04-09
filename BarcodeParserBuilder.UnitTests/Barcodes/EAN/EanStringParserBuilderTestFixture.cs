@@ -1,7 +1,7 @@
-﻿using BarcodeParserBuilder.Barcodes.EAN;
+﻿using System;
+using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Exceptions;
 using FluentAssertions;
-using System;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN

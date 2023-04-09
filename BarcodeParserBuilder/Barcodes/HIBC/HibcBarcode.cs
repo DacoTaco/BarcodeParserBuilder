@@ -6,7 +6,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
     public class HibcBarcode : Barcode
     {
         public HibcBarcode() : this(true) { }
-        public HibcBarcode(bool is2DBarcode) : base() 
+        public HibcBarcode(bool is2DBarcode) : base()
         {
             Is2DBarcode = is2DBarcode;
         }
@@ -24,7 +24,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             new HibcField<int?>("Q", 5),
         };
 
-        public override ProductCode? ProductCode 
+        public override ProductCode? ProductCode
         {
             get => (ProductCode?)BarcodeFields[nameof(ProductCode)].Value;
             set => BarcodeFields[nameof(ProductCode)].SetValue(value);
@@ -44,7 +44,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             get => (string?)BarcodeFields["B"].Value;
             set => BarcodeFields["B"].SetValue(value);
         }
-        public override string? SerialNumber 
+        public override string? SerialNumber
         {
             get => (string?)BarcodeFields["S"].Value;
             set => BarcodeFields["S"].SetValue(value);

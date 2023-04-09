@@ -1,8 +1,8 @@
-﻿using BarcodeParserBuilder.Exceptions.PPN;
-using BarcodeParserBuilder.Infrastructure;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using BarcodeParserBuilder.Exceptions.PPN;
+using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.PPN
 {
@@ -55,7 +55,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
 
                 barcodeString += $"{(string.IsNullOrWhiteSpace(barcodeString) ? "" : PpnBarcode.GroupSeparator.ToString())}{field.Identifier}{value}";
             }
-            
+
             return $"{PpnBarcode.Prefix}{barcodeString}{PpnBarcode.Suffix}";
         }
 
@@ -67,12 +67,12 @@ namespace BarcodeParserBuilder.Barcodes.PPN
                     return default;
 
                 barcodeString = AimParser.StripBarcodePrefix(barcodeString);
-                if (!barcodeString.StartsWith(PpnBarcode.Prefix, StringComparison.Ordinal) || 
+                if (!barcodeString.StartsWith(PpnBarcode.Prefix, StringComparison.Ordinal) ||
                     !barcodeString.EndsWith(PpnBarcode.Suffix, StringComparison.Ordinal) ||
-                    barcodeString.Length < (PpnBarcode.Prefix.Length + PpnBarcode.Suffix.Length) )
+                    barcodeString.Length < (PpnBarcode.Prefix.Length + PpnBarcode.Suffix.Length))
                     throw new PPNParseException("Invalid PPN Barcode Prefix/Suffix/Size");
 
-                
+
                 barcodeString = barcodeString[PpnBarcode.Prefix.Length..(barcodeString.Length - PpnBarcode.Suffix.Length)]; //remove prefix & suffix
 
                 var barcode = new PpnBarcode();

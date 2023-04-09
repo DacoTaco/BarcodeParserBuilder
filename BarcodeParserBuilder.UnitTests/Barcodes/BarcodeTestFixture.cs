@@ -1,10 +1,10 @@
-﻿using BarcodeParserBuilder.Abstraction;
+﻿using System.Linq;
+using System.Reflection;
+using BarcodeParserBuilder.Abstraction;
 using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
 using FluentAssertions;
-using System.Linq;
-using System.Reflection;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes

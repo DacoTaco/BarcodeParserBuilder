@@ -1,13 +1,12 @@
-﻿using BarcodeParserBuilder.Exceptions.GS1;
-using BarcodeParserBuilder.Infrastructure;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
+using BarcodeParserBuilder.Exceptions.GS1;
+using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {
-    public class GS1BarcodeParserBuilder : BaseGS1BarcodeParserBuilder<GS1Barcode> 
+    public class GS1BarcodeParserBuilder : BaseGS1BarcodeParserBuilder<GS1Barcode>
     {
         protected GS1BarcodeParserBuilder() { }
 
@@ -61,7 +60,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                 if (string.IsNullOrWhiteSpace(value))
                     continue;
 
-                barcodeString += $"{field.Identifier}{value}{(field.FixedLength? "" : GS1Barcode.GroupSeparator.ToString())}";
+                barcodeString += $"{field.Identifier}{value}{(field.FixedLength ? "" : GS1Barcode.GroupSeparator.ToString())}";
             }
 
             if (string.IsNullOrWhiteSpace(barcodeString))
@@ -69,7 +68,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
 
             //remove last <GS>, it can never be the last character.
             if (barcodeString.Last() == GS1Barcode.GroupSeparator)
-                barcodeString = barcodeString.Remove(barcodeString.Length-1); 
+                barcodeString = barcodeString.Remove(barcodeString.Length - 1);
 
             return barcodeString;
         }

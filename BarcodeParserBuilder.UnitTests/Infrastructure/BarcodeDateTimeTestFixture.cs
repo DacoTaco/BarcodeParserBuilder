@@ -1,8 +1,8 @@
-﻿using BarcodeParserBuilder.Barcodes.HIBC;
+﻿using System;
+using System.Collections.Generic;
+using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Infrastructure
@@ -34,28 +34,28 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
             //GS1 - Regular Date
             yield return new object[]
             {
-                "991231", 
+                "991231",
                 new DateTime(2099, 12, 31)
             };
 
             //GS1 - Regular Date(February)
             yield return new object[]
             {
-                "990200", 
+                "990200",
                 new DateTime(2099, 02, 28)
             };
 
             //GS1 - Leap-Year
             yield return new object[]
             {
-                "200229", 
+                "200229",
                 new DateTime(2020, 02, 29)
             };
 
             //GS1 - Leap-Year 00 days
             yield return new object[]
             {
-                "200200", 
+                "200200",
                 new DateTime(2020, 02, 29)
             };
         }
@@ -115,28 +115,28 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
             //PPN - Regular Date
             yield return new object[]
             {
-                "20991231", 
+                "20991231",
                 new DateTime(2099, 12, 31)
             };
 
             //PPN - Regular Date(February)
             yield return new object[]
             {
-                "20990200", 
+                "20990200",
                 new DateTime(2099, 02, 28)
             };
 
             //PPN - Leap-Year
             yield return new object[]
             {
-                "20200229", 
+                "20200229",
                 new DateTime(2020, 02, 29)
             };
 
             //PPN - Leap-Year 00 days
             yield return new object[]
             {
-                "20200200", 
+                "20200200",
                 new DateTime(2020, 02, 29)
             };
         }
@@ -195,22 +195,22 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
             result.DateTime.Should().Be(date);
             result.StringValue.Should().Be(expectedValue);
         }
-      
+
         public static IEnumerable<object[]> ValidHIBCDateStrings()
         {
             //NOTE : DO NOT touch these datetime format indexes. these are static and part of the HIBC specs !
             //therefor, this test also checks the indexes!
 
             //HIBC - MMYY
-            yield return new object[] 
+            yield return new object[]
             {
-                "1299", 
-                HibcBarcodeSegmentFormat.SegmentFormats[0], 
+                "1299",
+                HibcBarcodeSegmentFormat.SegmentFormats[0],
                 new DateTime(2099, 12, 01)
             };
 
             //HIBC - MMYY 2
-            yield return new object[] 
+            yield return new object[]
             {
                 "0220",
                 HibcBarcodeSegmentFormat.SegmentFormats[1],
@@ -218,74 +218,74 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
             };
 
             //HIBC - MMDDYY
-            yield return new object[] 
+            yield return new object[]
             {
-                "123199", 
-                HibcBarcodeSegmentFormat.SegmentFormats[2], 
+                "123199",
+                HibcBarcodeSegmentFormat.SegmentFormats[2],
                 new DateTime(2099, 12, 31)
             };
 
             //HIBC - YYMMDD
-            yield return new object[] 
+            yield return new object[]
             {
-                "990216", 
-                HibcBarcodeSegmentFormat.SegmentFormats[3], 
+                "990216",
+                HibcBarcodeSegmentFormat.SegmentFormats[3],
                 new DateTime(2099, 02, 16)
             };
 
             //HIBC - YYMMDDHH
-            yield return new object[] 
+            yield return new object[]
             {
-                "20022916", 
-                HibcBarcodeSegmentFormat.SegmentFormats[4], 
+                "20022916",
+                HibcBarcodeSegmentFormat.SegmentFormats[4],
                 new DateTime(2020, 02, 29, 16, 00, 00)
             };
 
             //HIBC - YYJJJ
-            yield return new object[] 
+            yield return new object[]
             {
-                "20059", 
-                HibcBarcodeSegmentFormat.SegmentFormats[5], 
+                "20059",
+                HibcBarcodeSegmentFormat.SegmentFormats[5],
                 new DateTime(2020, 02, 28)
             };
 
             //HIBC - YYJJJ - Leap Year
-            yield return new object[] 
+            yield return new object[]
             {
-                "20060", 
-                HibcBarcodeSegmentFormat.SegmentFormats[5], 
+                "20060",
+                HibcBarcodeSegmentFormat.SegmentFormats[5],
                 new DateTime(2020, 02, 29)
             };
 
             //HIBC - YYJJJ - None - Leap Year
-            yield return new object[] 
+            yield return new object[]
             {
-                "19060", 
-                HibcBarcodeSegmentFormat.SegmentFormats[5], 
+                "19060",
+                HibcBarcodeSegmentFormat.SegmentFormats[5],
                 new DateTime(2019, 03, 01)
             };
 
             //HIBC - YYJJJHH
-            yield return new object[] 
+            yield return new object[]
             {
-                "2005911", 
-                HibcBarcodeSegmentFormat.SegmentFormats[6], 
+                "2005911",
+                HibcBarcodeSegmentFormat.SegmentFormats[6],
                 new DateTime(2020, 02, 28, 11, 00, 00)
             };
 
             //HIBC - YYJJJHH - Leap Year
-            yield return new object[] 
+            yield return new object[]
             {
-                "2006006", 
-                HibcBarcodeSegmentFormat.SegmentFormats[6], 
+                "2006006",
+                HibcBarcodeSegmentFormat.SegmentFormats[6],
                 new DateTime(2020, 02, 29, 6, 00, 00)
             };
 
             //HIBC - YYJJJHH - None - Leap Year
-            yield return new object[] 
+            yield return new object[]
             {
-                "1906023", 
-                HibcBarcodeSegmentFormat.SegmentFormats[6], 
+                "1906023",
+                HibcBarcodeSegmentFormat.SegmentFormats[6],
                 new DateTime(2019, 03, 01, 23, 00, 00)
             };
         }
@@ -316,72 +316,72 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
             //HIBC - Too short
             yield return new object[]
             {
-                "129", 
-                HibcBarcodeSegmentFormat.SegmentFormats[0], 
+                "129",
+                HibcBarcodeSegmentFormat.SegmentFormats[0],
                 "Invalid datetime value '129' for format 'MMyy'."
             };
 
             //HIBC - Invalid Character
             yield return new object[]
             {
-                "12#9", 
-                HibcBarcodeSegmentFormat.SegmentFormats[0], 
+                "12#9",
+                HibcBarcodeSegmentFormat.SegmentFormats[0],
                 "Invalid datetime value '12#9' for format 'MMyy'."
             };
 
             //HIBC - No Digits
             yield return new object[]
             {
-                "NODI", 
-                HibcBarcodeSegmentFormat.SegmentFormats[0], 
+                "NODI",
+                HibcBarcodeSegmentFormat.SegmentFormats[0],
                 "Invalid datetime value 'NODI' for format 'MMyy'."
             };
 
             //HIBC - Null Character
             yield return new object[]
             {
-                "\0", 
-                HibcBarcodeSegmentFormat.SegmentFormats[0], 
+                "\0",
+                HibcBarcodeSegmentFormat.SegmentFormats[0],
                 "Invalid datetime value '\0' for format 'MMyy'."
             };
 
             //HIBC - No Format
             yield return new object[]
             {
-                "1299", 
-                null, 
+                "1299",
+                null,
                 "Invalid Hibc date format '(null)'."
             };
 
             //HIBC - Empty Format
             yield return new object[]
             {
-                "1299", 
-                "", 
+                "1299",
+                "",
                 "Invalid Hibc date format '(null)'."
             };
 
             //HIBC - Invalid Format
             yield return new object[]
             {
-                "1299", 
-                "HAHA", 
+                "1299",
+                "HAHA",
                 "Invalid Hibc date format 'HAHA'."
             };
 
             //HIBC - Devided Format
             yield return new object[]
             {
-                "1299", 
-                "YYMMYYDD", 
+                "1299",
+                "YYMMYYDD",
                 "Invalid Hibc date format 'YYMMYYDD'."
             };
 
             //HIBC - Unknown Format
             yield return new object[]
             {
-                "1299", 
-                "YYYYMMDDHH", 
+                "1299",
+                "YYYYMMDDHH",
                 "Invalid Hibc date format 'YYYYMMDDHH'."
             };
         }

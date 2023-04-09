@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Exceptions.GS1;
+﻿using System.Text.RegularExpressions;
+using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
-using System.Text.RegularExpressions;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {

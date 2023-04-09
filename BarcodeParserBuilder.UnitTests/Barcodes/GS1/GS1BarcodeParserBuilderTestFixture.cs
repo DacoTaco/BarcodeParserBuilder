@@ -1,9 +1,9 @@
-﻿using BarcodeParserBuilder.Barcodes.GS1;
+﻿using System;
+using System.Collections.Generic;
+using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
@@ -37,7 +37,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             else
                 result.NetWeightInPounds.Should().BeNull();
 
-            if(expectedBarcode.Price.HasValue)
+            if (expectedBarcode.Price.HasValue)
                 result.Price.Value.Should().BeApproximately(expectedBarcode.Price.Value, 0.000000000000001d);
             else
                 result.Price.Should().BeNull();
@@ -214,8 +214,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
         {
             var gs1Barcode = new GS1Barcode()
             {
-                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) => 
-                { 
+                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                {
                     productCode.Type = ProductCodeType.GTIN;
                     productCode.Value = "357466145194";
                     productCode.Indicator = 0;
@@ -223,7 +223,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 BatchNumber = null,
                 SerialNumber = null,
             };
-            gs1Barcode.Fields["20"].SetValue("BL");           
+            gs1Barcode.Fields["20"].SetValue("BL");
             gs1Barcode.Fields["240"].SetValue("40600199T");
             gs1Barcode.Fields["30"].SetValue(1);
             gs1Barcode.Fields["71"].SetValue("025862471");
@@ -350,8 +350,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 $"0100367457153032101724847.1{GroupSeparator}1721033121118165795226",
                 new GS1Barcode()
                 {
-                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("00367457153032", (productCode) => 
-                    { 
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("00367457153032", (productCode) =>
+                    {
                         productCode.Type = ProductCodeType.GTIN;
                         productCode.Schema = GtinProductScheme.NationalDrugCode;
                         productCode.Value = "6745715303";

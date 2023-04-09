@@ -1,5 +1,5 @@
-﻿using BarcodeParserBuilder.Infrastructure;
-using System;
+﻿using System;
+using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.UnitTests
 {

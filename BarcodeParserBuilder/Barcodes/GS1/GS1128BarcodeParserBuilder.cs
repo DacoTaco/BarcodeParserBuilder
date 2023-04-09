@@ -1,7 +1,7 @@
-﻿using BarcodeParserBuilder.Exceptions.GS1;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BarcodeParserBuilder.Exceptions.GS1;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {
@@ -50,7 +50,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                 if (!barcodeString.StartsWith(GS1128Barcode.SymbologyPrefix, StringComparison.Ordinal))
                     throw new GS1128ParseException("Barcode does not start with the Symbology Prefix.");
 
-                barcodeString = barcodeString.Replace(GS1128Barcode.SymbologyPrefix, GS1Barcode.GroupSeparator.ToString());                
+                barcodeString = barcodeString.Replace(GS1128Barcode.SymbologyPrefix, GS1Barcode.GroupSeparator.ToString());
                 return base.ParseString(barcodeString);
             }
             catch (Exception e)
@@ -83,7 +83,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             var list = BuildBarcodes(barcode);
             var barcodeString = list.Select(s => s).Aggregate((i, s) => i + s);
 
-            return string.IsNullOrWhiteSpace(barcodeString)? null : barcodeString;
+            return string.IsNullOrWhiteSpace(barcodeString) ? null : barcodeString;
         }
     }
 }

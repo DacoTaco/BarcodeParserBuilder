@@ -1,8 +1,8 @@
-﻿using BarcodeParserBuilder.Exceptions.GS1;
-using BarcodeParserBuilder.Infrastructure;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
+using BarcodeParserBuilder.Exceptions.GS1;
+using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {

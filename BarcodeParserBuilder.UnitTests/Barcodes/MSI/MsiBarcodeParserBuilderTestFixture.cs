@@ -1,9 +1,9 @@
-﻿using BarcodeParserBuilder.Exceptions.MSI;
-using BarcodeParserBuilder.Infrastructure;
-using BarcodeParserBuilder.Barcodes.MSI;
-using FluentAssertions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BarcodeParserBuilder.Barcodes.MSI;
+using BarcodeParserBuilder.Exceptions.MSI;
+using BarcodeParserBuilder.Infrastructure;
+using FluentAssertions;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI

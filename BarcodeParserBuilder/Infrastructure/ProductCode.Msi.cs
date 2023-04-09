@@ -6,7 +6,7 @@ namespace BarcodeParserBuilder.Infrastructure
     public class MsiProductCode : ProductCode
     {
         internal MsiProductCode() : base("") { }
-        public MsiProductCode(string code) : base(code) 
+        public MsiProductCode(string code) : base(code)
         {
             ///MSI can have multiple ways to calculate check digits ... *sigh*
             ///Most common is luhn/Mod 10 - from right to left add all numbers together. numbers in even positions need to be multiplied by 2 and added together to make 1 digit. then modulo by 10

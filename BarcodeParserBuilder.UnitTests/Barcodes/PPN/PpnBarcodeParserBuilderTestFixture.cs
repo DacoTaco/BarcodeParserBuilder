@@ -1,10 +1,10 @@
-﻿using BarcodeParserBuilder.Exceptions.PPN;
-using BarcodeParserBuilder.Infrastructure;
+﻿using System;
+using System.Collections.Generic;
 using BarcodeParserBuilder.Barcodes.PPN;
+using BarcodeParserBuilder.Exceptions.PPN;
+using BarcodeParserBuilder.Infrastructure;
 using BarcodeParserBuilder.UnitTests.Barcodes.GS1;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
@@ -113,14 +113,14 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
         public static IEnumerable<object[]> ValidPpnBarcodes()
         {
             //Empty string
-            yield return new object[] 
+            yield return new object[]
             {
                 null,
                 null
             };
 
             //Empty Barcode
-            yield return new object[] 
+            yield return new object[]
             {
                 $"{Prefix}{Suffix}",
                 new PpnBarcode()
@@ -129,8 +129,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
             //GTIN ProductCode + Unused AI's
             var barcode = new PpnBarcode()
             {
-                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) => 
-                { 
+                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                {
                     productCode.Type = ProductCodeType.GTIN;
                     productCode.Value = "357466145194";
                     productCode.Indicator = 0;
@@ -232,7 +232,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
             //InvalidFormat (Missing Suffix)
             yield return new object[]
             {
-                $"{Prefix}9N111234568408", 
+                $"{Prefix}9N111234568408",
                 $"Failed to parse PPN Barcode :{Environment.NewLine}Invalid PPN Barcode Prefix/Suffix/Size"
             };
 

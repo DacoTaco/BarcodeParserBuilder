@@ -1,7 +1,7 @@
-﻿using BarcodeParserBuilder.Abstraction;
-using BarcodeParserBuilder.Exceptions;
-using System;
+﻿using System;
 using System.IO;
+using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Exceptions;
 
 namespace BarcodeParserBuilder.Infrastructure
 {
@@ -10,10 +10,10 @@ namespace BarcodeParserBuilder.Infrastructure
         public BarcodeField(BarcodeType barcodeType, string identifier, int length) : this(barcodeType, identifier, length, length) { }
         public BarcodeField(BarcodeType barcodeType, string identifier, int minLength, int? maxLength)
         {
-            if (minLength < 0 || 
+            if (minLength < 0 ||
                 (maxLength.HasValue && maxLength.Value < 0) ||
                 (maxLength.HasValue && maxLength.Value < MinLength))
-                throw new ArgumentException($"Invalid field size '({MinLength}{(MaxLength.HasValue?$"-{MaxLength.Value}":null)})' for '{identifier}'.");
+                throw new ArgumentException($"Invalid field size '({MinLength}{(MaxLength.HasValue ? $"-{MaxLength.Value}" : null)})' for '{identifier}'.");
 
             Identifier = identifier;
             MinLength = minLength;
@@ -30,7 +30,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
         private bool ValidateLength(string? value)
         {
-            if(!FixedLength && string.IsNullOrWhiteSpace(value))
+            if (!FixedLength && string.IsNullOrWhiteSpace(value))
                 return true;
 
             var valueLength = (value?.Length ?? 0);
@@ -53,7 +53,7 @@ namespace BarcodeParserBuilder.Infrastructure
         public void Parse(string? value)
         {
             if (!ValidateLength(value))
-                throw new ValidateException($"Invalid value Length {value?.Length ?? 0}. Expected {(FixedLength? null : "Max ")}{MaxLength} Bytes.");
+                throw new ValidateException($"Invalid value Length {value?.Length ?? 0}. Expected {(FixedLength ? null : "Max ")}{MaxLength} Bytes.");
 
             Value = FieldParserBuilder.Parse(value, MinLength, MaxLength);
         }

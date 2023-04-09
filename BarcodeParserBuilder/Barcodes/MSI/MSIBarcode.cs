@@ -13,7 +13,7 @@ namespace BarcodeParserBuilder.Barcodes.MSI
         };
 
 
-        public override ProductCode? ProductCode 
+        public override ProductCode? ProductCode
         {
             get => (ProductCode?)BarcodeFields[nameof(ProductCode)].Value;
             set => BarcodeFields[nameof(ProductCode)].SetValue(value);

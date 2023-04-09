@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Exceptions.GS1;
+﻿using System.Linq;
+using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
-using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {
@@ -25,7 +25,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             if (obj == null)
                 return true;
 
-            if (!Validate(obj.StringValue) || obj.FormatString != BarcodeDateTime.GS1Format )
+            if (!Validate(obj.StringValue) || obj.FormatString != BarcodeDateTime.GS1Format)
                 throw new GS1ValidateException($"Invalid Barcode Value '{obj.StringValue}'.");
 
             return true;

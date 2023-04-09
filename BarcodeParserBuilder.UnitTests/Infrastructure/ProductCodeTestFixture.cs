@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Infrastructure;
+﻿using System;
+using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Infrastructure

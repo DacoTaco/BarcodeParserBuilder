@@ -1,7 +1,7 @@
-﻿using BarcodeParserBuilder.Abstraction;
-using BarcodeParserBuilder.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
+using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes
 {

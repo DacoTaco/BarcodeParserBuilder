@@ -1,9 +1,9 @@
-﻿using BarcodeParserBuilder.Abstraction;
+﻿using System;
+using System.Linq;
+using BarcodeParserBuilder.Abstraction;
 using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Infrastructure;
-using System;
-using System.Linq;
 
 namespace BarcodeParserBuilder
 {
@@ -11,7 +11,7 @@ namespace BarcodeParserBuilder
     {
         private static readonly IAimParser _aimParser = new AimParser();
 
-        public bool TryParse(string? barcodeString, out Barcode? barcode) => TryParse(barcodeString, out barcode, out var _ );
+        public bool TryParse(string? barcodeString, out Barcode? barcode) => TryParse(barcodeString, out barcode, out var _);
         public bool TryParse(string? barcodeString, out Barcode? barcode, out string? feedback)
         {
             try
@@ -22,7 +22,7 @@ namespace BarcodeParserBuilder
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return true;
 
-                foreach(var parserBuilder in _aimParser.GetParsers(barcodeString))
+                foreach (var parserBuilder in _aimParser.GetParsers(barcodeString))
                 {
                     var methodInfo = parserBuilder.GetMethod(nameof(GS1BarcodeParserBuilder.TryParse));
                     if (methodInfo == null)
@@ -44,7 +44,7 @@ namespace BarcodeParserBuilder
 
                 throw new Exception("Failed to parse barcode : no parser could accept barcode.");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 feedback = e.Message;
                 barcode = null;

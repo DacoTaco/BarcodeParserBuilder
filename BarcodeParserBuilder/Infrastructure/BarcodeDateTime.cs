@@ -15,7 +15,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
         public DateTime DateTime { get; private set; }
         public string StringValue { get; private set; }
-        public string FormatString  { get; private set; }
+        public string FormatString { get; private set; }
 
         //the following regex is quite a monstrocity, i know.
         //basically it can be split up in 2 parts. 
@@ -106,7 +106,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
         private static void ValidateHibcFormat(string? format)
         {
-            if( !string.Equals(format, HIBCMonthShortYear, StringComparison.OrdinalIgnoreCase) &&
+            if (!string.Equals(format, HIBCMonthShortYear, StringComparison.OrdinalIgnoreCase) &&
                 !string.Equals(format, HIBCShortYearMonthDayHour, StringComparison.OrdinalIgnoreCase) &&
                 !string.Equals(format, HIBCYearMonthDay, StringComparison.OrdinalIgnoreCase) &&
                 !string.Equals(format, HIBCMonthDayShortYear, StringComparison.OrdinalIgnoreCase) &&

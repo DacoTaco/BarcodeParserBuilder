@@ -1,15 +1,15 @@
-﻿using BarcodeParserBuilder.Barcodes.EAN;
-using BarcodeParserBuilder.Barcodes.GS1;
-using BarcodeParserBuilder.Barcodes.HIBC;
-using BarcodeParserBuilder.Infrastructure;
-using BarcodeParserBuilder.Barcodes.MSI;
-using BarcodeParserBuilder.Barcodes.PPN;
-using FluentAssertions;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
-using Xunit;
 using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Barcodes.EAN;
+using BarcodeParserBuilder.Barcodes.GS1;
+using BarcodeParserBuilder.Barcodes.HIBC;
+using BarcodeParserBuilder.Barcodes.MSI;
+using BarcodeParserBuilder.Barcodes.PPN;
+using BarcodeParserBuilder.Infrastructure;
+using FluentAssertions;
+using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Infrastructure
 {

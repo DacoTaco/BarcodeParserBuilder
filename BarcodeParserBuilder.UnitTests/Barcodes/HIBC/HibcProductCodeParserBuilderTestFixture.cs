@@ -1,19 +1,19 @@
-﻿using BarcodeParserBuilder.Exceptions.HIBC;
+﻿using System;
 using BarcodeParserBuilder.Barcodes.HIBC;
+using BarcodeParserBuilder.Exceptions.HIBC;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
 {
     public class HibcProductCodeParserBuilderTestFixture
     {
-        [Fact] 
+        [Fact]
         public void FieldParserBuilderAcceptsValidProductCodes()
         {
             //Arrange
-            var fieldParserBuilder = new HibcProductCodeParserBuilder();            
+            var fieldParserBuilder = new HibcProductCodeParserBuilder();
             var productCode = "AZBCD79927398713";
             ProductCode result = null;
 

@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Exceptions.EAN;
+﻿using System;
+using BarcodeParserBuilder.Exceptions.EAN;
 using BarcodeParserBuilder.Infrastructure;
-using System;
 
 namespace BarcodeParserBuilder.Barcodes.EAN
 {
@@ -11,7 +11,7 @@ namespace BarcodeParserBuilder.Barcodes.EAN
         public static string? Build(EanBarcode? barcode)
         {
             var parserBuider = new EanBarcodeParserBuilder();
-            return parserBuider.BuildString(barcode);       
+            return parserBuider.BuildString(barcode);
         }
 
         public static bool TryParse(string? barcode, out EanBarcode? eanBarcode)

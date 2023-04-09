@@ -1,9 +1,9 @@
-﻿using BarcodeParserBuilder.Barcodes.EAN;
+﻿using System;
+using System.Collections.Generic;
+using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Exceptions.EAN;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
@@ -75,8 +75,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
         public static IEnumerable<object[]> ValidEanBarcodes()
         {
             //EAN13
-            yield return new object[] 
-            { 
+            yield return new object[]
+            {
                 $"5420046520228",
                 new EanBarcode
                 {
@@ -86,7 +86,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
                         productCode.Schema = GtinProductScheme.Unknown;
                         productCode.Value = "542004652022";
                     }),
-                } 
+                }
             };
 
             //UPC in EAN13

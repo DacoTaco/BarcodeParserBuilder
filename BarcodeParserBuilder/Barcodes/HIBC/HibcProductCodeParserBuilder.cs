@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Exceptions.HIBC;
+﻿using System.Linq;
+using BarcodeParserBuilder.Exceptions.HIBC;
 using BarcodeParserBuilder.Infrastructure;
-using System.Linq;
 
 namespace BarcodeParserBuilder.Barcodes.HIBC
 {
@@ -15,9 +15,9 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             if (string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if (value.Length < 2 || 
-                value.Length > 18 || 
-                value.Any(c => !char.IsLetterOrDigit(c)) || 
+            if (value.Length < 2 ||
+                value.Length > 18 ||
+                value.Any(c => !char.IsLetterOrDigit(c)) ||
                 value.Where(c => char.IsLetter(c)).Any(c => !char.IsUpper(c)))
                 throw new HIBCValidateException($"Invalid HIBC value '{value}'.");
 

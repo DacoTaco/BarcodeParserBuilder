@@ -1,8 +1,8 @@
-﻿using BarcodeParserBuilder.Barcodes;
+﻿using System;
+using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Exceptions;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
 
 namespace BarcodeParserBuilder.UnitTests
 {
@@ -30,7 +30,7 @@ namespace BarcodeParserBuilder.UnitTests
                 parsedProductCode.Should().NotBeNull();
                 parsedProductCode.Should().BeOfType(expectedProductCode.GetType());
 
-                foreach(var property in expectedProductCode.GetType().GetProperties())
+                foreach (var property in expectedProductCode.GetType().GetProperties())
                 {
                     var actualValue = property.GetValue(parsedProductCode, null);
                     var expectedValue = property.GetValue(expectedProductCode, null);
@@ -65,7 +65,7 @@ namespace BarcodeParserBuilder.UnitTests
             {
                 expectedValue = expectedGetter();
             }
-            catch(UnusedFieldException)
+            catch (UnusedFieldException)
             {
                 expectedValue = null;
             }

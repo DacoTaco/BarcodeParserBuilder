@@ -1,8 +1,8 @@
-﻿using BarcodeParserBuilder.Exceptions.PPN;
-using BarcodeParserBuilder.Infrastructure;
+﻿using System;
 using BarcodeParserBuilder.Barcodes.PPN;
+using BarcodeParserBuilder.Exceptions.PPN;
+using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN

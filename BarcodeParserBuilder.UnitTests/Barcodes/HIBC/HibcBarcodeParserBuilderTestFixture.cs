@@ -1,9 +1,9 @@
-﻿using BarcodeParserBuilder.Exceptions.HIBC;
+﻿using System;
+using System.Collections.Generic;
 using BarcodeParserBuilder.Barcodes.HIBC;
+using BarcodeParserBuilder.Exceptions.HIBC;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
@@ -411,21 +411,21 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
             //2D - Invalid CheckCharacter
             yield return new object[]
             {
-                "+A99912345/$$52001510X3/16D20111212/S77DEFG45/", 
+                "+A99912345/$$52001510X3/16D20111212/S77DEFG45/",
                 $"Failed to parse HIBC Barcode :{Environment.NewLine}Check Character did not match: expected '7' but got '/'."
             };
 
             //1D - Invalid Primary CheckCharacter
             yield return new object[]
             {
-                "+A123BJC5D6E71++$$52001510X3+D", 
+                "+A123BJC5D6E71++$$52001510X3+D",
                 $"Failed to parse HIBC Barcode :{Environment.NewLine}Check Character did not match: expected 'G' but got '+'."
             };
 
             //1D - Invalid Secondary LinkCharacter
             yield return new object[]
             {
-                "+A123BJC5D6E71G+$$52001510X3+ ", 
+                "+A123BJC5D6E71G+$$52001510X3+ ",
                 $"Failed to parse HIBC Barcode :{Environment.NewLine}Link Character did not match: expected 'G' but got '+'."
             };
         }

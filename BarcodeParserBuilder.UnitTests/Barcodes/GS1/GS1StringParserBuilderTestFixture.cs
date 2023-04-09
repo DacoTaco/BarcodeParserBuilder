@@ -1,7 +1,7 @@
-﻿using BarcodeParserBuilder.Exceptions.GS1;
+﻿using System;
 using BarcodeParserBuilder.Barcodes.GS1;
+using BarcodeParserBuilder.Exceptions.GS1;
 using FluentAssertions;
-using System;
 using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1

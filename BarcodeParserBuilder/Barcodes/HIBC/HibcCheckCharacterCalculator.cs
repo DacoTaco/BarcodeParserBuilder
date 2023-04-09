@@ -1,6 +1,6 @@
-﻿using BarcodeParserBuilder.Exceptions.HIBC;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
+using BarcodeParserBuilder.Exceptions.HIBC;
 
 namespace BarcodeParserBuilder.Barcodes.HIBC
 {
@@ -13,7 +13,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             if (string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if ( linkCharacter.HasValue && !Regex.IsMatch(linkCharacter?.ToString() ?? "", AllowedCharacterRegex))
+            if (linkCharacter.HasValue && !Regex.IsMatch(linkCharacter?.ToString() ?? "", AllowedCharacterRegex))
                 throw new HIBCValidateException("Invalid input to validate check character on.");
 
             var input = value.Substring(0, value.Length - 1);
@@ -22,7 +22,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             if (checkCharacter != value.Last())
                 throw new HIBCValidateException($"Check Character did not match: expected '{checkCharacter}' but got '{value.Last()}'.");
 
-            if(linkCharacter.HasValue && input.Last() != linkCharacter)
+            if (linkCharacter.HasValue && input.Last() != linkCharacter)
                 throw new HIBCValidateException($"Link Character did not match: expected '{linkCharacter}' but got '{input.Last()}'.");
 
             return true;
@@ -30,10 +30,10 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
 
         public static char CalculateSegmentCheckCharacter(string? value)
         {
-            if(string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
                 throw new HIBCValidateException("Can not calculate check character for an empty string.");
 
-            if ( value.Length < 5 || !Regex.IsMatch(value, AllowedCharacterRegex))
+            if (value.Length < 5 || !Regex.IsMatch(value, AllowedCharacterRegex))
                 throw new HIBCValidateException("Invalid input to validate check character on.");
 
             var sum = value.Select(c => GetWeight(c)).Sum();

@@ -57,6 +57,20 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 }
             };
 
+            //1D - Multiple Lines concat - Old Format - aztec prefix
+            yield return new object[]
+            {
+                "]zB+A123BJC5D6E71G+2001510X3GG",
+                new HibcBarcode(false)
+                {
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("BJC5D6E7"),
+                    LabelerIdentificationCode = "A123",
+                    UnitOfMeasure = 1,
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 01, 15), "20015", "yyJJJ"),
+                    BatchNumber = "10X3",
+                }
+            };
+
             //1D - Old Format
             yield return new object[]
             {
@@ -87,10 +101,41 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                 }
             };
 
+            //2D - Old Format - QRCode
+            yield return new object[]
+            {
+                "]Q0+J123AQ3451/25330BC34567/S4012X",
+                new HibcBarcode()
+                {
+                    LabelerIdentificationCode = "J123",
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("AQ345"),
+                    UnitOfMeasure = 1,
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2025, 11, 26), "25330", "yyJJJ"),
+                    BatchNumber = "BC34567",
+                    SerialNumber = "4012"
+                }
+            };
+
             //2D - Online Example #1
             yield return new object[]
             {
                 "+A123ABCDEFGHI1234567891/$$420020216LOT123456789012345/SXYZ456789012345678/16D20130202$",
+                new HibcBarcode()
+                {
+                    LabelerIdentificationCode = "A123",
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("ABCDEFGHI123456789"),
+                    UnitOfMeasure = 1,
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 02, 02, 16, 00, 00), "20020216", "yyMMddHH"),
+                    BatchNumber = "LOT123456789012345",
+                    SerialNumber = "XYZ456789012345678",
+                    ProductionDate = new TestBarcodeDateTime(new DateTime(2013, 02, 02), "20130202", "yyyyMMdd")
+                }
+            };
+
+            //2D - Online Example #1 - DataMatrix
+            yield return new object[]
+            {
+                "]d1+A123ABCDEFGHI1234567891/$$420020216LOT123456789012345/SXYZ456789012345678/16D20130202$",
                 new HibcBarcode()
                 {
                     LabelerIdentificationCode = "A123",

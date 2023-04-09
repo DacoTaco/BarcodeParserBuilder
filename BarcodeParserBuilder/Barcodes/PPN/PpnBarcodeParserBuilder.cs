@@ -66,15 +66,14 @@ namespace BarcodeParserBuilder.Barcodes.PPN
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return default;
 
+                barcodeString = AimParser.StripBarcodePrefix(barcodeString);
                 if (!barcodeString.StartsWith(PpnBarcode.Prefix, StringComparison.Ordinal) || 
                     !barcodeString.EndsWith(PpnBarcode.Suffix, StringComparison.Ordinal) ||
                     barcodeString.Length < (PpnBarcode.Prefix.Length + PpnBarcode.Suffix.Length) )
                     throw new PPNParseException("Invalid PPN Barcode Prefix/Suffix/Size");
 
                 
-                barcodeString = barcodeString
-                    .Remove(barcodeString.Length - PpnBarcode.Suffix.Length) // remove suffix
-                    .Substring(PpnBarcode.Prefix.Length); //remove prefix
+                barcodeString = barcodeString[PpnBarcode.Prefix.Length..(barcodeString.Length - PpnBarcode.Suffix.Length)]; //remove prefix & suffix
 
                 var barcode = new PpnBarcode();
                 var codeStream = new StringReader(barcodeString);

@@ -189,6 +189,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return null;
 
+                barcodeString = AimParser.StripBarcodePrefix(barcodeString);
                 if (!Regex.IsMatch(barcodeString, HibcCheckCharacterCalculator.AllowedCharacterRegex))
                     throw new HIBCParseException("Invalid HIBC Character detected.");
 

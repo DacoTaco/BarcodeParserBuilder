@@ -63,7 +63,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             //Random Order #1
             yield return new object[]
             {
-                $"20BL0103574661451947301{GroupSeparator}9915489{GroupSeparator}9815647{GroupSeparator}24040600199T{GroupSeparator}71025862471",
+                $"]d220BL0103574661451947301{GroupSeparator}9915489{GroupSeparator}9815647{GroupSeparator}24040600199T{GroupSeparator}71025862471",
                 new GS1Barcode()
                 {
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
@@ -162,6 +162,51 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     BatchNumber = "3456789",
                     SerialNumber = null
                 }
+            };
+
+            //GS1 example 1
+            yield return new object[]
+            {
+                "]d20108430215011539112212221724022021S3736",
+                new GS1Barcode
+                {
+                    ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("08430215011539", (productCode) =>
+                    {
+                        productCode.Type = ProductCodeType.GTIN;
+                        productCode.Value = "843021501153";
+                        productCode.Indicator = 0;
+                        productCode.Code = "08430215011539";
+                    }),
+                    SerialNumber = "S3736",
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2024, 02, 20), "240220", GS1BarcodeParserBuilderTestFixture.GS1DateFormat),
+                    ProductionDate = new TestBarcodeDateTime(new DateTime(2022, 12, 22), "221222", GS1BarcodeParserBuilderTestFixture.GS1DateFormat)
+                }
+            };
+
+            //GS1 example 2
+            var gs1Barcode = new GS1Barcode()
+            {
+                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                {
+                    productCode.Type = ProductCodeType.GTIN;
+                    productCode.Value = "357466145194";
+                    productCode.Indicator = 0;
+                }),
+                BatchNumber = null,
+                SerialNumber = null,
+                ExpirationDate = new TestBarcodeDateTime(new DateTime(2099, 12, 31), "991200", GS1BarcodeParserBuilderTestFixture.GS1DateFormat),
+                ProductionDate = new TestBarcodeDateTime(new DateTime(2002, 05, 04), "020504", GS1BarcodeParserBuilderTestFixture.GS1DateFormat)
+            };
+            gs1Barcode.Fields["20"].SetValue("BL");
+            gs1Barcode.Fields["240"].SetValue("40600199T");
+            gs1Barcode.Fields["30"].SetValue(1);
+            gs1Barcode.Fields["71"].SetValue("025862471");
+            gs1Barcode.Fields["98"].SetValue("15647");
+            gs1Barcode.Fields["99"].SetValue("15489");
+            yield return new object[]
+            {
+                $"]e00103574661451947110205041799120020BL24040600199T{GroupSeparator}301{GroupSeparator}71025862471{GroupSeparator}9815647{GroupSeparator}9915489",
+                gs1Barcode
             };
         }
 

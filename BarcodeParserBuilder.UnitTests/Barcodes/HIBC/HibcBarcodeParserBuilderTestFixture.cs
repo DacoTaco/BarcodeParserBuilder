@@ -210,10 +210,10 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                     LabelerIdentificationCode = "A123",
                     ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("ABCDEFGHI123456789"),
                     UnitOfMeasure = 1,
-                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 02, 02), "20200202", "yyyyMMdd"),
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 02, 02), "200202", "yyMMdd"),
                     BatchNumber = "LOT123456789012345",
                     SerialNumber = "XYZ456789012345678",
-                    ProductionDate = new TestBarcodeDateTime(new DateTime(2013, 02, 02), "20130202", "yyyyMMdd")
+                    ProductionDate = new TestBarcodeDateTime(new DateTime(2013, 02, 02), "130202", "yyMMdd")
                 }
             };
 
@@ -229,8 +229,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                     SerialNumber = "77DEFG45",
                     BatchNumber = "10X3",
                     Quantity = 12,
-                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 09, 06), "20200906", "yyyyMMdd"),
-                    ProductionDate = new TestBarcodeDateTime(new DateTime(2011, 12, 12), "20111212", "yyyyMMdd")
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 09, 06), "200906", "yyMMdd"),
+                    ProductionDate = new TestBarcodeDateTime(new DateTime(2011, 12, 12), "111212", "yyMMdd")
                 }
             };
 
@@ -246,8 +246,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                     SerialNumber = "77DEFG45",
                     BatchNumber = "10X3",
                     Quantity = 2345,
-                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 09, 06), "20200906", "yyyyMMdd"),
-                    ProductionDate = new TestBarcodeDateTime(new DateTime(2011, 12, 12), "20111212", "yyyyMMdd")
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 09, 06), "200906", "yyMMdd"),
+                    ProductionDate = new TestBarcodeDateTime(new DateTime(2011, 12, 12), "111212", "yyMMdd")
                 }
             };
         }
@@ -379,6 +379,20 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2023, 12, 31), "231231", "yyMMdd"),
                     BatchNumber = "BC34567",
                     SerialNumber = "4012"
+                }
+            };
+
+            //2D - Example with YYYYMMDD format
+            yield return new object[]
+            {
+                "+E308T800206X0/$$7230513/14D20260413F",
+                new HibcBarcode()
+                {
+                    LabelerIdentificationCode = "E308",
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("T800206X"),
+                    UnitOfMeasure = 0,
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2026, 04, 13), "20260413", "yyyyMMdd"),
+                    BatchNumber = "230513",
                 }
             };
         }

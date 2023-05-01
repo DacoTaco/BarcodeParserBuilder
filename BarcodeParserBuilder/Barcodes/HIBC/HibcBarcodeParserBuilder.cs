@@ -56,7 +56,6 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code) || string.IsNullOrWhiteSpace(barcode.LabelerIdentificationCode))
                 return list;
 
-            var parserBuider = new HibcBarcodeParserBuilder();
             var segments = BuildSegments(barcode);
             char? linkCharacter = null;
             for (var index = 0; index < segments.Count; index++)
@@ -101,15 +100,17 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             var hasSerialNumber = !string.IsNullOrWhiteSpace(barcode.SerialNumber);
             var hasExpirationDate = (barcode.ExpirationDate != null && !string.IsNullOrWhiteSpace(barcode.ExpirationDate.StringValue));
             var hasQuantity = barcode.Quantity > 0;
+            var quantityFormatNumber = barcode.Quantity < 100 ? 8 : 9;
+            var expirationFormatNumber = HibcBarcodeSegmentFormat.GetHibcDateTimeFormatIdentifierByFormat(barcode.ExpirationDate?.FormatString ?? string.Empty);
+
             segments.Add($"{barcode.LabelerIdentificationCode}{barcode.ProductCode.Code}{barcode.UnitOfMeasure}");
 
             if (hasQuantity && (hasBatchNumber || hasSerialNumber))
             {
                 hasQuantity = false;
-                var formatNumber = barcode.Quantity < 100 ? 8 : 9;
-                var format = HibcBarcodeSegmentFormat.SegmentFormats[formatNumber];
+                var format = HibcBarcodeSegmentFormat.SegmentFormats[quantityFormatNumber];
                 var prefix = $"$${(hasBatchNumber ? "" : "+")}";
-                var segment = $"{prefix}{(formatNumber)}{barcode.Quantity.ToString(format)}";
+                var segment = $"{prefix}{(quantityFormatNumber)}{barcode.Quantity.ToString(format)}";
 
                 if (hasBatchNumber)
                 {
@@ -124,23 +125,19 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                 segments.Add(segment);
             }
 
-            if (hasExpirationDate && (hasBatchNumber || hasSerialNumber))
+            if (hasExpirationDate && expirationFormatNumber <= 7 && (hasBatchNumber || hasSerialNumber))
             {
                 hasExpirationDate = false;
                 var prefix = $"$${(hasBatchNumber ? "" : "+")}";
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                var formatNumber = HibcBarcodeSegmentFormat.GetHibcDateTimeFormatIdentifierByFormat(barcode.ExpirationDate.FormatString);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-                if (formatNumber > 7)
-                    formatNumber = 3;
-                prefix += (formatNumber < 2 || formatNumber > 6) ? "" : formatNumber.ToString();
-                var date = BarcodeDateTime.HibcDate(barcode.ExpirationDate.DateTime, HibcBarcodeSegmentFormat.SegmentFormats[formatNumber]);
+
+                prefix += (expirationFormatNumber < 2 || expirationFormatNumber > 6) ? "" : expirationFormatNumber.ToString();
+                var date = BarcodeDateTime.HibcDate(barcode.ExpirationDate!.DateTime, HibcBarcodeSegmentFormat.SegmentFormats[expirationFormatNumber]);
                 var segment = $"{prefix}{date?.StringValue}";
 
                 if (hasBatchNumber)
                 {
                     segment += barcode.BatchNumber;
-                    //hasBatchNumber = false;
+                    hasBatchNumber = false;
                 }
                 else
                 {
@@ -155,7 +152,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                 if (hasBatchNumber)
                 {
                     segment += barcode.BatchNumber;
-                    //hasBatchNumber = false;
+                    hasBatchNumber = false;
                 }
                 else
                 {
@@ -165,16 +162,17 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                 segments.Add(segment);
             }
 
+            if (hasBatchNumber)
+                segments.Add($"${barcode.BatchNumber}");
+
             if (hasQuantity)
                 segments.Add($"Q{barcode.Quantity}");
 
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (hasExpirationDate)
-                segments.Add($"14D{BarcodeDateTime.HibcDate(barcode.ExpirationDate.DateTime, BarcodeDateTime.HIBCYearMonthDay).StringValue}");
+                segments.Add($"14D{BarcodeDateTime.HibcDate(barcode.ExpirationDate!.DateTime, BarcodeDateTime.HIBCYearMonthDay)!.StringValue}");
 
             if (!string.IsNullOrWhiteSpace(barcode.ProductionDate?.StringValue))
-                segments.Add($"16D{BarcodeDateTime.HibcDate(barcode.ProductionDate.DateTime, BarcodeDateTime.HIBCYearMonthDay).StringValue}");
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                segments.Add($"16D{BarcodeDateTime.HibcDate(barcode.ProductionDate.DateTime, BarcodeDateTime.HIBCYearMonthDay)!.StringValue}");
 
             if (hasSerialNumber)
                 segments.Add($"S{barcode.SerialNumber}");

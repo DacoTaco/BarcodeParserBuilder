@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BarcodeParserBuilder.Barcodes.EAN;
+﻿using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Exceptions.EAN;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;

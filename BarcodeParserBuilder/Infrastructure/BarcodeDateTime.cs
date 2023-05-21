@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace BarcodeParserBuilder.Infrastructure
 {
@@ -38,15 +36,13 @@ namespace BarcodeParserBuilder.Infrastructure
         internal static string HIBCShortYearJulianDay => "yyJJJ";
         internal static string HIBCShortYearJulianDayHour => "yyJJJHH";
 
-#pragma warning disable CS8603 // Possible null reference return.
         public static BarcodeDateTime Gs1Date(DateTime date) => BuildDateString(date, GS1Format);
-#pragma warning restore CS8603 // Possible null reference return.
         public static BarcodeDateTime? Gs1Date(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;
 
-            ParseDateString(value, GS1Format, out var year, out var month, out var day, out var _);
+            ParseDateString(value!, GS1Format, out var year, out var month, out var day, out var _);
             if (year == null || month == null)
                 return null;
 
@@ -56,15 +52,13 @@ namespace BarcodeParserBuilder.Infrastructure
             return new BarcodeDateTime(new DateTime(year.Value, month.Value, day.Value), value, GS1Format);
         }
 
-#pragma warning disable CS8603 // Possible null reference return.
         public static BarcodeDateTime PpnDate(DateTime date) => BuildDateString(date, PPNFormat);
-#pragma warning restore CS8603 // Possible null reference return.
         public static BarcodeDateTime? PpnDate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return null;
 
-            ParseDateString(value, PPNFormat, out var year, out var month, out var day, out var _);
+            ParseDateString(value!, PPNFormat, out var year, out var month, out var day, out var _);
             if (year == null || month == null)
                 return null;
 
@@ -79,7 +73,7 @@ namespace BarcodeParserBuilder.Infrastructure
                 return null;
 
             ValidateHibcFormat(format);
-            ParseDateString(value, format, out var year, out var month, out var day, out var hour);
+            ParseDateString(value!, format, out var year, out var month, out var day, out var hour);
 
             if (year == null)
                 return null;
@@ -131,7 +125,7 @@ namespace BarcodeParserBuilder.Infrastructure
             if (input.Length != format.Length || input.Any(c => !char.IsDigit(c)))
                 throw new ArgumentException($"Invalid datetime value '{input}' for format '{format}'.");
 
-            foreach (Match? match in Regex.Matches(format, @"([a-zA-Z])\1*", RegexOptions.IgnoreCase))
+            foreach (var match in Regex.Matches(format, @"([a-zA-Z])\1*", RegexOptions.IgnoreCase).Cast<Match?>())
             {
                 if (string.IsNullOrWhiteSpace(match?.Value))
                     continue;
@@ -163,13 +157,13 @@ namespace BarcodeParserBuilder.Infrastructure
 
             return;
         }
-        private static BarcodeDateTime? BuildDateString(DateTime input, string format)
+        private static BarcodeDateTime BuildDateString(DateTime input, string format)
         {
             if (string.IsNullOrWhiteSpace(format) || !Regex.IsMatch(format, DateFormatRegex, RegexOptions.IgnoreCase))
                 throw new ArgumentException($"Invalid format '{(string.IsNullOrWhiteSpace(format) ? "(null)" : format)}' given.");
 
-            string? value = null;
-            foreach (Match? match in Regex.Matches(format, @"([a-zA-Z])\1*", RegexOptions.IgnoreCase))
+            string value = string.Empty;
+            foreach (var match in Regex.Matches(format, @"([a-zA-Z])\1*", RegexOptions.IgnoreCase).Cast<Match?>())
             {
                 if (string.IsNullOrWhiteSpace(match?.Value))
                     continue;
@@ -198,9 +192,6 @@ namespace BarcodeParserBuilder.Infrastructure
                         throw new ArgumentException($"Unknown date format '{match}'.");
                 }
             }
-
-            if (string.IsNullOrWhiteSpace(value))
-                return null;
 
             return new BarcodeDateTime(input, value, format);
         }

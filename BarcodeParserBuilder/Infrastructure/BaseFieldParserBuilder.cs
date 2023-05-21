@@ -1,5 +1,4 @@
-﻿using BarcodeParserBuilder.Abstraction;
-using BarcodeParserBuilder.Exceptions;
+﻿using BarcodeParserBuilder.Exceptions;
 
 namespace BarcodeParserBuilder.Infrastructure
 {

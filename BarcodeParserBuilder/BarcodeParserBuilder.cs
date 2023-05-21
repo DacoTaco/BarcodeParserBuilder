@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using BarcodeParserBuilder.Abstraction;
-using BarcodeParserBuilder.Barcodes;
-using BarcodeParserBuilder.Barcodes.GS1;
+﻿using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder
@@ -22,7 +18,7 @@ namespace BarcodeParserBuilder
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return true;
 
-                foreach (var parserBuilder in _aimParser.GetParsers(barcodeString))
+                foreach (var parserBuilder in _aimParser.GetParsers(barcodeString!))
                 {
                     var methodInfo = parserBuilder.GetMethod(nameof(GS1BarcodeParserBuilder.TryParse));
                     if (methodInfo == null)
@@ -34,7 +30,7 @@ namespace BarcodeParserBuilder
                     tryParseParameters[1] = barcode;
                     var returnValue = methodInfo.Invoke(null, tryParseParameters);
 
-                    if (!(returnValue is bool canParse) || !canParse)
+                    if (returnValue is not bool canParse || !canParse)
                         continue;
 
                     //retrieve output parameter and return true

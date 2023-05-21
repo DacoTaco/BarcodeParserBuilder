@@ -1,5 +1,4 @@
-﻿using System;
-using BarcodeParserBuilder.Barcodes.EAN;
+﻿using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Exceptions;
 using FluentAssertions;
 using Xunit;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BarcodeParserBuilder.Exceptions.EAN
+﻿namespace BarcodeParserBuilder.Exceptions.EAN
 {
     public class EanParseException : ParseException
     {

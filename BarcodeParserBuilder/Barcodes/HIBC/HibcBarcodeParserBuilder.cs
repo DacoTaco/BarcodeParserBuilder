@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using BarcodeParserBuilder.Exceptions.HIBC;
 using BarcodeParserBuilder.Infrastructure;
 
@@ -96,7 +93,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code) || string.IsNullOrWhiteSpace(barcode.LabelerIdentificationCode))
                 return segments;
 
-            var hasBatchNumber = !string.IsNullOrWhiteSpace(barcode.BatchNumber);
+            var hasBatchNumber = !string.IsNullOrWhiteSpace(barcode!.BatchNumber);
             var hasSerialNumber = !string.IsNullOrWhiteSpace(barcode.SerialNumber);
             var hasExpirationDate = (barcode.ExpirationDate != null && !string.IsNullOrWhiteSpace(barcode.ExpirationDate.StringValue));
             var hasQuantity = barcode.Quantity > 0;

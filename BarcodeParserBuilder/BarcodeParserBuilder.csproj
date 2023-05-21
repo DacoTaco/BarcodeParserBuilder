@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7;net6;net5.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<Title>BarcodeParserBuilder</Title>
+	  <Title>BarcodeParserBuilder</Title>
     <Version>0.0.1</Version>
     <Authors>DacoTaco</Authors>
     <Company></Company>
@@ -27,7 +27,10 @@ When combined with barcode imaging projects like Zxing you can scan, parse, buil
     <RepositoryUrl>https://github.com/DacoTaco/BarcodeParserBuilder</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
+    <!-- I hate having to define the C# language, but otherwise Nullable & ImplicitUsings won't work as it is a newer language feature than netstandard 2.0 ...-->
+    <LangVersion>11.0</LangVersion>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
 
   </PropertyGroup>
 

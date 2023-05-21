@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Linq;
 using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
 

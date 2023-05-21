@@ -1,5 +1,4 @@
-﻿using BarcodeParserBuilder.Abstraction;
-using BarcodeParserBuilder.Infrastructure;
+﻿using BarcodeParserBuilder.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BarcodeParserBuilder

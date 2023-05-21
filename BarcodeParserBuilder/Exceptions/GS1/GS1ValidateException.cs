@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BarcodeParserBuilder.Exceptions.GS1
+﻿namespace BarcodeParserBuilder.Exceptions.GS1
 {
     public class GS1ValidateException : ValidateException
     {

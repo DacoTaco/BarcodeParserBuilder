@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BarcodeParserBuilder.Barcodes;
+﻿using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
@@ -24,7 +22,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             //Arrange 
             //prepare the GS1 barcodes by converting the GS & other prefixes to the GS1-128.
             //after that, add the Symbology prefix to the GS1 barcodes
-            if (barcode.StartsWith(']'))
+            if (barcode.StartsWith("]"))
                 barcode = AimParser.StripBarcodePrefix(barcode);
             barcode = barcode.Replace(GroupSeparator.ToString(), SymbologyPrefix);
             if (!barcode.StartsWith(SymbologyPrefix))

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using BarcodeParserBuilder.Abstraction;
-using BarcodeParserBuilder.Barcodes;
+﻿using System.Reflection;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
@@ -17,7 +12,7 @@ namespace BarcodeParserBuilder.Infrastructure
         internal static IEnumerable<Type> ParserBuilders { get; set; } = null!;
 
         //this list is compiled using the Honeywell documentation found at https://support.honeywellaidc.com/s/article/List-of-barcode-symbology-AIM-Identifiers
-        internal static Dictionary<string, Func<string, string, IEnumerable<Type>>> AimPrefixMap = new Dictionary<string, Func<string, string, IEnumerable<Type>>>()
+        internal static Dictionary<string, Func<string, string, IEnumerable<Type>>> AimPrefixMap = new()
         {
             { "A", ParseCode39Barcode },
             { "C", ParseCode128Barcode },
@@ -40,7 +35,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
         public IEnumerable<Type> GetParsers(string barcodeString)
         {
-            if (!barcodeString.StartsWith(']') || barcodeString.Length <= 3)
+            if (!barcodeString.StartsWith("]") || barcodeString.Length <= 3)
                 return ParserBuilders;
 
             var codeIdentifier = barcodeString[1].ToString();
@@ -54,7 +49,7 @@ namespace BarcodeParserBuilder.Infrastructure
         public string StripPrefix(string barcodeString) => StripBarcodePrefix(barcodeString);
         internal static string StripBarcodePrefix(string barcodeString)
         {
-            if (!barcodeString.StartsWith(']') || barcodeString.Length <= 3)
+            if (!barcodeString.StartsWith("]") || barcodeString.Length <= 3)
                 return barcodeString;
 
             var codeIdentifier = barcodeString[1].ToString();
@@ -129,160 +124,86 @@ namespace BarcodeParserBuilder.Infrastructure
             return parserBuilderList;
         }
 
-        internal static IEnumerable<Type> ParseCode39Barcode(string modifier, string _)
-        {
-            switch (modifier)
+        internal static IEnumerable<Type> ParseCode39Barcode(string modifier, string _) =>
+            modifier switch
             {
-                case "0":
-                case "1":
-                case "2":
-                case "4":
-                case "5":
-                case "7":
-                    return new[]
-                    {
-                        typeof(EanBarcodeParserBuilder),
-                        typeof(HibcBarcodeParserBuilder),
-                        typeof(MsiBarcodeParserBuilder),
-                    };
-                default:
-                    throw new NotImplementedException($"Code39 modifier '{modifier}' is not implemented.");
-            }
-        }
+                "0" or "1" or "2" or "4" or "5" or "7" => new[]
+                                    {
+                            typeof(EanBarcodeParserBuilder),
+                            typeof(HibcBarcodeParserBuilder),
+                            typeof(MsiBarcodeParserBuilder),
+                        },
+                _ => throw new NotImplementedException($"Code39 modifier '{modifier}' is not implemented."),
+            };
 
-        internal static IEnumerable<Type> ParseCode128Barcode(string modifier, string _)
-        {
-            switch (modifier)
+        internal static IEnumerable<Type> ParseCode128Barcode(string modifier, string _) =>
+            modifier switch
             {
-                case "1":
-                    return new[] { typeof(GS1128BarcodeParserBuilder) };
-                case "0":
-                case "2":
-                case "4":
-                    return new[]
-                    {
-                        typeof(GS1128BarcodeParserBuilder),
-                        typeof(ISBT128BarcodeParserBuilder),
-                        typeof(HibcBarcodeParserBuilder),
-                        typeof(MsiBarcodeParserBuilder),
-                    };
-                default:
-                    throw new NotImplementedException($"Code128 modifier '{modifier}' is not implemented.");
-            }
-        }
+                "1" => new[] { typeof(GS1128BarcodeParserBuilder) },
+                "0" or "2" or "4" => new[]
+                                    {
+                            typeof(GS1128BarcodeParserBuilder),
+                            typeof(ISBT128BarcodeParserBuilder),
+                            typeof(HibcBarcodeParserBuilder),
+                            typeof(MsiBarcodeParserBuilder),
+                        },
+                _ => throw new NotImplementedException($"Code128 modifier '{modifier}' is not implemented."),
+            };
 
-        internal static IEnumerable<Type> ParseEanBarcode(string modifier, string _)
-        {
-            switch (modifier)
+        internal static IEnumerable<Type> ParseEanBarcode(string modifier, string _) =>
+            modifier switch
             {
-                case "0":
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                    return new[]
-                    {
-                        typeof(EanBarcodeParserBuilder),
-                    };
-                default:
-                    throw new NotImplementedException($"EAN modifier '{modifier}' is not implemented.");
-            }
-        }
+                "0" or "1" or "2" or "3" or "4" => new[]
+                                    {
+                            typeof(EanBarcodeParserBuilder),
+                        },
+                _ => throw new NotImplementedException($"EAN modifier '{modifier}' is not implemented."),
+            };
 
-        internal static IEnumerable<Type> ParseMsiBarcode(string modifier, string _)
-        {
-            switch (modifier)
+        internal static IEnumerable<Type> ParseMsiBarcode(string modifier, string _) =>
+            modifier switch
             {
-                case "0":
-                case "1":
-                case "2":
-                case "3":
-                    return new[]
-                    {
-                        typeof(MsiBarcodeParserBuilder),
-                    };
-                default:
-                    throw new NotImplementedException($"MSI modifier '{modifier}' is not implemented.");
-            }
-        }
+                "0" or "1" or "2" or "3" => new[]
+                                    {
+                            typeof(MsiBarcodeParserBuilder),
+                        },
+                _ => throw new NotImplementedException($"MSI modifier '{modifier}' is not implemented."),
+            };
 
-        internal static IEnumerable<Type> ParseDataMatrix(string modifier, string _)
-        {
-            switch (modifier)
+        internal static IEnumerable<Type> ParseDataMatrix(string modifier, string _) =>
+            modifier switch
             {
-                case "2":
-                    return new[] { typeof(GS1BarcodeParserBuilder) };
-                case "0":
-                case "1":
-                case "3":
-                case "4":
-                case "5":
-                case "6":
-                    return ParserBuilders;
-                default:
-                    throw new NotImplementedException($"DataMatrix modifier '{modifier}' is not implemented.");
-            }
-        }
+                "2" => new[] { typeof(GS1BarcodeParserBuilder) },
+                "0" or "1" or "3" or "4" or "5" or "6" => ParserBuilders,
+                _ => throw new NotImplementedException($"DataMatrix modifier '{modifier}' is not implemented."),
+            };
 
-        internal static IEnumerable<Type> ParseGS1Barcode(string modifier, string _)
-        {
-            switch (modifier)
+        internal static IEnumerable<Type> ParseGS1Barcode(string modifier, string _) =>
+            modifier switch
             {
-                case "0":
-                case "1":
-                case "2":
-                case "3":
-                    return new[]
-                    {
+                "0" or "1" or "2" or "3" => new[]
+                                    {
                         typeof(GS1BarcodeParserBuilder),
-                    };
-                default:
-                    throw new NotImplementedException($"GS1 modifier '{modifier}' is not implemented.");
-            }
-        }
+                    },
+                _ => throw new NotImplementedException($"GS1 modifier '{modifier}' is not implemented."),
+            };
 
-        internal static IEnumerable<Type> ParseQrCode(string modifier, string _)
-        {
-            switch (modifier)
+        internal static IEnumerable<Type> ParseQrCode(string modifier, string _) =>
+            modifier switch
             {
-                case "3":
-                    return new[]
-                    {
+                "3" => new[]
+                                    {
                         typeof(GS1BarcodeParserBuilder),
-                    };
-                case "0":
-                case "1":
-                case "2":
-                case "4":
-                case "5":
-                case "6":
-                    return ParserBuilders;
-                default:
-                    throw new NotImplementedException($"QrCode modifier '{modifier}' is not implemented.");
-            }
-        }
+                    },
+                "0" or "1" or "2" or "4" or "5" or "6" => ParserBuilders,
+                _ => throw new NotImplementedException($"QrCode modifier '{modifier}' is not implemented."),
+            };
 
-        internal static IEnumerable<Type> ParseAztecBarcode(string modifier, string _)
-        {
-            switch (modifier)
+        internal static IEnumerable<Type> ParseAztecBarcode(string modifier, string _) =>
+            modifier switch
             {
-                case "0":
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                case "6":
-                case "7":
-                case "8":
-                case "9":
-                case "A":
-                case "B":
-                case "C":
-                    return ParserBuilders;
-                default:
-                    throw new NotImplementedException($"Aztec modifier '{modifier}' is not implemented.");
-            }
-        }
+                "0" or "1" or "2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "A" or "B" or "C" => ParserBuilders,
+                _ => throw new NotImplementedException($"Aztec modifier '{modifier}' is not implemented."),
+            };
     }
 }

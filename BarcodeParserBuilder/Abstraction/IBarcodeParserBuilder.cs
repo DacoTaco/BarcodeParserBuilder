@@ -1,5 +1,3 @@
-﻿using BarcodeParserBuilder.Barcodes;
-
 ﻿namespace BarcodeParserBuilder.Abstraction
 {
     public interface IBarcodeParserBuilder

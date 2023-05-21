@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using BarcodeParserBuilder.Abstraction;
+﻿using System.Reflection;
 
 namespace BarcodeParserBuilder.Infrastructure
 {

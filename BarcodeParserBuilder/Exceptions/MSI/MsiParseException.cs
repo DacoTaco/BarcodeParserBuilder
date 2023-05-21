@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BarcodeParserBuilder.Exceptions.MSI
+﻿namespace BarcodeParserBuilder.Exceptions.MSI
 {
     public class MsiParseException : ParseException
     {

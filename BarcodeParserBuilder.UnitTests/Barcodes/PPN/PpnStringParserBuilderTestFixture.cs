@@ -1,5 +1,4 @@
-﻿using System;
-using BarcodeParserBuilder.Barcodes.PPN;
+﻿using BarcodeParserBuilder.Barcodes.PPN;
 using BarcodeParserBuilder.Exceptions.PPN;
 using FluentAssertions;
 using Xunit;

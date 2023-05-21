@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BarcodeParserBuilder.Exceptions.PPN
+﻿namespace BarcodeParserBuilder.Exceptions.PPN
 {
     public class PPNParseException : ParseException
     {

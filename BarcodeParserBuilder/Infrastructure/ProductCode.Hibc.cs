@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace BarcodeParserBuilder.Infrastructure
+﻿namespace BarcodeParserBuilder.Infrastructure
 {
     public class HibcProductCode : ProductCode
     {

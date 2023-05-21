@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using BarcodeParserBuilder.Abstraction;
-using BarcodeParserBuilder.Barcodes;
-
-namespace BarcodeParserBuilder.Infrastructure
+﻿namespace BarcodeParserBuilder.Infrastructure
 {
     public abstract class BaseBarcodeParserBuilder<T> : IBaseBarcodeParserBuilder where T : Barcode
     {
@@ -15,7 +11,7 @@ namespace BarcodeParserBuilder.Infrastructure
             var list = new List<string>();
             var barcodeString = BuildString(barcode);
             if (!string.IsNullOrWhiteSpace(barcodeString))
-                list.Add(barcodeString);
+                list.Add(barcodeString!);
 
             return list;
         }

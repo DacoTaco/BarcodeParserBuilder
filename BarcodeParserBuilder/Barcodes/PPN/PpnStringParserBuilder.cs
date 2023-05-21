@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BarcodeParserBuilder.Exceptions.PPN;
+﻿using BarcodeParserBuilder.Exceptions.PPN;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.PPN

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BarcodeParserBuilder.Exceptions.EAN;
+﻿using BarcodeParserBuilder.Exceptions.EAN;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.EAN

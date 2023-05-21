@@ -6,7 +6,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
 {
     internal class PpnProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode?>
     {
-        protected override string? Build(ProductCode? obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj.Code;
+        protected override string? Build(ProductCode? obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj!.Code;
         protected override ProductCode? Parse(string? value) => ProductCode.ParsePpn(value);
 
         protected override bool Validate(string? value)
@@ -15,7 +15,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
                 return true;
 
             var regex = new Regex(@"^[A-Z0-9]*\d{2,2}$");
-            if (!regex.IsMatch(value) || value.Length < 4 || value.Length > 22)
+            if (!regex.IsMatch(value) || value!.Length < 4 || value.Length > 22)
                 throw new PPNValidateException($"Invalid PPN value '{value}'.");
 
             return true;

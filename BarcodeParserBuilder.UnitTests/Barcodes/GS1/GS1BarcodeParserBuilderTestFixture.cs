@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BarcodeParserBuilder.Barcodes.GS1;
+﻿using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;

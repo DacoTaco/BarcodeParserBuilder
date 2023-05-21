@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BarcodeParserBuilder.Abstraction
+﻿namespace BarcodeParserBuilder.Abstraction
 {
     internal interface IAimParser
     {

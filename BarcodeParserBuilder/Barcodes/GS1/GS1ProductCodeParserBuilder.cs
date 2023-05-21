@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BarcodeParserBuilder.Exceptions.GS1;
+﻿using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.GS1

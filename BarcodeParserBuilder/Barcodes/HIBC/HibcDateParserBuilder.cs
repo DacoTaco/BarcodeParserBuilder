@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using BarcodeParserBuilder.Exceptions.HIBC;
+﻿using BarcodeParserBuilder.Exceptions.HIBC;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.HIBC

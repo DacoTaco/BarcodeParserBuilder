@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using BarcodeParserBuilder.Exceptions.PPN;
+﻿using BarcodeParserBuilder.Exceptions.PPN;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.PPN
@@ -66,7 +63,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return default;
 
-                barcodeString = AimParser.StripBarcodePrefix(barcodeString);
+                barcodeString = AimParser.StripBarcodePrefix(barcodeString!);
                 if (!barcodeString.StartsWith(PpnBarcode.Prefix, StringComparison.Ordinal) ||
                     !barcodeString.EndsWith(PpnBarcode.Suffix, StringComparison.Ordinal) ||
                     barcodeString.Length < (PpnBarcode.Prefix.Length + PpnBarcode.Suffix.Length))

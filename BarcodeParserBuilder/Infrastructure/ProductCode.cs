@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BarcodeParserBuilder.Infrastructure
+﻿namespace BarcodeParserBuilder.Infrastructure
 {
     public enum ProductCodeType
     {
@@ -30,11 +28,11 @@ namespace BarcodeParserBuilder.Infrastructure
         public abstract ProductCodeType Type { get; internal set; }
 
         //Parse functions
-        public static GtinProductCode? ParseGtin(string? code) => string.IsNullOrWhiteSpace(code) ? null : new GtinProductCode(code);
+        public static GtinProductCode? ParseGtin(string? code) => string.IsNullOrWhiteSpace(code) ? null : new GtinProductCode(code!);
         [Obsolete("Ean is the same as Gtin, Use ParseGtin instead.")]
-        public static ProductCode? ParseEan(string? code) => null;
-        public static HibcProductCode? ParseHibc(string? code) => string.IsNullOrWhiteSpace(code) ? null : new HibcProductCode(code);
-        public static MsiProductCode? ParseMsi(string? code) => string.IsNullOrWhiteSpace(code) ? null : new MsiProductCode(code);
-        public static PpnProductCode? ParsePpn(string? code) => string.IsNullOrWhiteSpace(code) ? null : new PpnProductCode(code);
+        public static ProductCode? ParseEan(string? code) => ParseGtin(code);
+        public static HibcProductCode? ParseHibc(string? code) => string.IsNullOrWhiteSpace(code) ? null : new HibcProductCode(code!);
+        public static MsiProductCode? ParseMsi(string? code) => string.IsNullOrWhiteSpace(code) ? null : new MsiProductCode(code!);
+        public static PpnProductCode? ParsePpn(string? code) => string.IsNullOrWhiteSpace(code) ? null : new PpnProductCode(code!);
     }
 }

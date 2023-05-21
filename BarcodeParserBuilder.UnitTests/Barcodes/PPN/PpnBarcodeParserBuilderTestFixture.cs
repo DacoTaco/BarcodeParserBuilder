@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BarcodeParserBuilder.Barcodes.PPN;
+﻿using BarcodeParserBuilder.Barcodes.PPN;
 using BarcodeParserBuilder.Exceptions.PPN;
 using BarcodeParserBuilder.Infrastructure;
 using BarcodeParserBuilder.UnitTests.Barcodes.GS1;

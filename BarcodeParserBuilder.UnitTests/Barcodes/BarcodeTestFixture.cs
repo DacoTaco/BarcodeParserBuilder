@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using BarcodeParserBuilder.Abstraction;
 using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.EAN;

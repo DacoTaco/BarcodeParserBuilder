@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BarcodeParserBuilder.Exceptions.PPN;
+﻿using BarcodeParserBuilder.Exceptions.PPN;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.PPN
@@ -22,7 +21,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             if (string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if ((value.Length != 6 && value.Length != 8) || !value.All(char.IsDigit))
+            if ((value!.Length != 6 && value.Length != 8) || !value.All(char.IsDigit))
                 throw new PPNValidateException($"Invalid PPN Date value '{value}'.");
 
             return true;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BarcodeParserBuilder.Exceptions.GS1;
+﻿using BarcodeParserBuilder.Exceptions.GS1;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {

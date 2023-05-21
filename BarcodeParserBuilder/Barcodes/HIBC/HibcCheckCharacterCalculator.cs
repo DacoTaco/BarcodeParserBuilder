@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using BarcodeParserBuilder.Exceptions.HIBC;
 
 namespace BarcodeParserBuilder.Barcodes.HIBC

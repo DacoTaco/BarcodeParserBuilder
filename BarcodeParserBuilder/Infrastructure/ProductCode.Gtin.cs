@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace BarcodeParserBuilder.Infrastructure
+﻿namespace BarcodeParserBuilder.Infrastructure
 {
     //source : https://www.datafeedwatch.com/academy/gtin
     //UPC-E - 7 characters long
@@ -23,7 +19,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
     public class GtinProductCode : ProductCode
     {
-        internal readonly static Dictionary<int, GtinProductScheme> EanProductSystems = new Dictionary<int, GtinProductScheme>()
+        internal static readonly Dictionary<int, GtinProductScheme> EanProductSystems = new()
         {
             //0-1 & 6-9 -> Manufacturer & Product
             { 0, GtinProductScheme.ManufacturerAndProduct },

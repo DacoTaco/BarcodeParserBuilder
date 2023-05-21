@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using BarcodeParserBuilder.Abstraction;
+﻿using System.Collections.ObjectModel;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes
@@ -19,9 +17,7 @@ namespace BarcodeParserBuilder.Barcodes
         {
             get
             {
-                if (_fields == null)
-                    _fields = new ReadOnlyFieldCollection(BarcodeFields);
-
+                _fields ??= new ReadOnlyFieldCollection(BarcodeFields);
                 return _fields;
             }
         }

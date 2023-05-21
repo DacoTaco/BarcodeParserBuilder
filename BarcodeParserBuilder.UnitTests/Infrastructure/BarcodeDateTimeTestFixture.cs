@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BarcodeParserBuilder.Barcodes.HIBC;
+﻿using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
 using Xunit;

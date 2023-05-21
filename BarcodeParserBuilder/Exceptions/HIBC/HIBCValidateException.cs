@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BarcodeParserBuilder.Exceptions.HIBC
+﻿namespace BarcodeParserBuilder.Exceptions.HIBC
 {
     public class HIBCValidateException : ValidateException
     {

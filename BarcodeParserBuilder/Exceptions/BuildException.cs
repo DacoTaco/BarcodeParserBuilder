@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BarcodeParserBuilder.Exceptions
+﻿namespace BarcodeParserBuilder.Exceptions
 {
     public abstract class BuildException : Exception
     {

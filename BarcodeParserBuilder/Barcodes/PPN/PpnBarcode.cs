@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using BarcodeParserBuilder.Barcodes.GS1;
+﻿using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Exceptions.PPN;
 using BarcodeParserBuilder.Infrastructure;
 

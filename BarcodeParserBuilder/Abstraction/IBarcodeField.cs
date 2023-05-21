@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace BarcodeParserBuilder.Abstraction
+﻿namespace BarcodeParserBuilder.Abstraction
 {
     public interface IBarcodeField
     {

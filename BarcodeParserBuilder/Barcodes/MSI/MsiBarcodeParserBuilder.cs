@@ -1,5 +1,4 @@
-﻿using System;
-using BarcodeParserBuilder.Exceptions.MSI;
+﻿using BarcodeParserBuilder.Exceptions.MSI;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.MSI

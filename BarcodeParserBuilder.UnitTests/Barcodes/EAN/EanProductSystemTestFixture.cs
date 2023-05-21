@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
+namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
 {
     public class EanProductSystemTestFixture : BaseBarcodeTestFixture
     {

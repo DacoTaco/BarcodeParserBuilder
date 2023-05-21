@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BarcodeParserBuilder.Abstraction;
 using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;

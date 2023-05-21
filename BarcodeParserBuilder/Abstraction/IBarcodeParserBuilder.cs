@@ -1,6 +1,6 @@
 ﻿using BarcodeParserBuilder.Barcodes;
 
-namespace BarcodeParserBuilder
+﻿namespace BarcodeParserBuilder.Abstraction
 {
     public interface IBarcodeParserBuilder
     {

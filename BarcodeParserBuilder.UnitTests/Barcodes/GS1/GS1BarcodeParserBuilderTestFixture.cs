@@ -39,6 +39,28 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 result.Price.Value.Should().BeApproximately(expectedBarcode.Price.Value, 0.000000000000001d);
             else
                 result.Price.Should().BeNull();
+
+            // Dimension Test
+            if (expectedBarcode.Fields["311"].Value != null)
+                ((double)result.Fields["311"].Value).Should().BeApproximately((double)expectedBarcode.Fields["311"].Value, 0.000001d);
+            else
+                result.Fields["311"].Value.Should().BeNull();
+
+            if (expectedBarcode.Fields["312"].Value != null)
+                ((double)result.Fields["312"].Value).Should().BeApproximately((double)expectedBarcode.Fields["312"].Value, 0.000001d);
+            else
+                result.Fields["312"].Value.Should().BeNull();
+
+            if (expectedBarcode.Fields["313"].Value != null)
+                ((double)result.Fields["313"].Value).Should().BeApproximately((double)expectedBarcode.Fields["313"].Value, 0.000001d);
+            else
+                result.Fields["313"].Value.Should().BeNull();
+
+            if (expectedBarcode.Fields["314"].Value != null)
+                ((double)result.Fields["314"].Value).Should().BeApproximately((double)expectedBarcode.Fields["314"].Value, 0.000001d);
+            else
+                result.Fields["314"].Value.Should().BeNull();
+
         }
 
         [Theory]
@@ -440,6 +462,32 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                     ProductionDate = null,
                     Price = 123456.789012345d
                 }
+            };
+
+            //Check multiple dimensions
+            var gs1BarcodeDimension = new GS1Barcode()
+            {
+                ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+                {
+                    productCode.Type = ProductCodeType.GTIN;
+                    productCode.Value = "357466145194";
+                    productCode.Indicator = 0;
+                }),
+                BatchNumber = "1724847.1",
+                SerialNumber = "118165795226",
+                ExpirationDate = new TestBarcodeDateTime(new DateTime(2021, 03, 31), "210331", GS1DateFormat),
+                ProductionDate = null,
+                NetWeightInPounds = 3.54777d
+            };
+            gs1BarcodeDimension.Fields["311"].SetValue(1.23456); // Length in metres
+            gs1BarcodeDimension.Fields["312"].SetValue(1234.56); // Width in metres
+            gs1BarcodeDimension.Fields["313"].SetValue(0.01234); // Deepth in metres
+            gs1BarcodeDimension.Fields["314"].SetValue(123456d); // Area in square metres
+
+            yield return new object[]
+            {
+               $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226{GroupSeparator}31151234563122123456313500123431401234563205354777",
+                gs1BarcodeDimension
             };
         }
 

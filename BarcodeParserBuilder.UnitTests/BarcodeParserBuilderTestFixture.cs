@@ -87,7 +87,7 @@ namespace BarcodeParserBuilder.UnitTests
             var result = _parserBuilder.TryParse(barcode, out var _, out var feedback);
 
             //Assert
-            result.Should().BeFalse();
+            result.Should().BeFalse($" feedback must not signal success: {feedback}");
             feedback.Should().Be("Failed to parse barcode : no parser could accept barcode.");
         }
 

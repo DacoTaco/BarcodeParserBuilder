@@ -35,6 +35,7 @@ namespace BarcodeParserBuilder
 
                     //retrieve output parameter and return true
                     barcode = (Barcode?)tryParseParameters[1];
+                    feedback = $"was parsed by {parserBuilder.Name}";
                     return true;
                 }
 

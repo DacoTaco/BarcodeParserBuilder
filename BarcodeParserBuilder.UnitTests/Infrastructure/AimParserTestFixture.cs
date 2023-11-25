@@ -1,4 +1,5 @@
 ﻿using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
@@ -36,9 +37,7 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
         {
             var code39Parsers = new[]
             {
-                typeof(EanBarcodeParserBuilder),
-                typeof(HibcBarcodeParserBuilder),
-                typeof(MsiBarcodeParserBuilder),
+                typeof(Code39BarcodeParserBuilder)
             };
 
             var code128Parsers = new[]
@@ -55,6 +54,7 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
                 { "]A0", code39Parsers },
                 { "]A1", code39Parsers },
                 { "]A2", code39Parsers },
+                { "]A3", code39Parsers },
                 { "]A4", code39Parsers },
                 { "]A5", code39Parsers },
                 { "]A7", code39Parsers },

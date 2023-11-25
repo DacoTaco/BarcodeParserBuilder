@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
@@ -57,6 +58,31 @@ namespace BarcodeParserBuilder.Infrastructure
                 return barcodeString;
 
             return barcodeString[3..];
+        }
+
+        internal static bool HasAimIdentifier(string barcodeString)
+        {
+            return barcodeString.Length > 3 && barcodeString.StartsWith("]");
+        }
+
+        /// <summary>
+        /// AIM identifier consist of code and modifier. AIM code defines the barcode type, for example EAN, CODE39, GS1 etc
+        /// </summary>
+        /// <param name="barcodeString">raw string from the reader</param>
+        /// <returns></returns>
+        internal static string GetAimIdentifierCode(string barcodeString)
+        {
+            return HasAimIdentifier(barcodeString) ? barcodeString[1].ToString() : String.Empty;
+        }
+
+        /// <summary>
+        /// AIM idenfifier consist of code and modifier. AIM modifier describes how the reading was already processed by the reader and may help in further processing the reading
+        /// </summary>
+        /// <param name="barcodeString">raw string from the reader</param>
+        /// <returns></returns>
+        internal static string GetAimIdentifierModifier(string barcodeString)
+        {
+            return HasAimIdentifier(barcodeString) ? barcodeString[2].ToString() : String.Empty;
         }
 
         private static int GetParserBuilderOrderNumber(Type type)
@@ -127,11 +153,9 @@ namespace BarcodeParserBuilder.Infrastructure
         internal static IEnumerable<Type> ParseCode39Barcode(string modifier, string _) =>
             modifier switch
             {
-                "0" or "1" or "2" or "4" or "5" or "7" => new[]
+                "0" or "1" or "2" or "3" or "4" or "5" or "7" => new[]
                                     {
-                            typeof(EanBarcodeParserBuilder),
-                            typeof(HibcBarcodeParserBuilder),
-                            typeof(MsiBarcodeParserBuilder),
+                            typeof(Code39BarcodeParserBuilder)
                         },
                 _ => throw new NotImplementedException($"Code39 modifier '{modifier}' is not implemented."),
             };

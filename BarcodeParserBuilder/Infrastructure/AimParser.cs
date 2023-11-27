@@ -21,7 +21,7 @@ namespace BarcodeParserBuilder.Infrastructure
             { "E", ParseEanBarcode },
             { "e", ParseGS1Barcode },
             { "M", ParseMsiBarcode },
-            { "J", (modifier, _) => { if(modifier != "1") throw new NotImplementedException($"GS1's J modifier '{modifier}' is not implemented."); return new [] { typeof(GS1BarcodeParserBuilder)}; } },
+            { "J", (modifier, _) => { if(modifier != "1") throw new NotImplementedException($"GS1's J information '{modifier}' is not implemented."); return new [] { typeof(GS1BarcodeParserBuilder)}; } },
             { "Q", ParseQrCode },
             { "X", ParseCode39Barcode },
             //Z means no barcode
@@ -59,32 +59,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
             return barcodeString[3..];
         }
-
-        internal static bool HasAimIdentifier(string barcodeString)
-        {
-            return barcodeString.Length > 3 && barcodeString.StartsWith("]");
-        }
-
-        /// <summary>
-        /// AIM identifier consist of code and modifier. AIM code defines the barcode type, for example EAN, CODE39, GS1 etc
-        /// </summary>
-        /// <param name="barcodeString">raw string from the reader</param>
-        /// <returns></returns>
-        internal static string GetAimIdentifierCode(string barcodeString)
-        {
-            return HasAimIdentifier(barcodeString) ? barcodeString[1].ToString() : String.Empty;
-        }
-
-        /// <summary>
-        /// AIM idenfifier consist of code and modifier. AIM modifier describes how the reading was already processed by the reader and may help in further processing the reading
-        /// </summary>
-        /// <param name="barcodeString">raw string from the reader</param>
-        /// <returns></returns>
-        internal static string GetAimIdentifierModifier(string barcodeString)
-        {
-            return HasAimIdentifier(barcodeString) ? barcodeString[2].ToString() : String.Empty;
-        }
-
+        
         private static int GetParserBuilderOrderNumber(Type type)
         {
             if (type == null)
@@ -157,7 +132,7 @@ namespace BarcodeParserBuilder.Infrastructure
                                     {
                             typeof(Code39BarcodeParserBuilder)
                         },
-                _ => throw new NotImplementedException($"Code39 modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"Code39 information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseCode128Barcode(string modifier, string _) =>
@@ -171,7 +146,7 @@ namespace BarcodeParserBuilder.Infrastructure
                             typeof(HibcBarcodeParserBuilder),
                             typeof(MsiBarcodeParserBuilder),
                         },
-                _ => throw new NotImplementedException($"Code128 modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"Code128 information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseEanBarcode(string modifier, string _) =>
@@ -181,7 +156,7 @@ namespace BarcodeParserBuilder.Infrastructure
                                     {
                             typeof(EanBarcodeParserBuilder),
                         },
-                _ => throw new NotImplementedException($"EAN modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"EAN information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseMsiBarcode(string modifier, string _) =>
@@ -191,7 +166,7 @@ namespace BarcodeParserBuilder.Infrastructure
                                     {
                             typeof(MsiBarcodeParserBuilder),
                         },
-                _ => throw new NotImplementedException($"MSI modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"MSI information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseDataMatrix(string modifier, string _) =>
@@ -199,7 +174,7 @@ namespace BarcodeParserBuilder.Infrastructure
             {
                 "2" => new[] { typeof(GS1BarcodeParserBuilder) },
                 "0" or "1" or "3" or "4" or "5" or "6" => ParserBuilders,
-                _ => throw new NotImplementedException($"DataMatrix modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"DataMatrix information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseGS1Barcode(string modifier, string _) =>
@@ -209,7 +184,7 @@ namespace BarcodeParserBuilder.Infrastructure
                                     {
                         typeof(GS1BarcodeParserBuilder),
                     },
-                _ => throw new NotImplementedException($"GS1 modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"GS1 information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseQrCode(string modifier, string _) =>
@@ -220,14 +195,14 @@ namespace BarcodeParserBuilder.Infrastructure
                         typeof(GS1BarcodeParserBuilder),
                     },
                 "0" or "1" or "2" or "4" or "5" or "6" => ParserBuilders,
-                _ => throw new NotImplementedException($"QrCode modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"QrCode information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseAztecBarcode(string modifier, string _) =>
             modifier switch
             {
                 "0" or "1" or "2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "A" or "B" or "C" => ParserBuilders,
-                _ => throw new NotImplementedException($"Aztec modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"Aztec information '{modifier}' is not implemented."),
             };
     }
 }

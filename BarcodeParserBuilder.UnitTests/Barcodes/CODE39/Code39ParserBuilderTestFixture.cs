@@ -15,6 +15,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
         public void CanParseBarcodeString(string barcode, Code39Barcode expectedBarcode)
         {
             //Arrange & Act
+            
             Code39BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeTrue($"'{barcode}' should be parsable");
             Action parseAction = () => Code39BarcodeParserBuilder.Parse(barcode);
 

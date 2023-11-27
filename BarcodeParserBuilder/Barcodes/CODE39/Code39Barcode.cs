@@ -12,13 +12,8 @@ public class Code39Barcode : Barcode
     
     public Code39Barcode() : base() { }
 
-    public Code39Barcode(Code39ReaderModifier readerModifier) : base(readerModifier) { }
-
-    public Code39Barcode(string readerModifierValue)
-    {
-
-    }
-
+    public Code39Barcode(Code39SymbologyIdentifier symbologyIdentifier) : base(symbologyIdentifier) { }
+    
     public override ProductCode? ProductCode
     {
         get => (ProductCode?)BarcodeFields[nameof(ProductCode)].Value;
@@ -58,25 +53,15 @@ public class Code39Barcode : Barcode
     }
 
 
-    public static Code39ReaderModifier ParseReaderModifier(string readerModifierValue)
-    {
-        if (Code39ReaderModifier.GetAllValues<Code39ReaderModifier>().Contains(readerModifierValue))
-        {
-            return new Code39ReaderModifier(readerModifierValue);
-        }
-
-        throw new Code39ParseException("Invalid reader modifier");
-    }
-
-    public static string StripCheckCharacter(string inputString, Code39ReaderModifier readerModifier)
+    public static string StripCheckCharacter(string inputString, Code39SymbologyIdentifier symbologyIdentifier)
     {
         if (String.IsNullOrEmpty(inputString) || inputString!.Length < 2)
             return inputString;
 
-        switch (readerModifier.Value)
+        switch (symbologyIdentifier.SymbologyIdentifier)
         {
-            case Code39ReaderModifier.NoFullASCIIMod43ChecksumTransmittedValue:
-            case Code39ReaderModifier.FullASCIIMod43ChecksumTransmittedValue:
+            case Code39SymbologyIdentifier.NoFullASCIIMod43ChecksumTransmittedValue:
+            case Code39SymbologyIdentifier.FullASCIIMod43ChecksumTransmittedValue:
                 return inputString[0..^1].ToString();
             default:
                 return inputString;

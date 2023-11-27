@@ -10,13 +10,13 @@ namespace BarcodeParserBuilder.Barcodes
         public Barcode() { }
 
         /// <summary>
-        /// If the reader returns the reader modifier, then it can be passed to barcode.
-        /// But the barcode should still be usable without the reader modifier information
+        /// If the reader returns the reader information, then it can be passed to barcode.
+        /// But the barcode should still be usable without the reader information information
         /// </summary>
-        /// <param name="modifier">Parsed and validated modifier</param>
-        public Barcode(AimReaderModifier modifier)
+        /// <param name="information">Parsed and validated information</param>
+        public Barcode(AimSymbologyIdentifier information)
         {
-            ReaderModifier = modifier;
+            ReaderInformation = information;
         }
 
         protected abstract FieldCollection BarcodeFields { get; }
@@ -42,10 +42,10 @@ namespace BarcodeParserBuilder.Barcodes
         public abstract string? SerialNumber { get; set; }
 
         /// <summary>
-        /// ReaderModifier is not part of the barcode but is crucial to interpret the reading correctly.
-        /// Barcode readers can be configured to behave differently on the same reading and reader modifier informs about it
+        /// ReaderInformation is not part of the barcode but is crucial to interpret the reading correctly.
+        /// Barcode readers can be configured to behave differently on the same reading and reader information informs about it
         /// </summary>
-        public AimReaderModifier? ReaderModifier { get; private set; }
+        public AimSymbologyIdentifier? ReaderInformation { get; private set; }
 
     }
 

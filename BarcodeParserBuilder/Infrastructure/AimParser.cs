@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
@@ -20,7 +21,7 @@ namespace BarcodeParserBuilder.Infrastructure
             { "E", ParseEanBarcode },
             { "e", ParseGS1Barcode },
             { "M", ParseMsiBarcode },
-            { "J", (modifier, _) => { if(modifier != "1") throw new NotImplementedException($"GS1's J modifier '{modifier}' is not implemented."); return new [] { typeof(GS1BarcodeParserBuilder)}; } },
+            { "J", (modifier, _) => { if(modifier != "1") throw new NotImplementedException($"GS1's J information '{modifier}' is not implemented."); return new [] { typeof(GS1BarcodeParserBuilder)}; } },
             { "Q", ParseQrCode },
             { "X", ParseCode39Barcode },
             //Z means no barcode
@@ -58,7 +59,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
             return barcodeString[3..];
         }
-
+        
         private static int GetParserBuilderOrderNumber(Type type)
         {
             if (type == null)
@@ -127,13 +128,11 @@ namespace BarcodeParserBuilder.Infrastructure
         internal static IEnumerable<Type> ParseCode39Barcode(string modifier, string _) =>
             modifier switch
             {
-                "0" or "1" or "2" or "4" or "5" or "7" => new[]
+                "0" or "1" or "2" or "3" or "4" or "5" or "7" => new[]
                                     {
-                            typeof(EanBarcodeParserBuilder),
-                            typeof(HibcBarcodeParserBuilder),
-                            typeof(MsiBarcodeParserBuilder),
+                            typeof(Code39BarcodeParserBuilder)
                         },
-                _ => throw new NotImplementedException($"Code39 modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"Code39 information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseCode128Barcode(string modifier, string _) =>
@@ -147,7 +146,7 @@ namespace BarcodeParserBuilder.Infrastructure
                             typeof(HibcBarcodeParserBuilder),
                             typeof(MsiBarcodeParserBuilder),
                         },
-                _ => throw new NotImplementedException($"Code128 modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"Code128 information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseEanBarcode(string modifier, string _) =>
@@ -157,7 +156,7 @@ namespace BarcodeParserBuilder.Infrastructure
                                     {
                             typeof(EanBarcodeParserBuilder),
                         },
-                _ => throw new NotImplementedException($"EAN modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"EAN information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseMsiBarcode(string modifier, string _) =>
@@ -167,7 +166,7 @@ namespace BarcodeParserBuilder.Infrastructure
                                     {
                             typeof(MsiBarcodeParserBuilder),
                         },
-                _ => throw new NotImplementedException($"MSI modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"MSI information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseDataMatrix(string modifier, string _) =>
@@ -175,7 +174,7 @@ namespace BarcodeParserBuilder.Infrastructure
             {
                 "2" => new[] { typeof(GS1BarcodeParserBuilder) },
                 "0" or "1" or "3" or "4" or "5" or "6" => ParserBuilders,
-                _ => throw new NotImplementedException($"DataMatrix modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"DataMatrix information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseGS1Barcode(string modifier, string _) =>
@@ -185,7 +184,7 @@ namespace BarcodeParserBuilder.Infrastructure
                                     {
                         typeof(GS1BarcodeParserBuilder),
                     },
-                _ => throw new NotImplementedException($"GS1 modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"GS1 information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseQrCode(string modifier, string _) =>
@@ -196,14 +195,14 @@ namespace BarcodeParserBuilder.Infrastructure
                         typeof(GS1BarcodeParserBuilder),
                     },
                 "0" or "1" or "2" or "4" or "5" or "6" => ParserBuilders,
-                _ => throw new NotImplementedException($"QrCode modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"QrCode information '{modifier}' is not implemented."),
             };
 
         internal static IEnumerable<Type> ParseAztecBarcode(string modifier, string _) =>
             modifier switch
             {
                 "0" or "1" or "2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "A" or "B" or "C" => ParserBuilders,
-                _ => throw new NotImplementedException($"Aztec modifier '{modifier}' is not implemented."),
+                _ => throw new NotImplementedException($"Aztec information '{modifier}' is not implemented."),
             };
     }
 }

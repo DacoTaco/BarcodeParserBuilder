@@ -10,6 +10,7 @@
         PPN,
         MSI,
         HIBC,
-        ISBT128
+        ISBT128,
+        CODE39
     }
 }

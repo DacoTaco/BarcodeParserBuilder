@@ -1,11 +1,23 @@
 ﻿using System.Collections.ObjectModel;
+using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes
 {
     public abstract class Barcode
     {
+        
         public Barcode() { }
+
+        /// <summary>
+        /// If the reader returns the reader information, then it can be passed to barcode.
+        /// But the barcode should still be usable without the reader information information
+        /// </summary>
+        /// <param name="information">Parsed and validated information</param>
+        public Barcode(AimSymbologyIdentifier information)
+        {
+            ReaderInformation = information;
+        }
 
         protected abstract FieldCollection BarcodeFields { get; }
 
@@ -28,6 +40,13 @@ namespace BarcodeParserBuilder.Barcodes
         public abstract BarcodeDateTime? ProductionDate { get; set; }
         public abstract string? BatchNumber { get; set; }
         public abstract string? SerialNumber { get; set; }
+
+        /// <summary>
+        /// ReaderInformation is not part of the barcode but is crucial to interpret the reading correctly.
+        /// Barcode readers can be configured to behave differently on the same reading and reader information informs about it
+        /// </summary>
+        public AimSymbologyIdentifier? ReaderInformation { get; private set; }
+
     }
 
     public class FieldCollection : KeyedCollection<string, IBarcodeField>
@@ -48,4 +67,6 @@ namespace BarcodeParserBuilder.Barcodes
 
         internal bool Contains(string identifier) => _innerCollection.Contains(identifier);
     }
+
+    
 }

@@ -7,7 +7,8 @@
         EAN,
         PPN,
         MSI,
-        HIBC
+        HIBC,
+        CODE39
     }
 
     public abstract class ProductCode

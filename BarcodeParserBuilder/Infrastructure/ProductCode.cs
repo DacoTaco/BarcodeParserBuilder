@@ -8,7 +8,8 @@
         PPN,
         MSI,
         HIBC,
-        CODE39
+        CODE39,
+        CODE128
     }
 
     public abstract class ProductCode

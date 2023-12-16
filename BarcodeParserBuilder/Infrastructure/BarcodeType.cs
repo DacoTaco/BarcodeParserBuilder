@@ -11,6 +11,7 @@
         MSI,
         HIBC,
         ISBT128,
-        CODE39
+        CODE39,
+        CODE128
     }
 }

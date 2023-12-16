@@ -38,6 +38,13 @@ namespace BarcodeParserBuilder.UnitTests
             _parserBuilder = new BarcodeParserBuilder();
         }
 
+        [Fact]
+        public void GetParsersWhenNoSymbologyIdenfitier()
+        {
+            _parserBuilder.TryParse("0020000", out var bc, out var feedback);
+            Console.WriteLine("000");
+        }
+
         [Theory]
         [MemberData(nameof(ValidBarcodes))]
         [MemberData(nameof(ValidParseBarcodes))]

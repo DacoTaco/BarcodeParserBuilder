@@ -1,7 +1,4 @@
-﻿using BarcodeParserBuilder.Barcodes.CODE39;
-using BarcodeParserBuilder.Exceptions.CODE39;
-using BarcodeParserBuilder.Exceptions.EAN;
-using BarcodeParserBuilder.Infrastructure;
+﻿using BarcodeParserBuilder.Exceptions.CODE39;
 
 namespace BarcodeParserBuilder.Barcodes.CODE39
 {
@@ -15,7 +12,7 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
             if (string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if (! Code39StringParserBuilder.ValidateFullASCII(value))
+            if (!Code39StringParserBuilder.ValidateFullASCII(value))
                 throw new Code39ValidateException($"Invalid Code39 value '{value}'.");
 
             return true;

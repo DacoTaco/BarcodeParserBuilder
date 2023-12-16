@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 
 namespace BarcodeParserBuilder.Infrastructure
 {
@@ -42,13 +38,13 @@ namespace BarcodeParserBuilder.Infrastructure
     public abstract class AimSymbologyIdentifier : IComparable
     {
         public static readonly string AIMSYMBOLOGYFLAG = "]";
-        
+
         public string SymbologyIdentifier { get; private set; }
         public string CodeCharacter { get => SymbologyIdentifier[0].ToString(); }
 
         public string ModifierCharacter { get => SymbologyIdentifier[1].ToString(); }
 
-        public AimSymbologyIdentifier() {}
+        public AimSymbologyIdentifier() { }
 
         public AimSymbologyIdentifier(string symbologyIdentifier)
         {
@@ -86,7 +82,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
             if (!barcodeString.StartsWith(AIMSYMBOLOGYFLAG) || barcodeString.Length <= 3)
                 return barcodeString;
-            
+
             return barcodeString[3..];
         }
 
@@ -95,7 +91,7 @@ namespace BarcodeParserBuilder.Infrastructure
             SymbologyIdentifier = rawReading!.StartsWith(AIMSYMBOLOGYFLAG)
                 ? rawReading[1..3].ToString()
                 : rawReading[0..2].ToString();
-            
+
         }
 
         public override string ToString() => SymbologyIdentifier;
@@ -110,7 +106,7 @@ namespace BarcodeParserBuilder.Infrastructure
         public static IEnumerable<string> GetAllValues<T>() where T : AimSymbologyIdentifier =>
             typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static)
                 .Select(f => f.GetValue(f).ToString());
-                
+
 
         public override bool Equals(object obj)
         {
@@ -118,7 +114,7 @@ namespace BarcodeParserBuilder.Infrastructure
         }
 
         public int CompareTo(object other) => SymbologyIdentifier.CompareTo(((AimSymbologyIdentifier)other).SymbologyIdentifier);
-        
+
         public override int GetHashCode()
         {
             return SymbologyIdentifier.GetHashCode();

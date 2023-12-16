@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.HIBC
 {

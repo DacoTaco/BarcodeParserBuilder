@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BarcodeParserBuilder.Exceptions;
-using BarcodeParserBuilder.Exceptions.CODE39;
-using BarcodeParserBuilder.Infrastructure;
+﻿using BarcodeParserBuilder.Exceptions;
 
 namespace BarcodeParserBuilder.Barcodes.CODE39;
 
 public class Code39Barcode : Barcode
 {
-    
     public Code39Barcode() : base() { }
-
     public Code39Barcode(Code39SymbologyIdentifier symbologyIdentifier) : base(symbologyIdentifier) { }
-    
+
     public override ProductCode? ProductCode
     {
         get => (ProductCode?)BarcodeFields[nameof(ProductCode)].Value;
@@ -26,7 +19,7 @@ public class Code39Barcode : Barcode
     };
 
     public override BarcodeType BarcodeType => BarcodeType.CODE39;
-    
+
 
     public override BarcodeDateTime? ExpirationDate
     {

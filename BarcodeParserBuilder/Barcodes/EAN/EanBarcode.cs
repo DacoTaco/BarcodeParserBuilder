@@ -1,5 +1,4 @@
 ﻿using BarcodeParserBuilder.Exceptions;
-using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.EAN
 {

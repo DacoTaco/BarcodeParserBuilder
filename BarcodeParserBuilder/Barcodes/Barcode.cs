@@ -1,12 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using BarcodeParserBuilder.Barcodes.CODE39;
-using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes
 {
     public abstract class Barcode
     {
-        
         public Barcode() { }
 
         /// <summary>
@@ -68,5 +65,5 @@ namespace BarcodeParserBuilder.Barcodes
         internal bool Contains(string identifier) => _innerCollection.Contains(identifier);
     }
 
-    
+
 }

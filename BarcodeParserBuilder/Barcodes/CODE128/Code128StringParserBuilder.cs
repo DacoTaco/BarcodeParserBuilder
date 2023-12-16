@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BarcodeParserBuilder.Infrastructure;
-
-namespace BarcodeParserBuilder.Barcodes.CODE128
+﻿namespace BarcodeParserBuilder.Barcodes.CODE128
 {
     internal class Code128StringParserBuilder : BaseFieldParserBuilder<string?>
     {

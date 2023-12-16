@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BarcodeParserBuilder.Infrastructure;
-using BarcodeParserBuilder.Exceptions;
+﻿using BarcodeParserBuilder.Exceptions;
 
 namespace BarcodeParserBuilder.Barcodes.CODE128
 {
@@ -48,6 +44,6 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
             get => throw new UnusedFieldException(nameof(SerialNumber));
             set => throw new UnusedFieldException(nameof(SerialNumber));
         }
-      
+
     }
 }

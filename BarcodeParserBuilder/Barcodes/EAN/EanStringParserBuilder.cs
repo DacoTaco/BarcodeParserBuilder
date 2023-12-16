@@ -1,6 +1,4 @@
-﻿using BarcodeParserBuilder.Infrastructure;
-
-namespace BarcodeParserBuilder.Barcodes.EAN
+﻿namespace BarcodeParserBuilder.Barcodes.EAN
 {
     internal class EanStringParserBuilder : BaseFieldParserBuilder<string?>
     {

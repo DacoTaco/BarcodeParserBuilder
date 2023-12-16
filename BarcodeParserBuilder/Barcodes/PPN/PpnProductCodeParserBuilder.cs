@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using BarcodeParserBuilder.Exceptions.PPN;
-using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.PPN
 {

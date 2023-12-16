@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BarcodeParserBuilder.Barcodes.CODE128;
+﻿using BarcodeParserBuilder.Barcodes.CODE128;
 using BarcodeParserBuilder.Exceptions.CODE128;
 using FluentAssertions;
 using Xunit;
@@ -17,7 +12,6 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE128
         public void CanParseBarcodeString(string barcode, Code128Barcode expectedBarcode)
         {
             //Arrange & Act
-
             Code128BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeTrue($"'{barcode}' should be parsable");
             Action parseAction = () => Code128BarcodeParserBuilder.Parse(barcode);
 
@@ -42,7 +36,6 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE128
 
         public static IEnumerable<object[]> ValidCode128ParsingBarcodes()
         {
-            
             yield return new object[]
             {
                 $"]C01234567890ABSDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvxyz",
@@ -79,14 +72,10 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE128
                     ProductCode = new Code128ProductCode("1293AAS-.$/+%õ ")
                 }
             };
-
-
         }
 
         public static IEnumerable<object[]> InvalidCode128ParsingBarcodes()
         {
-
-            
             yield return new object[]
             {
                 $"1234444",

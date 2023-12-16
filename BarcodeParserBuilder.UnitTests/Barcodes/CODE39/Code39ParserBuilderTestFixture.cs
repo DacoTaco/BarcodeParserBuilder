@@ -1,9 +1,7 @@
 ﻿using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Exceptions.CODE39;
-using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
 using Xunit;
-using Xunit.Sdk;
 
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
@@ -15,7 +13,6 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
         public void CanParseBarcodeString(string barcode, Code39Barcode expectedBarcode)
         {
             //Arrange & Act
-            
             Code39BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeTrue($"'{barcode}' should be parsable");
             Action parseAction = () => Code39BarcodeParserBuilder.Parse(barcode);
 
@@ -27,7 +24,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
 
         [Theory]
         [MemberData(nameof(InvalidCode39ParsingBarcodes))]
-        public void CanInvalidateBarcodeString<TException>(string barcode, TException exceptionType) where TException : Exception 
+        public void CanInvalidateBarcodeString<TException>(string barcode, TException exceptionType) where TException : Exception
         {
             //Arrange & Act
             Code39BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeFalse($"'{barcode}' should not be parsable");
@@ -35,7 +32,6 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
 
             //Assert
             parseAction.Should().ThrowExactly<TException>();
-            
         }
 
         public static IEnumerable<object[]> ValidCode39arsingBarcodes()
@@ -49,7 +45,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                     ProductCode = new Code39Productcode("1293AAS-.$/+% ")
                 }
             };
-            
+
             // base symbols, checksum transmitted
             yield return new object[]
             {
@@ -109,14 +105,10 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                     ProductCode = new Code39Productcode("C39ex")
                 }
             };
-
-
-
         }
 
         public static IEnumerable<object[]> InvalidCode39ParsingBarcodes()
         {
-            
             yield return new object[]
             {
                 $"]A0aaaabbbb",
@@ -127,7 +119,6 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                 $"]A7abcüüü",
                 new Code39ParseException("characters outside of full ascii")
             };
-
         }
     }
 }

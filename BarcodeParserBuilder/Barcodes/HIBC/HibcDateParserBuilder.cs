@@ -1,5 +1,4 @@
 ﻿using BarcodeParserBuilder.Exceptions.HIBC;
-using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.HIBC
 {

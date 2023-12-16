@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using BarcodeParserBuilder.Exceptions.GS1;
-using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.GS1
 {

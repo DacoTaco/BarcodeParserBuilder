@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using BarcodeParserBuilder.Barcodes.CODE39;
-using FluentAssertions;
-using BarcodeParserBuilder.Exceptions.CODE39;
+﻿using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Infrastructure;
+using FluentAssertions;
+using Xunit;
 
 namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
 {
@@ -23,16 +17,15 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
         [InlineData("]A7", Code39SymbologyIdentifier.FullASCIIMod43ChecksumStrippedValue)]
         public void CanCreateValidCode39SymbologyIdentifier(string readerModifier, string readerModifierValue)
         {
-
-            
+            //Arrange & Act
             Action parseAction = () =>
             {
                 var result = AimSymbologyIdentifier.FromRawReading<Code39SymbologyIdentifier>(readerModifier);
                 result.SymbologyIdentifier.Should().Be(readerModifierValue);
             };
 
+            //Assert
             parseAction.Should().NotThrow($"for {readerModifier}");
-
         }
 
 
@@ -42,15 +35,14 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
         [InlineData("anything")]
         public void CanValidateIncorrectCode39ReaderModifier(string readerModifier)
         {
+            //Arrange & Act
             Action parseAction = () =>
             {
                 var result = AimSymbologyIdentifier.FromRawReading<Code39SymbologyIdentifier>(readerModifier);
             };
 
+            //Assert
             parseAction.Should().Throw<ArgumentException>();
-
-            
-            
         }
     }
 }

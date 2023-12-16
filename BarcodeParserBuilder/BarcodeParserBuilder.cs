@@ -1,5 +1,4 @@
 ﻿using BarcodeParserBuilder.Barcodes.GS1;
-using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder
 {

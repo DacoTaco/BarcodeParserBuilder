@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BarcodeParserBuilder.Exceptions.CODE39
+﻿namespace BarcodeParserBuilder.Exceptions.CODE39
 {
     internal class Code39ParseException : ParseException
     {

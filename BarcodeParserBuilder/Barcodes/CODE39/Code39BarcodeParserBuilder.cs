@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BarcodeParserBuilder.Barcodes.EAN;
-using BarcodeParserBuilder.Exceptions.CODE39;
-using BarcodeParserBuilder.Infrastructure;
+﻿using BarcodeParserBuilder.Exceptions.CODE39;
 
 namespace BarcodeParserBuilder.Barcodes.CODE39
 {
     internal class Code39BarcodeParserBuilder : BaseBarcodeParserBuilder<Code39Barcode>
     {
-        
-
         protected Code39BarcodeParserBuilder() { }
 
         public static string? Build(Code39Barcode? barcode)
@@ -32,7 +25,7 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
             }
             return false;
         }
-        
+
 
         public static Code39Barcode? Parse(string? barcode)
         {

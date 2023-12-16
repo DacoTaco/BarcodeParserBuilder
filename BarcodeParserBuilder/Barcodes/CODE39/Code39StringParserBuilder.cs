@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using BarcodeParserBuilder.Infrastructure;
-
-namespace BarcodeParserBuilder.Barcodes.CODE39
+﻿namespace BarcodeParserBuilder.Barcodes.CODE39
 {
     internal class Code39StringParserBuilder : BaseFieldParserBuilder<string?>
     {
@@ -33,7 +27,7 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
                 case Code39SymbologyIdentifier.FullASCIINoChecksumValue:
                 case Code39SymbologyIdentifier.FullASCIIMod43ChecksumTransmittedValue:
                 case Code39SymbologyIdentifier.FullASCIIMod43ChecksumStrippedValue:
-                    return ValidateFullASCII(value); 
+                    return ValidateFullASCII(value);
                 default:
                     return ValidateCode39String(value);
             }
@@ -87,5 +81,5 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
             return value.Length > 1 && value.Length < 56;
         }
     }
-    
+
 }

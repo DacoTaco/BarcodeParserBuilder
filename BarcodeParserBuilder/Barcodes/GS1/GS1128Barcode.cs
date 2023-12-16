@@ -1,6 +1,4 @@
-﻿using BarcodeParserBuilder.Infrastructure;
-
-namespace BarcodeParserBuilder.Barcodes.GS1
+﻿namespace BarcodeParserBuilder.Barcodes.GS1
 {
     public class GS1128Barcode : GS1Barcode
     {

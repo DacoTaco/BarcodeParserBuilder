@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BarcodeParserBuilder.Infrastructure;
-
-namespace BarcodeParserBuilder.Barcodes.CODE39
+﻿namespace BarcodeParserBuilder.Barcodes.CODE39
 {
     public class Code39SymbologyIdentifier : AimSymbologyIdentifier
     {
@@ -16,7 +11,7 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
         public const string FullASCIIMod43ChecksumTransmittedValue = "A5";
         public const string FullASCIIMod43ChecksumStrippedValue = "A7";
 
-        public Code39SymbologyIdentifier() {}
+        public Code39SymbologyIdentifier() { }
 
         public Code39SymbologyIdentifier(string symbologyIdentifier) : base(symbologyIdentifier) { }
 

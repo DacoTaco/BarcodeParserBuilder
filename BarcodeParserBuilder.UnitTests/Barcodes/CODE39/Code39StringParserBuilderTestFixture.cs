@@ -8,7 +8,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
     {
         [Theory] // Positive case - the validation of code39 string is explicit, listing all possible characters in the regular expression 
         [InlineData("A")] // code length 1 should be ok
-        [InlineData("BB")] 
+        [InlineData("BB")]
         [InlineData("ABCDEFGHIJKLMNOPQRSTUVXYZ0123456789 -.$/+%")] // all allowed characters of code39 regular 
         public void CanValidateCorrectCode39String(string barcode)
         {
@@ -30,7 +30,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
             Code39StringParserBuilder.ValidateCode39String(barcode).Should().BeFalse();
         }
 
-        
+
         [Theory] // Positive case - code39 full ascii set is a range of characters of 0x0-0x7F and the regular expression is explicit so we leave the work to the regex
         [InlineData("A\u0000\u0001\u007f")] // character from the beginning of the range, second and last
         [InlineData("ABCDEFGHIJKLMNOPQRSTUVXYZ0123456789 -.$/+%")] // subset, code 39 base
@@ -63,7 +63,5 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
             Action validateAction = () => Code39StringParserBuilder.ValidateCode39ContentLength(null);
             validateAction.Should().Throw<ArgumentNullException>();
         }
-
-
     }
 }

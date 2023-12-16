@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Barcodes.CODE128;
+using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
@@ -60,7 +60,7 @@ namespace BarcodeParserBuilder.Infrastructure
 
             return barcodeString[3..];
         }
-        
+
         private static int GetParserBuilderOrderNumber(Type type)
         {
             if (type == null)

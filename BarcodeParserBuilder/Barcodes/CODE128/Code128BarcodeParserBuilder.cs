@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BarcodeParserBuilder.Exceptions.CODE128;
-using BarcodeParserBuilder.Infrastructure;
+﻿using BarcodeParserBuilder.Exceptions.CODE128;
 
 namespace BarcodeParserBuilder.Barcodes.CODE128
 {
@@ -50,11 +46,11 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
                 // AimSymbologyIdentifier is not responsible of validating that although
                 Code128SymbologyIdentifier code128identifier = AimSymbologyIdentifier.FromRawReading<Code128SymbologyIdentifier>(inputBarcode!);
 
-                if (! code128identifier.Equals(Code128SymbologyIdentifier.StandardNoFNC1))
+                if (!code128identifier.Equals(Code128SymbologyIdentifier.StandardNoFNC1))
                 {
                     throw new Code128ParseException("Not a standard Code128 barcode by the symbology identifier");
                 }
-                
+
                 var dataContent = AimSymbologyIdentifier.StripSymbologyIdentifier(inputBarcode!);
 
                 // Reading is validated now in the context of obtained identifier information 
@@ -63,7 +59,7 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
                 {
                     throw new Code128ParseException("Code content does not match reader information");
                 }
-                
+
                 // Although Code128 does not specify any structure whether the reading is ProductCode or SerialNumber
                 // or something else, we initialize the ProductCode, because it is most aligned with the current implementation
                 return new Code128Barcode(code128identifier)

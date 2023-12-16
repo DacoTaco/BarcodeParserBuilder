@@ -1,6 +1,4 @@
-﻿using BarcodeParserBuilder.Infrastructure;
-
-namespace BarcodeParserBuilder.Barcodes.ISBT128
+﻿namespace BarcodeParserBuilder.Barcodes.ISBT128
 {
     public class ISBT128BarcodeParserBuilder : BaseBarcodeParserBuilder<ISBT128Barcode>
     {

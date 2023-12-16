@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BarcodeParserBuilder.Barcodes.CODE128;
-using BarcodeParserBuilder.Exceptions.GS1;
+using BarcodeParserBuilder.Exceptions.CODE128;
 using FluentAssertions;
 using Xunit;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BarcodeParserBuilder.Exceptions.GS1
+namespace BarcodeParserBuilder.Exceptions.CODE128
 {
     public class Code128ValidateException : ValidateException
     {

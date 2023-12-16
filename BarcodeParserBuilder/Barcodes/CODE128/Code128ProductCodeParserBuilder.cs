@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using BarcodeParserBuilder.Barcodes.CODE128;
-using BarcodeParserBuilder.Exceptions.GS1;
+using BarcodeParserBuilder.Exceptions.CODE128;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.CODE128

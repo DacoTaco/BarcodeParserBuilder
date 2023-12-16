@@ -8,7 +8,6 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
 {
     public class Code128Barcode : Barcode
     {
-
         public Code128Barcode() : base() { }
 
         public Code128Barcode(Code128SymbologyIdentifier symbologyIdentifier) : base(symbologyIdentifier) { }
@@ -25,7 +24,6 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
         };
 
         public override BarcodeType BarcodeType => BarcodeType.CODE128;
-
 
         public override BarcodeDateTime? ExpirationDate
         {
@@ -50,6 +48,6 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
             get => throw new UnusedFieldException(nameof(SerialNumber));
             set => throw new UnusedFieldException(nameof(SerialNumber));
         }
-        
+      
     }
 }

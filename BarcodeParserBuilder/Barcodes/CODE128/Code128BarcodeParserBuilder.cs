@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BarcodeParserBuilder.Exceptions.GS1;
+using BarcodeParserBuilder.Exceptions.CODE128;
 using BarcodeParserBuilder.Infrastructure;
 
 namespace BarcodeParserBuilder.Barcodes.CODE128
 {
     public class Code128BarcodeParserBuilder : BaseBarcodeParserBuilder<Code128Barcode>
     {
-
-
         protected Code128BarcodeParserBuilder() { }
 
         public static string? Build(Code128Barcode? barcode)
@@ -31,7 +29,6 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
             }
             return false;
         }
-
 
         public static Code128Barcode? Parse(string? barcode)
         {

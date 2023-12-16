@@ -21,6 +21,7 @@ Currently supports GS1, GS1-128, EAN/UPC, PPN, MSI &amp; HIBC.
   
 When combined with barcode imaging projects like Zxing you can scan, parse, build &amp; create any barcode to your needs.
 </Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Copyright>2021 DacoTaco</Copyright>
     <PackageProjectUrl>https://github.com/DacoTaco/BarcodeParserBuilder</PackageProjectUrl>
@@ -40,6 +41,10 @@ When combined with barcode imaging projects like Zxing you can scan, parse, buil
       <PackagePath></PackagePath>
     </None>
     <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

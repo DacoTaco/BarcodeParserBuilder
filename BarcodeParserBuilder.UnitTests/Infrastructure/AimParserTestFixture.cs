@@ -1,4 +1,5 @@
 ﻿using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Barcodes.CODE128;
 using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
@@ -42,6 +43,11 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
 
             var code128Parsers = new[]
             {
+                typeof(Code128BarcodeParserBuilder)
+            };
+
+            var gs1Parsers = new[]
+            {
                 typeof(GS1128BarcodeParserBuilder),
                 typeof(ISBT128BarcodeParserBuilder),
                 typeof(HibcBarcodeParserBuilder),
@@ -62,8 +68,8 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
                 //Code128
                 { "]C1", new[] {typeof(GS1128BarcodeParserBuilder)} },
                 { "]C0", code128Parsers },
-                { "]C2", code128Parsers },
-                { "]C4", code128Parsers },
+                { "]C2", gs1Parsers },
+                { "]C4", gs1Parsers },
 
                 //DataMatrix
                 { "]d2", new[] {typeof(GS1BarcodeParserBuilder)} },

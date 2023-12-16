@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using BarcodeParserBuilder.Barcodes.CODE39;
+using BarcodeParserBuilder.Barcodes.CODE128;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
@@ -138,8 +139,9 @@ namespace BarcodeParserBuilder.Infrastructure
         internal static IEnumerable<Type> ParseCode128Barcode(string modifier, string _) =>
             modifier switch
             {
+                "0" => new[] { typeof(Code128BarcodeParserBuilder) },
                 "1" => new[] { typeof(GS1128BarcodeParserBuilder) },
-                "0" or "2" or "4" => new[]
+                "2" or "4" => new[]
                                     {
                             typeof(GS1128BarcodeParserBuilder),
                             typeof(ISBT128BarcodeParserBuilder),

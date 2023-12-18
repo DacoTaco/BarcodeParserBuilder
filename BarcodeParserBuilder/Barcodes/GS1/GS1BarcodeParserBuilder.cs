@@ -7,7 +7,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
         protected GS1BarcodeParserBuilder() { }
 
         //Overwrite the internal orderNumber to be a high number. this should make it last when ordered
-        internal new static int ParsingOrderNumber => 0xFF;
+        internal static new int ParsingOrderNumber => 0xFF;
 
         public static bool TryParse(string barcode, out GS1Barcode? gs1Barcode)
         {
@@ -76,7 +76,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return default;
 
-                barcodeString = AimParser.StripBarcodePrefix(barcodeString);
+                barcodeString = AimParser.StripBarcodePrefix(barcodeString!);
                 if (barcodeString.FirstOrDefault() == GS1Barcode.GroupSeparator)
                     barcodeString = barcodeString[1..];
 

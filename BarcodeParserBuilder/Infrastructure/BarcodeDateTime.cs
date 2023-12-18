@@ -49,7 +49,7 @@ namespace BarcodeParserBuilder.Infrastructure
             if (!day.HasValue || day.Value == 0)
                 day = DateTime.DaysInMonth(year.Value, month.Value);
 
-            return new BarcodeDateTime(new DateTime(year.Value, month.Value, day.Value), value, GS1Format);
+            return new BarcodeDateTime(new DateTime(year.Value, month.Value, day.Value), value!, GS1Format);
         }
 
         public static BarcodeDateTime PpnDate(DateTime date) => BuildDateString(date, PPNFormat);
@@ -65,7 +65,7 @@ namespace BarcodeParserBuilder.Infrastructure
             if (!day.HasValue || day.Value == 0)
                 day = DateTime.DaysInMonth(year.Value, month.Value);
 
-            return new BarcodeDateTime(new DateTime(year.Value, month.Value, day.Value), value, PPNFormat);
+            return new BarcodeDateTime(new DateTime(year.Value, month.Value, day.Value), value!, PPNFormat);
         }
         public static BarcodeDateTime? HibcDate(string? value, string format)
         {
@@ -86,10 +86,10 @@ namespace BarcodeParserBuilder.Infrastructure
                 var date = new DateTime(year.Value, 1, 1, hour ?? 0, 0, 0);
                 if (day > 1)
                     date = date.AddDays(day.Value - 1);
-                return new BarcodeDateTime(date, value, format);
+                return new BarcodeDateTime(date, value!, format);
             }
 
-            return new BarcodeDateTime(new DateTime(year.Value, month.Value, day ?? 1, hour ?? 0, 0, 0), value, format);
+            return new BarcodeDateTime(new DateTime(year.Value, month.Value, day ?? 1, hour ?? 0, 0, 0), value!, format);
         }
         public static BarcodeDateTime? HibcDate(DateTime date) => HibcDate(date, date.Hour > 0 ? HIBCShortYearMonthDayHour : HIBCYearMonthDay);
         public static BarcodeDateTime? HibcDate(DateTime date, string format)
@@ -115,14 +115,13 @@ namespace BarcodeParserBuilder.Infrastructure
             month = null;
             day = null;
             hour = null;
-
             if (string.IsNullOrWhiteSpace(input))
                 return;
 
             if (string.IsNullOrWhiteSpace(format) || !Regex.IsMatch(format, DateFormatRegex, RegexOptions.IgnoreCase))
                 throw new ArgumentException($"Invalid format '{(string.IsNullOrWhiteSpace(format) ? "(null)" : format)}' given.");
 
-            if (input.Length != format.Length || input.Any(c => !char.IsDigit(c)))
+            if (input!.Length != format!.Length || input.Any(c => !char.IsDigit(c)))
                 throw new ArgumentException($"Invalid datetime value '{input}' for format '{format}'.");
 
             foreach (var match in Regex.Matches(format, @"([a-zA-Z])\1*", RegexOptions.IgnoreCase).Cast<Match?>())
@@ -130,7 +129,7 @@ namespace BarcodeParserBuilder.Infrastructure
                 if (string.IsNullOrWhiteSpace(match?.Value))
                     continue;
 
-                int number = int.Parse(input[..match.Value.Length]);
+                int number = int.Parse(input[..match!.Value.Length]);
                 input = input.Remove(0, match.Value.Length);
                 switch (match.Value.ToUpper().First())
                 {
@@ -168,7 +167,7 @@ namespace BarcodeParserBuilder.Infrastructure
                 if (string.IsNullOrWhiteSpace(match?.Value))
                     continue;
 
-                switch (match.Value.ToUpper().First())
+                switch (match!.Value.ToUpper().First())
                 {
                     case 'M':
                         value += input.Month.ToString("00");

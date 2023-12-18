@@ -5,7 +5,7 @@ using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Barcodes.MSI;
 using BarcodeParserBuilder.Barcodes.PPN;
-using BarcodeParserBuilder.Infrastructure;
+using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using BarcodeParserBuilder.UnitTests.Barcodes.EAN;
 using BarcodeParserBuilder.UnitTests.Barcodes.GS1;
 using BarcodeParserBuilder.UnitTests.Barcodes.HIBC;

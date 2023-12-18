@@ -49,7 +49,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
         protected override IList<string> BuildBarcodes(HibcBarcode? barcode)
         {
             var list = new List<string>();
-            if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code) || string.IsNullOrWhiteSpace(barcode.LabelerIdentificationCode))
+            if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code) || string.IsNullOrWhiteSpace(barcode!.LabelerIdentificationCode))
                 return list;
 
             var segments = BuildSegments(barcode);
@@ -89,7 +89,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
         protected static IList<string> BuildSegments(HibcBarcode? barcode)
         {
             var segments = new List<string>();
-            if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code) || string.IsNullOrWhiteSpace(barcode.LabelerIdentificationCode))
+            if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code) || string.IsNullOrWhiteSpace(barcode!.LabelerIdentificationCode))
                 return segments;
 
             var hasBatchNumber = !string.IsNullOrWhiteSpace(barcode!.BatchNumber);
@@ -99,7 +99,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             var quantityFormatNumber = barcode.Quantity < 100 ? 8 : 9;
             var expirationFormatNumber = HibcBarcodeSegmentFormat.GetHibcDateTimeFormatIdentifierByFormat(barcode.ExpirationDate?.FormatString ?? string.Empty);
 
-            segments.Add($"{barcode.LabelerIdentificationCode}{barcode.ProductCode.Code}{barcode.UnitOfMeasure}");
+            segments.Add($"{barcode.LabelerIdentificationCode}{barcode.ProductCode!.Code}{barcode.UnitOfMeasure}");
 
             if (hasQuantity && (hasBatchNumber || hasSerialNumber))
             {
@@ -168,7 +168,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                 segments.Add($"14D{BarcodeDateTime.HibcDate(barcode.ExpirationDate!.DateTime, BarcodeDateTime.HIBCYearMonthDay)!.StringValue}");
 
             if (!string.IsNullOrWhiteSpace(barcode.ProductionDate?.StringValue))
-                segments.Add($"16D{BarcodeDateTime.HibcDate(barcode.ProductionDate.DateTime, BarcodeDateTime.HIBCYearMonthDay)!.StringValue}");
+                segments.Add($"16D{BarcodeDateTime.HibcDate(barcode.ProductionDate!.DateTime, BarcodeDateTime.HIBCYearMonthDay)!.StringValue}");
 
             if (hasSerialNumber)
                 segments.Add($"S{barcode.SerialNumber}");
@@ -183,7 +183,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return null;
 
-                barcodeString = AimParser.StripBarcodePrefix(barcodeString);
+                barcodeString = AimParser.StripBarcodePrefix(barcodeString!);
                 if (!Regex.IsMatch(barcodeString, HibcCheckCharacterCalculator.AllowedCharacterRegex))
                     throw new HIBCParseException("Invalid HIBC Character detected.");
 

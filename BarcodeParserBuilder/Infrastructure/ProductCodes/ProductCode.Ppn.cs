@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace BarcodeParserBuilder.Infrastructure
+namespace BarcodeParserBuilder.Infrastructure.ProductCodes
 {
     public class PpnProductCode : ProductCode
     {

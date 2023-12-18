@@ -45,16 +45,14 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
                 // Try to initialize the symbology identifier. This should succeed if the reading looks like having AIM identifier
                 // But it may not be from the correct set of the supported identifiers of particular barcode class
                 // AimSymbologyIdentifier is not responsible of validating that although
-                Code39SymbologyIdentifier code39identifier = AimSymbologyIdentifier.FromRawReading<Code39SymbologyIdentifier>(inputBarcode!);
+                var code39identifier = AimSymbologyIdentifier.ParseString<Code39SymbologyIdentifier>(inputBarcode!);
 
-                var dataContent = AimSymbologyIdentifier.StripSymbologyIdentifier(inputBarcode);
+                var dataContent = AimSymbologyIdentifier.StripSymbologyIdentifier(inputBarcode!);
 
                 // Reading is validated now in the context of obtained identifier information 
                 // Same reading may give different validation results depending on the AIM identifier
-                if (!Code39StringParserBuilder.Validate(dataContent, code39identifier))
-                {
+                if (!Validate(dataContent, code39identifier))
                     throw new Code39ParseException("Code content does not match reader information");
-                }
 
                 // When the check character is transmitted, we strip it from the entire reading, 
                 // because Code39 does not have any specific structure and check character applies to entire reading

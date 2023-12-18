@@ -1,4 +1,4 @@
-﻿namespace BarcodeParserBuilder.Infrastructure
+﻿namespace BarcodeParserBuilder.Infrastructure.ProductCodes
 {
     public enum ProductCodeType
     {
@@ -36,5 +36,6 @@
         public static HibcProductCode? ParseHibc(string? code) => string.IsNullOrWhiteSpace(code) ? null : new HibcProductCode(code!);
         public static MsiProductCode? ParseMsi(string? code) => string.IsNullOrWhiteSpace(code) ? null : new MsiProductCode(code!);
         public static PpnProductCode? ParsePpn(string? code) => string.IsNullOrWhiteSpace(code) ? null : new PpnProductCode(code!);
+        public static Code128ProductCode? ParseCode128(string? value) => string.IsNullOrEmpty(value) ? null : new Code128ProductCode(value!);
     }
 }

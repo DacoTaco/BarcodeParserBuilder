@@ -1,6 +1,6 @@
 ﻿using BarcodeParserBuilder.Barcodes.PPN;
 using BarcodeParserBuilder.Exceptions.PPN;
-using BarcodeParserBuilder.Infrastructure;
+using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using BarcodeParserBuilder.UnitTests.Barcodes.GS1;
 using FluentAssertions;
 using Xunit;

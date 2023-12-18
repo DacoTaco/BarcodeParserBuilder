@@ -44,7 +44,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return null;
 
-                if (!barcodeString.StartsWith(GS1128Barcode.SymbologyPrefix, StringComparison.Ordinal))
+                if (!barcodeString!.StartsWith(GS1128Barcode.SymbologyPrefix, StringComparison.Ordinal))
                     throw new GS1128ParseException("Barcode does not start with the Symbology Prefix.");
 
                 barcodeString = barcodeString.Replace(GS1128Barcode.SymbologyPrefix, GS1Barcode.GroupSeparator.ToString());

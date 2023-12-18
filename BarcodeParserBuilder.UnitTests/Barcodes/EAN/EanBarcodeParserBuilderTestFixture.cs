@@ -1,6 +1,6 @@
 ﻿using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Exceptions.EAN;
-using BarcodeParserBuilder.Infrastructure;
+using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
 using Xunit;
 

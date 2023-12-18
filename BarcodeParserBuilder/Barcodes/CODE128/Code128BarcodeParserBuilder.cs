@@ -32,7 +32,7 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
             return parserBuider.ParseString(barcode);
         }
 
-        protected override string? BuildString(Code128Barcode? barcode) => barcode?.ProductCode.Code;
+        protected override string? BuildString(Code128Barcode? barcode) => barcode?.ProductCode?.Code;
 
         protected override Code128Barcode? ParseString(string? inputBarcode)
         {
@@ -44,21 +44,17 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
                 // Try to initialize the symbology identifier. This should succeed if the reading looks like having AIM identifier
                 // But it may not be from the correct set of the supported identifiers of particular barcode class
                 // AimSymbologyIdentifier is not responsible of validating that although
-                Code128SymbologyIdentifier code128identifier = AimSymbologyIdentifier.FromRawReading<Code128SymbologyIdentifier>(inputBarcode!);
+                Code128SymbologyIdentifier code128identifier = AimSymbologyIdentifier.ParseString<Code128SymbologyIdentifier>(inputBarcode!);
 
                 if (!code128identifier.Equals(Code128SymbologyIdentifier.StandardNoFNC1))
-                {
                     throw new Code128ParseException("Not a standard Code128 barcode by the symbology identifier");
-                }
 
                 var dataContent = AimSymbologyIdentifier.StripSymbologyIdentifier(inputBarcode!);
 
                 // Reading is validated now in the context of obtained identifier information 
                 // Same reading may give different validation results depending on the AIM identifier
                 if (!Code128StringParserBuilder.Validate(dataContent, code128identifier))
-                {
                     throw new Code128ParseException("Code content does not match reader information");
-                }
 
                 // Although Code128 does not specify any structure whether the reading is ProductCode or SerialNumber
                 // or something else, we initialize the ProductCode, because it is most aligned with the current implementation

@@ -1,4 +1,5 @@
 ﻿using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Aim;
 using BarcodeParserBuilder.Barcodes.CODE128;
 using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Barcodes.EAN;
@@ -6,11 +7,10 @@ using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Barcodes.ISBT128;
 using BarcodeParserBuilder.Barcodes.MSI;
-using BarcodeParserBuilder.Infrastructure;
 using FluentAssertions;
 using Xunit;
 
-namespace BarcodeParserBuilder.UnitTests.Infrastructure
+namespace BarcodeParserBuilder.UnitTests.Aim
 {
     public class AimParserTestFixture
     {

@@ -4,7 +4,7 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
 {
     internal class Code128ProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode?>
     {
-        protected override ProductCode? Parse(string? value) => new Code128ProductCode(value);
+        protected override ProductCode? Parse(string? value) => ProductCode.ParseCode128(value);
         protected override string? Build(ProductCode? obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj!.Code;
 
         protected override bool Validate(string? value)

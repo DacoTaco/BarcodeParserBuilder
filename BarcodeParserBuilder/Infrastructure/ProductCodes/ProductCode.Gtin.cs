@@ -1,4 +1,4 @@
-﻿namespace BarcodeParserBuilder.Infrastructure
+﻿namespace BarcodeParserBuilder.Infrastructure.ProductCodes
 {
     //source : https://www.datafeedwatch.com/academy/gtin
     //UPC-E - 7 characters long
@@ -45,11 +45,11 @@
             if (value.Length != 7 && value.Length != 8 && value.Length != 10 && value.Length != 12 && value.Length != 13 && value.Length != 14)
                 throw new ArgumentException($"Invalid GTIN/EAN Length of {value.Length}.");
 
-            Type = (value.Length == 14) ? ProductCodeType.GTIN : ProductCodeType.EAN;
+            Type = value.Length == 14 ? ProductCodeType.GTIN : ProductCodeType.EAN;
             var checkDigit = int.Parse(value.Last().ToString());
             //pad untill we have at least 13 characters.
             //the beauty of GTIN/EAN is thats its backwards & fowards compatible with EAN8/EAN13/UPC etc etc.
-            string productCode = value.Remove(value.Length - 1).PadLeft(13, '0');
+            var productCode = value.Remove(value.Length - 1).PadLeft(13, '0');
 
             //The checkDigit is calculated as following : 
             //every digit is added together. numbers in even positions are multiplied by 3 before being added.

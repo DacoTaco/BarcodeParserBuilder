@@ -7,7 +7,7 @@ using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Barcodes.ISBT128;
 using BarcodeParserBuilder.Barcodes.MSI;
 
-namespace BarcodeParserBuilder.Infrastructure
+namespace BarcodeParserBuilder.Aim
 {
     internal class AimParser : IAimParser
     {

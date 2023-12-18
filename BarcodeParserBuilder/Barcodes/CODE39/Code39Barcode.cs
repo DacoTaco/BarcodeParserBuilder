@@ -45,19 +45,15 @@ public class Code39Barcode : Barcode
         set => throw new UnusedFieldException(nameof(SerialNumber));
     }
 
-
     public static string StripCheckCharacter(string inputString, Code39SymbologyIdentifier symbologyIdentifier)
     {
-        if (String.IsNullOrEmpty(inputString) || inputString!.Length < 2)
+        if (string.IsNullOrEmpty(inputString) || inputString!.Length < 2)
             return inputString;
 
-        switch (symbologyIdentifier.SymbologyIdentifier)
+        return symbologyIdentifier.SymbologyIdentifier switch
         {
-            case Code39SymbologyIdentifier.NoFullASCIIMod43ChecksumTransmittedValue:
-            case Code39SymbologyIdentifier.FullASCIIMod43ChecksumTransmittedValue:
-                return inputString[0..^1].ToString();
-            default:
-                return inputString;
-        }
+            Code39SymbologyIdentifier.NoFullASCIIMod43ChecksumTransmittedValue or Code39SymbologyIdentifier.FullASCIIMod43ChecksumTransmittedValue => inputString[0..^1].ToString(),
+            _ => inputString,
+        };
     }
 }

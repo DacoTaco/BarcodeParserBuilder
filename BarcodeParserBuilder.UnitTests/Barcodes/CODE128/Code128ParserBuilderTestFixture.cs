@@ -23,15 +23,14 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE128
 
         [Theory]
         [MemberData(nameof(InvalidCode128ParsingBarcodes))]
-        public void CanInvalidateBarcodeString<TException>(string barcode, TException exceptionType) where TException : Exception
+        public void CanInvalidateBarcodeString<TException>(string barcode, TException exception) where TException : Exception
         {
             //Arrange & Act
             Code128BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeFalse($"'{barcode}' should not be parsable");
             Action parseAction = () => Code128BarcodeParserBuilder.Parse(barcode);
 
             //Assert
-            parseAction.Should().ThrowExactly<TException>();
-
+            parseAction.Should().ThrowExactly<TException>().Which.Message.Should().Be(exception.Message);
         }
 
         public static IEnumerable<object[]> ValidCode128ParsingBarcodes()
@@ -79,12 +78,12 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE128
             yield return new object[]
             {
                 $"1234444",
-                new Code128ParseException("Should NOT parse as Code128 without symbology prefix, causing ambiguity")
+                new Code128ParseException($"Failed to parse Code128 Barcode :{Environment.NewLine}Reading does not start with AIM symbology flag")
             };
             yield return new object[]
             {
                 $"]C01234444\u263A222",
-                new Code128ParseException("Not extended ASCII")
+                new Code128ParseException($"Failed to parse Code128 Barcode :{Environment.NewLine}Code content does not match reader information")
             };
         }
     }

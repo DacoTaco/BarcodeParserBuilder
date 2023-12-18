@@ -12,7 +12,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             if (string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if (value.Length < 4 || value.Length > 8 || !value.All(char.IsDigit))
+            if (value!.Length < 4 || value.Length > 8 || !value.All(char.IsDigit))
                 throw new HIBCValidateException($"Invalid HIBC Date value '{value}'.");
 
             return true;

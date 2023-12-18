@@ -1,4 +1,4 @@
-﻿namespace BarcodeParserBuilder.Infrastructure
+﻿namespace BarcodeParserBuilder.Infrastructure.ProductCodes
 {
     public class HibcProductCode : ProductCode
     {

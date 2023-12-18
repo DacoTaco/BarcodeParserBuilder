@@ -40,7 +40,7 @@ namespace BarcodeParserBuilder.Barcodes.MSI
             if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code))
                 return null;
 
-            return barcode.Fields[nameof(barcode.ProductCode)].Build();
+            return barcode!.Fields[nameof(barcode.ProductCode)].Build();
         }
 
         protected override MsiBarcode? ParseString(string? barcodeString)
@@ -50,7 +50,7 @@ namespace BarcodeParserBuilder.Barcodes.MSI
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return null;
 
-                barcodeString = AimParser.StripBarcodePrefix(barcodeString);
+                barcodeString = AimParser.StripBarcodePrefix(barcodeString!);
 
                 //technically, a MSI has no size limitation.
                 //however, it tends to clash with GS1 since GS1 has so many fields and MSI's product code can clash with GS1's

@@ -24,14 +24,14 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
 
         [Theory]
         [MemberData(nameof(InvalidCode39ParsingBarcodes))]
-        public void CanInvalidateBarcodeString<TException>(string barcode, TException exceptionType) where TException : Exception
+        public void CanInvalidateBarcodeString<TException>(string barcode, TException exception) where TException : Exception
         {
             //Arrange & Act
             Code39BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeFalse($"'{barcode}' should not be parsable");
             Action parseAction = () => Code39BarcodeParserBuilder.Parse(barcode);
 
             //Assert
-            parseAction.Should().ThrowExactly<TException>();
+            parseAction.Should().ThrowExactly<TException>().Which.Message.Should().Be(exception.Message);
         }
 
         public static IEnumerable<object[]> ValidCode39arsingBarcodes()
@@ -112,12 +112,12 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
             yield return new object[]
             {
                 $"]A0aaaabbbb",
-                new Code39ParseException("Modifier 0 allows only base Code39 characters")
+                new Code39ParseException($"Failed to parse Code39 Barcode :{Environment.NewLine}Code content does not match reader information")
             };
             yield return new object[]
             {
                 $"]A7abcüüü",
-                new Code39ParseException("characters outside of full ascii")
+                new Code39ParseException($"Failed to parse Code39 Barcode :{Environment.NewLine}Code content does not match reader information")
             };
         }
     }

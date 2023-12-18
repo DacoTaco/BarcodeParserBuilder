@@ -1,7 +1,9 @@
-﻿using BarcodeParserBuilder.Barcodes;
+﻿using BarcodeParserBuilder.Aim;
+using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure;
+using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
 using Xunit;
 

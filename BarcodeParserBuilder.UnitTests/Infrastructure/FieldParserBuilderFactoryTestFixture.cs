@@ -6,6 +6,7 @@ using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Barcodes.MSI;
 using BarcodeParserBuilder.Barcodes.PPN;
 using BarcodeParserBuilder.Infrastructure;
+using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
 using Xunit;
 

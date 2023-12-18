@@ -1,4 +1,4 @@
-﻿using BarcodeParserBuilder.Infrastructure;
+﻿using BarcodeParserBuilder.Infrastructure.ProductCodes;
 
 namespace BarcodeParserBuilder.UnitTests
 {

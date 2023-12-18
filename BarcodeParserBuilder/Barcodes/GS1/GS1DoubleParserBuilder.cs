@@ -27,7 +27,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                 return null;
 
             var location = int.Parse(value.First().ToString());
-            value = value[1..];
+            value = value![1..];
 
             return double.Parse(value) * Math.Pow(10, -location);
         }

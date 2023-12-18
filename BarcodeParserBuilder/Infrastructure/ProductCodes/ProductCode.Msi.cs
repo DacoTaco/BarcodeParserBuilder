@@ -1,4 +1,4 @@
-﻿namespace BarcodeParserBuilder.Infrastructure
+﻿namespace BarcodeParserBuilder.Infrastructure.ProductCodes
 {
     public class MsiProductCode : ProductCode
     {
@@ -21,7 +21,7 @@
                 .ToList();
 
             var sum = 0;
-            for (int index = 0; index < productCode.Count; index++)
+            for (var index = 0; index < productCode.Count; index++)
             {
                 var character = productCode[index];
                 var digit = index % 2 == 0 ? int.Parse(character.ToString()) : int.Parse(character.ToString()) * 2;

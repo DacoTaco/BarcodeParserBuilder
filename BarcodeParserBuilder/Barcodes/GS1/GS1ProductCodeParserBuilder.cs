@@ -5,14 +5,14 @@ namespace BarcodeParserBuilder.Barcodes.GS1
     internal class GS1ProductCodeParserBuilder : BaseFieldParserBuilder<ProductCode?>
     {
         protected override ProductCode? Parse(string? value) => ProductCode.ParseGtin(value);
-        protected override string? Build(ProductCode? obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj.Code;
+        protected override string? Build(ProductCode? obj) => string.IsNullOrWhiteSpace(obj?.Code) ? null : obj!.Code;
 
         protected override bool Validate(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if (!value.All(char.IsDigit) || value.Length != 14)
+            if (!value!.All(char.IsDigit) || value!.Length != 14)
                 throw new GS1ValidateException($"Invalid GTIN value '{value}'.");
 
             return true;

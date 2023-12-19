@@ -4,7 +4,7 @@
     {
         internal static int ParsingOrderNumber => 0;
 
-        protected abstract T? ParseString(string? barcodeString);
+        protected abstract T? ParseString(string? barcodeString, AimSymbologyIdentifier? symbologyIdentifier);
         protected abstract string? BuildString(T? barcode);
         protected virtual IList<string> BuildBarcodes(T barcode)
         {

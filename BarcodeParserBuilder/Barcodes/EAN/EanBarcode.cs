@@ -4,7 +4,8 @@ namespace BarcodeParserBuilder.Barcodes.EAN
 {
     public class EanBarcode : Barcode
     {
-        public EanBarcode() : base() { }
+        public EanBarcode() : this(null) { }
+        public EanBarcode(EanSymbologyIdentifier? symbologyIdentifier) : base(symbologyIdentifier) { }
 
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()
         {

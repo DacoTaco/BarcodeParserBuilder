@@ -6,11 +6,11 @@ namespace BarcodeParserBuilder.Barcodes.PPN
     {
         protected PpnBarcodeParserBuilder() { }
 
-        public static bool TryParse(string? barcode, out PpnBarcode? ppnBarcode)
+        public static bool TryParse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier, out PpnBarcode? ppnBarcode)
         {
             try
             {
-                ppnBarcode = Parse(barcode);
+                ppnBarcode = Parse(barcode, symbologyIdentifier);
                 return true;
             }
             catch
@@ -20,10 +20,10 @@ namespace BarcodeParserBuilder.Barcodes.PPN
             return false;
         }
 
-        public static PpnBarcode? Parse(string? barcode)
+        public static PpnBarcode? Parse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             var parserBuider = new PpnBarcodeParserBuilder();
-            return parserBuider.ParseString(barcode);
+            return parserBuider.ParseString(barcode, symbologyIdentifier);
         }
 
         public static string? Build(PpnBarcode? barcode)
@@ -52,17 +52,21 @@ namespace BarcodeParserBuilder.Barcodes.PPN
                 barcodeString += $"{(string.IsNullOrWhiteSpace(barcodeString) ? "" : PpnBarcode.GroupSeparator.ToString())}{field.Identifier}{value}";
             }
 
-            return $"{PpnBarcode.Prefix}{barcodeString}{PpnBarcode.Suffix}";
+            var identifier = string.IsNullOrEmpty(barcode.ReaderInformation?.SymbologyIdentifier)
+                ? string.Empty
+                : $"]{barcode.ReaderInformation!.SymbologyIdentifier}";
+
+            return $"{identifier}{PpnBarcode.Prefix}{barcodeString}{PpnBarcode.Suffix}";
         }
 
-        protected override PpnBarcode? ParseString(string? barcodeString)
+        protected override PpnBarcode? ParseString(string? barcodeString, AimSymbologyIdentifier? symbologyIdentifier)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return default;
 
-                barcodeString = AimParser.StripBarcodePrefix(barcodeString!);
+                barcodeString = symbologyIdentifier?.StripSymbologyIdentifier(barcodeString!) ?? barcodeString!;
                 if (!barcodeString.StartsWith(PpnBarcode.Prefix, StringComparison.Ordinal) ||
                     !barcodeString.EndsWith(PpnBarcode.Suffix, StringComparison.Ordinal) ||
                     barcodeString.Length < (PpnBarcode.Prefix.Length + PpnBarcode.Suffix.Length))
@@ -71,7 +75,7 @@ namespace BarcodeParserBuilder.Barcodes.PPN
 
                 barcodeString = barcodeString[PpnBarcode.Prefix.Length..(barcodeString.Length - PpnBarcode.Suffix.Length)]; //remove prefix & suffix
 
-                var barcode = new PpnBarcode();
+                var barcode = new PpnBarcode(symbologyIdentifier);
                 var codeStream = new StringReader(barcodeString);
                 var applicationIdentifier = "";
                 while (codeStream.Peek() > -1)

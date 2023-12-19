@@ -12,11 +12,11 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
             return parserBuider.BuildString(barcode);
         }
 
-        public static bool TryParse(string? barcode, out Code39Barcode? code39Barcode)
+        public static bool TryParse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier, out Code39Barcode? code39Barcode)
         {
             try
             {
-                code39Barcode = Parse(barcode);
+                code39Barcode = Parse(barcode, symbologyIdentifier);
                 return true;
             }
             catch
@@ -26,37 +26,47 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
             return false;
         }
 
-
-        public static Code39Barcode? Parse(string? barcode)
+        public static Code39Barcode? Parse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             var parserBuider = new Code39BarcodeParserBuilder();
-            return parserBuider.ParseString(barcode);
+            return parserBuider.ParseString(barcode, symbologyIdentifier);
         }
 
-        protected override string? BuildString(Code39Barcode? barcode) => barcode?.SerialNumber;
+        protected override string? BuildString(Code39Barcode? barcode)
+        {
+            if (barcode?.ProductCode?.Code == null)
+                return string.Empty;
 
-        protected override Code39Barcode? ParseString(string? inputBarcode)
+            var barcodeStr = $"{barcode.Fields[nameof(barcode.ProductCode)].Build()}";
+            if (barcode.ReaderInformation is Code39SymbologyIdentifier symbologyIdentifier)
+                barcodeStr = $"{barcodeStr}{Code39Checksum.GetBarcodeCheckCharacter(barcodeStr, symbologyIdentifier)}";
+
+            if (!string.IsNullOrWhiteSpace(barcode.ReaderInformation?.SymbologyIdentifier))
+                barcodeStr = $"]{barcode.ReaderInformation!.SymbologyIdentifier}{barcodeStr}";
+
+            return barcodeStr;
+        }
+
+        protected override Code39Barcode? ParseString(string? inputBarcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(inputBarcode))
                     return null;
 
-                // Try to initialize the symbology identifier. This should succeed if the reading looks like having AIM identifier
-                // But it may not be from the correct set of the supported identifiers of particular barcode class
-                // AimSymbologyIdentifier is not responsible of validating that although
-                var code39identifier = AimSymbologyIdentifier.ParseString<Code39SymbologyIdentifier>(inputBarcode!);
+                if (symbologyIdentifier is not Code39SymbologyIdentifier code39identifier)
+                    throw new Code39ParseException("Invalid Code39 SymbologyIdentifier");
 
-                var dataContent = AimSymbologyIdentifier.StripSymbologyIdentifier(inputBarcode!);
+                inputBarcode = code39identifier.StripSymbologyIdentifier(inputBarcode!);
 
                 // Reading is validated now in the context of obtained identifier information 
                 // Same reading may give different validation results depending on the AIM identifier
-                if (!Validate(dataContent, code39identifier))
+                if (!Validate(inputBarcode, code39identifier))
                     throw new Code39ParseException("Code content does not match reader information");
 
                 // When the check character is transmitted, we strip it from the entire reading, 
                 // because Code39 does not have any specific structure and check character applies to entire reading
-                string strippedInput = Code39Barcode.StripCheckCharacter(dataContent, code39identifier);
+                string strippedInput = Code39Checksum.ValidateAndStripChecksum(inputBarcode, code39identifier);
 
                 // Although Code39 does not specify any structure whether the reading is ProductCode or SerialNumber
                 // or something else, we initialize the ProductCode, because it is most aligned with the current implementation

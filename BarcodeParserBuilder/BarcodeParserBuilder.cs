@@ -6,8 +6,10 @@ namespace BarcodeParserBuilder
     {
         private static readonly IAimParser _aimParser = new AimParser();
 
-        public bool TryParse(string? barcodeString, out Barcode? barcode) => TryParse(barcodeString, out barcode, out var _);
-        public bool TryParse(string? barcodeString, out Barcode? barcode, out string? feedback)
+        public bool TryParse(string? barcodeString, out Barcode? barcode) => TryParse(barcodeString, null, out barcode, out var _);
+        public bool TryParse(string? barcodeString, out Barcode? barcode, out string? feedback) => TryParse(barcodeString, null, out barcode, out feedback);
+        public bool TryParse(string? barcodeString, AimSymbologyIdentifier? symbologyIdentifier, out Barcode? barcode) => TryParse(barcodeString, symbologyIdentifier, out barcode, out var _);
+        public bool TryParse(string? barcodeString, AimSymbologyIdentifier? symbologyIdentifier, out Barcode? barcode, out string? feedback)
         {
             try
             {
@@ -17,27 +19,31 @@ namespace BarcodeParserBuilder
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return true;
 
-                foreach (var parserBuilder in _aimParser.GetParsers(barcodeString!))
+                var results = _aimParser.GetParsers(barcodeString!);
+                foreach (var parserBuilder in results.ParserBuilders)
                 {
                     var methodInfo = parserBuilder.GetMethod(nameof(GS1BarcodeParserBuilder.TryParse));
                     if (methodInfo == null)
                         continue;
 
                     //setup parameters and execute the method
-                    var tryParseParameters = new object?[2];
-                    tryParseParameters[0] = barcodeString;
-                    tryParseParameters[1] = barcode;
+                    var tryParseParameters = new object?[3]
+                    {
+                        barcodeString,
+                        results.SymbologyIdentifier,
+                        barcode
+                    };
                     var returnValue = methodInfo.Invoke(null, tryParseParameters);
 
                     if (returnValue is not bool canParse || !canParse)
                         continue;
 
                     //retrieve output parameter and return true
-                    barcode = (Barcode?)tryParseParameters[1];
+                    barcode = (Barcode?)tryParseParameters[2];
                     return true;
                 }
 
-                throw new Exception("Failed to parse barcode : no parser could accept barcode.");
+                throw new Exception($"Failed to parse barcode : no parser could accept barcode '{barcodeString}'.");
             }
             catch (Exception e)
             {

@@ -15,11 +15,11 @@ namespace BarcodeParserBuilder.Barcodes.MSI
             return parserBuider.BuildString(barcode);
         }
 
-        public static bool TryParse(string? barcode, out MsiBarcode? msiBarcode)
+        public static bool TryParse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier, out MsiBarcode? msiBarcode)
         {
             try
             {
-                msiBarcode = Parse(barcode);
+                msiBarcode = Parse(barcode, symbologyIdentifier);
                 return true;
             }
             catch
@@ -29,10 +29,10 @@ namespace BarcodeParserBuilder.Barcodes.MSI
             return false;
         }
 
-        public static MsiBarcode? Parse(string? barcode)
+        public static MsiBarcode? Parse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             var parserBuider = new MsiBarcodeParserBuilder();
-            return parserBuider.ParseString(barcode);
+            return parserBuider.ParseString(barcode, symbologyIdentifier);
         }
 
         protected override string? BuildString(MsiBarcode? barcode)
@@ -40,17 +40,21 @@ namespace BarcodeParserBuilder.Barcodes.MSI
             if (string.IsNullOrWhiteSpace(barcode?.ProductCode?.Code))
                 return null;
 
-            return barcode!.Fields[nameof(barcode.ProductCode)].Build();
+            var identifier = string.IsNullOrEmpty(barcode!.ReaderInformation?.SymbologyIdentifier)
+                ? string.Empty
+                : $"]{barcode.ReaderInformation!.SymbologyIdentifier}";
+
+            return $"{identifier}{barcode.Fields[nameof(barcode.ProductCode)].Build()}";
         }
 
-        protected override MsiBarcode? ParseString(string? barcodeString)
+        protected override MsiBarcode? ParseString(string? barcodeString, AimSymbologyIdentifier? symbologyIdentifier)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return null;
 
-                barcodeString = AimParser.StripBarcodePrefix(barcodeString!);
+                barcodeString = symbologyIdentifier?.StripSymbologyIdentifier(barcodeString!) ?? barcodeString!;
 
                 //technically, a MSI has no size limitation.
                 //however, it tends to clash with GS1 since GS1 has so many fields and MSI's product code can clash with GS1's
@@ -58,7 +62,7 @@ namespace BarcodeParserBuilder.Barcodes.MSI
                 if (barcodeString.Length > 10)
                     throw new MsiParseException($"Product Code has an unsupported length({barcodeString.Length}).");
 
-                var barcode = new MsiBarcode();
+                var barcode = new MsiBarcode(symbologyIdentifier);
                 barcode.Fields[nameof(barcode.ProductCode)].Parse(barcodeString);
                 return barcode;
             }

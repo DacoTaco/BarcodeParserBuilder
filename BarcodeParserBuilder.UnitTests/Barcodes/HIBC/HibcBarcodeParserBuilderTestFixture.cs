@@ -1,4 +1,5 @@
-﻿using BarcodeParserBuilder.Barcodes.HIBC;
+﻿using BarcodeParserBuilder.Aim;
+using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Exceptions.HIBC;
 using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
@@ -14,8 +15,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
         public void CanParseBarcodeString(string barcode, HibcBarcode expectedBarcode)
         {
             //Arrange & Act
-            var parsed = HibcBarcodeParserBuilder.TryParse(barcode, out var result);
-            Action parseAction = () => HibcBarcodeParserBuilder.Parse(barcode);
+            var parsed = HibcBarcodeParserBuilder.TryParse(barcode, expectedBarcode?.ReaderInformation, out var result);
+            Action parseAction = () => HibcBarcodeParserBuilder.Parse(barcode, expectedBarcode?.ReaderInformation);
 
             //Assert
             parsed.Should().BeTrue();
@@ -59,7 +60,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
             yield return new object[]
             {
                 "]zB+A123BJC5D6E71G+2001510X3GG",
-                new HibcBarcode(false)
+                new HibcBarcode(AimSymbologyIdentifier.ParseString("]zB"), false)
                 {
                     ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("BJC5D6E7"),
                     LabelerIdentificationCode = "A123",
@@ -103,14 +104,14 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
             yield return new object[]
             {
                 "]Q0+J123AQ3451/25330BC34567/S4012X",
-                new HibcBarcode()
+                new HibcBarcode(AimSymbologyIdentifier.ParseString("]Q0"))
                 {
                     LabelerIdentificationCode = "J123",
                     ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("AQ345"),
                     UnitOfMeasure = 1,
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2025, 11, 26), "25330", "yyJJJ"),
                     BatchNumber = "BC34567",
-                    SerialNumber = "4012"
+                    SerialNumber = "4012",
                 }
             };
 
@@ -134,7 +135,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
             yield return new object[]
             {
                 "]d1+A123ABCDEFGHI1234567891/$$420020216LOT123456789012345/SXYZ456789012345678/16D20130202$",
-                new HibcBarcode()
+                new HibcBarcode(AimSymbologyIdentifier.ParseString("]d1"))
                 {
                     LabelerIdentificationCode = "A123",
                     ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("ABCDEFGHI123456789"),
@@ -142,7 +143,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
                     ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 02, 02, 16, 00, 00), "20020216", "yyMMddHH"),
                     BatchNumber = "LOT123456789012345",
                     SerialNumber = "XYZ456789012345678",
-                    ProductionDate = new TestBarcodeDateTime(new DateTime(2013, 02, 02), "20130202", "yyyyMMdd")
+                    ProductionDate = new TestBarcodeDateTime(new DateTime(2013, 02, 02), "20130202", "yyyyMMdd"),
                 }
             };
 
@@ -183,6 +184,20 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
 
         public static IEnumerable<object[]> ValidHibcBuildingBarcodes()
         {
+            //1D - Multiple Lines concat - Old Format - aztec prefix
+            yield return new object[]
+            {
+                "]zB+A123BJC5D6E71G+$$52001510X3GD",
+                new HibcBarcode(AimSymbologyIdentifier.ParseString("]zB"), false)
+                {
+                    ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("BJC5D6E7"),
+                    LabelerIdentificationCode = "A123",
+                    UnitOfMeasure = 1,
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 01, 15), "20015", "yyJJJ"),
+                    BatchNumber = "10X3",
+                }
+            };
+
             //2D - Online Example #1
             yield return new object[]
             {
@@ -400,8 +415,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.HIBC
         public void InvalidBarcodeStringThrowsException(string barcode, string expectedMessage)
         {
             //Arrange & Act
-            var parsed = HibcBarcodeParserBuilder.TryParse(barcode, out var result);
-            Action parseAction = () => HibcBarcodeParserBuilder.Parse(barcode);
+            var parsed = HibcBarcodeParserBuilder.TryParse(barcode, null, out var result);
+            Action parseAction = () => HibcBarcodeParserBuilder.Parse(barcode, null);
 
             //Assert
             parsed.Should().BeFalse();

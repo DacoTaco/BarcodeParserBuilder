@@ -13,8 +13,8 @@ namespace BarcodeParserBuilder.Aim
     {
         internal static IEnumerable<Type> ParserBuilders { get; set; } = null!;
 
-        //this list is compiled using the Honeywell documentation found at https://support.honeywellaidc.com/s/article/List-of-barcode-symbology-AIM-Identifiers
-        internal static Dictionary<string, Func<string, string, IEnumerable<Type>>> AimPrefixMap = new()
+        //this list is compiled using the Honeywell documentation found at https://sps-support.honeywell.com/s/article/List-of-barcode-symbology-AIM-Identifiers
+        internal static Dictionary<string, AimParserProcessor> AimPrefixMap = new()
         {
             { "A", ParseCode39Barcode },
             { "C", ParseCode128Barcode },
@@ -22,11 +22,11 @@ namespace BarcodeParserBuilder.Aim
             { "E", ParseEanBarcode },
             { "e", ParseGS1Barcode },
             { "M", ParseMsiBarcode },
-            { "J", (modifier, _) => { if(modifier != "1") throw new NotImplementedException($"GS1's J information '{modifier}' is not implemented."); return new [] { typeof(GS1BarcodeParserBuilder)}; } },
+            { "J", (modifier, barcode) => { if(modifier != "1") throw new NotImplementedException($"GS1's J information '{modifier}' is not implemented."); return new AimProcessorResult(AimSymbologyIdentifier.ParseString<GS1AimSymbologyIdentifier>(barcode), typeof(GS1BarcodeParserBuilder)); } },
             { "Q", ParseQrCode },
             { "X", ParseCode39Barcode },
             //Z means no barcode
-            { "Z", (_, __) => Enumerable.Empty<Type>() },
+            { "Z", (_, __) => new AimProcessorResult(Enumerable.Empty<Type>(), null) },
             { "z", ParseAztecBarcode }
         };
 
@@ -35,30 +35,17 @@ namespace BarcodeParserBuilder.Aim
             ParserBuilders ??= CompileParserBuildersList();
         }
 
-        public IEnumerable<Type> GetParsers(string barcodeString)
+        public AimProcessorResult GetParsers(string barcodeString)
         {
             if (!barcodeString.StartsWith("]") || barcodeString.Length <= 3)
-                return ParserBuilders;
+                return new AimProcessorResult(ParserBuilders, null);
 
             var codeIdentifier = barcodeString[1].ToString();
             var modifier = barcodeString[2].ToString();
             if (!AimPrefixMap.ContainsKey(codeIdentifier))
-                return ParserBuilders;
+                return new AimProcessorResult(ParserBuilders, AimSymbologyIdentifier.ParseString(barcodeString));
 
             return AimPrefixMap[codeIdentifier].Invoke(modifier, barcodeString);
-        }
-
-        public string StripPrefix(string barcodeString) => StripBarcodePrefix(barcodeString);
-        internal static string StripBarcodePrefix(string barcodeString)
-        {
-            if (!barcodeString.StartsWith("]") || barcodeString.Length <= 3)
-                return barcodeString;
-
-            var codeIdentifier = barcodeString[1].ToString();
-            if (!AimPrefixMap.ContainsKey(codeIdentifier))
-                return barcodeString;
-
-            return barcodeString[3..];
         }
 
         private static int GetParserBuilderOrderNumber(Type type)
@@ -100,10 +87,11 @@ namespace BarcodeParserBuilder.Aim
                     .GetParameters()
                     .ToList();
 
-                //check if the method signature is how we expect it to : public static boolean TryParse(string, out Barcode)
+                //check if the method signature is how we expect it to : public static boolean TryParse(string, AimSymbologyIdentifier, out Barcode)
                 if (methodInfo.ReturnType != typeof(bool) ||
-                    parameters.Count != 2 ||
+                    parameters.Count != 3 ||
                     parameters.First().ParameterType != typeof(string) ||
+                    parameters[1].ParameterType != typeof(AimSymbologyIdentifier) ||
                     !parameters.Last().IsOut)
                     continue;
 
@@ -126,85 +114,58 @@ namespace BarcodeParserBuilder.Aim
             return parserBuilderList;
         }
 
-        internal static IEnumerable<Type> ParseCode39Barcode(string modifier, string _) =>
-            modifier switch
-            {
-                "0" or "1" or "2" or "3" or "4" or "5" or "7" => new[]
-                                    {
-                            typeof(Code39BarcodeParserBuilder)
-                        },
-                _ => throw new NotImplementedException($"Code39 information '{modifier}' is not implemented."),
-            };
+        internal static AimProcessorResult ParseCode39Barcode(string modifier, string barcode) => modifier switch
+        {
+            "0" or "1" or "2" or "3" or "4" or "5" or "7" => new AimProcessorResult(AimSymbologyIdentifier.ParseString<Code39SymbologyIdentifier>(barcode), typeof(Code39BarcodeParserBuilder)),
+            _ => throw new NotImplementedException($"Code39 information '{modifier}' is not implemented."),
+        };
 
-        internal static IEnumerable<Type> ParseCode128Barcode(string modifier, string _) =>
-            modifier switch
-            {
-                "0" => new[] { typeof(Code128BarcodeParserBuilder) },
-                "1" => new[] { typeof(GS1128BarcodeParserBuilder) },
-                "2" or "4" => new[]
-                                    {
-                            typeof(GS1128BarcodeParserBuilder),
-                            typeof(ISBT128BarcodeParserBuilder),
-                            typeof(HibcBarcodeParserBuilder),
-                            typeof(MsiBarcodeParserBuilder),
-                        },
-                _ => throw new NotImplementedException($"Code128 information '{modifier}' is not implemented."),
-            };
+        internal static AimProcessorResult ParseCode128Barcode(string modifier, string barcode) => modifier switch
+        {
+            "0" => new AimProcessorResult(AimSymbologyIdentifier.ParseString<Code128SymbologyIdentifier>(barcode), typeof(Code128BarcodeParserBuilder)),
+            "1" => new AimProcessorResult(AimSymbologyIdentifier.ParseString<Code128SymbologyIdentifier>(barcode), typeof(GS1128BarcodeParserBuilder)),
+            "2" or "4" => new AimProcessorResult(
+                AimSymbologyIdentifier.ParseString<Code128SymbologyIdentifier>(barcode),
+                typeof(GS1128BarcodeParserBuilder), typeof(ISBT128BarcodeParserBuilder), typeof(HibcBarcodeParserBuilder), typeof(MsiBarcodeParserBuilder)),
+            _ => throw new NotImplementedException($"Code128 information '{modifier}' is not implemented."),
+        };
 
-        internal static IEnumerable<Type> ParseEanBarcode(string modifier, string _) =>
-            modifier switch
-            {
-                "0" or "1" or "2" or "3" or "4" => new[]
-                                    {
-                            typeof(EanBarcodeParserBuilder),
-                        },
-                _ => throw new NotImplementedException($"EAN information '{modifier}' is not implemented."),
-            };
+        internal static AimProcessorResult ParseEanBarcode(string modifier, string barcode) => modifier switch
+        {
+            "0" or "1" or "2" or "3" or "4" => new AimProcessorResult(new[] { typeof(EanBarcodeParserBuilder) }, AimSymbologyIdentifier.ParseString<EanSymbologyIdentifier>(barcode)),
+            _ => throw new NotImplementedException($"EAN information '{modifier}' is not implemented."),
+        };
 
-        internal static IEnumerable<Type> ParseMsiBarcode(string modifier, string _) =>
-            modifier switch
-            {
-                "0" or "1" or "2" or "3" => new[]
-                                    {
-                            typeof(MsiBarcodeParserBuilder),
-                        },
-                _ => throw new NotImplementedException($"MSI information '{modifier}' is not implemented."),
-            };
+        internal static AimProcessorResult ParseMsiBarcode(string modifier, string barcode) => modifier switch
+        {
+            "0" or "1" or "2" or "3" => new AimProcessorResult(AimSymbologyIdentifier.ParseString(barcode), typeof(MsiBarcodeParserBuilder)),
+            _ => throw new NotImplementedException($"MSI information '{modifier}' is not implemented."),
+        };
 
-        internal static IEnumerable<Type> ParseDataMatrix(string modifier, string _) =>
-            modifier switch
-            {
-                "2" => new[] { typeof(GS1BarcodeParserBuilder) },
-                "0" or "1" or "3" or "4" or "5" or "6" => ParserBuilders,
-                _ => throw new NotImplementedException($"DataMatrix information '{modifier}' is not implemented."),
-            };
+        internal static AimProcessorResult ParseDataMatrix(string modifier, string barcode) => modifier switch
+        {
+            "2" => new AimProcessorResult(new[] { typeof(GS1BarcodeParserBuilder) }, AimSymbologyIdentifier.ParseString<GS1AimSymbologyIdentifier>(barcode)),
+            "0" or "1" or "3" or "4" or "5" or "6" => new AimProcessorResult(ParserBuilders, AimSymbologyIdentifier.ParseString(barcode)),
+            _ => throw new NotImplementedException($"DataMatrix information '{modifier}' is not implemented."),
+        };
 
-        internal static IEnumerable<Type> ParseGS1Barcode(string modifier, string _) =>
-            modifier switch
-            {
-                "0" or "1" or "2" or "3" => new[]
-                                    {
-                        typeof(GS1BarcodeParserBuilder),
-                    },
-                _ => throw new NotImplementedException($"GS1 information '{modifier}' is not implemented."),
-            };
+        internal static AimProcessorResult ParseGS1Barcode(string modifier, string barcode) => modifier switch
+        {
+            "0" or "1" or "2" or "3" => new AimProcessorResult(new[] { typeof(GS1BarcodeParserBuilder) }, AimSymbologyIdentifier.ParseString<GS1AimSymbologyIdentifier>(barcode)),
+            _ => throw new NotImplementedException($"GS1 information '{modifier}' is not implemented."),
+        };
 
-        internal static IEnumerable<Type> ParseQrCode(string modifier, string _) =>
-            modifier switch
-            {
-                "3" => new[]
-                                    {
-                        typeof(GS1BarcodeParserBuilder),
-                    },
-                "0" or "1" or "2" or "4" or "5" or "6" => ParserBuilders,
-                _ => throw new NotImplementedException($"QrCode information '{modifier}' is not implemented."),
-            };
+        internal static AimProcessorResult ParseQrCode(string modifier, string barcode) => modifier switch
+        {
+            "3" => new AimProcessorResult(AimSymbologyIdentifier.ParseString<GS1AimSymbologyIdentifier>(barcode), typeof(GS1BarcodeParserBuilder)),
+            "0" or "1" or "2" or "4" or "5" or "6" => new AimProcessorResult(ParserBuilders, AimSymbologyIdentifier.ParseString(barcode)),
+            _ => throw new NotImplementedException($"QrCode information '{modifier}' is not implemented."),
+        };
 
-        internal static IEnumerable<Type> ParseAztecBarcode(string modifier, string _) =>
-            modifier switch
-            {
-                "0" or "1" or "2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "A" or "B" or "C" => ParserBuilders,
-                _ => throw new NotImplementedException($"Aztec information '{modifier}' is not implemented."),
-            };
+        internal static AimProcessorResult ParseAztecBarcode(string modifier, string barcode) => modifier switch
+        {
+            "0" or "1" or "2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "A" or "B" or "C" => new AimProcessorResult(ParserBuilders, AimSymbologyIdentifier.ParseString(barcode)),
+            _ => throw new NotImplementedException($"Aztec information '{modifier}' is not implemented."),
+        };
     }
 }

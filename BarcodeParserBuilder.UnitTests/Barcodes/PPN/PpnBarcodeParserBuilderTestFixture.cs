@@ -1,4 +1,5 @@
-﻿using BarcodeParserBuilder.Barcodes.PPN;
+﻿using BarcodeParserBuilder.Aim;
+using BarcodeParserBuilder.Barcodes.PPN;
 using BarcodeParserBuilder.Exceptions.PPN;
 using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using BarcodeParserBuilder.UnitTests.Barcodes.GS1;
@@ -22,8 +23,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
         public void CanParseBarcodeString(string barcode, PpnBarcode expectedBarcode)
         {
             //Arrange & Act
-            PpnBarcodeParserBuilder.TryParse(barcode, out var result).Should().BeTrue($"'{barcode}' should be parsable");
-            Action parseAction = () => PpnBarcodeParserBuilder.Parse(barcode);
+            PpnBarcodeParserBuilder.TryParse(barcode, expectedBarcode?.ReaderInformation, out var result).Should().BeTrue($"'{barcode}' should be parsable");
+            Action parseAction = () => PpnBarcodeParserBuilder.Parse(barcode, expectedBarcode?.ReaderInformation);
 
             //Assert
             parseAction.Should().NotThrow($"'{barcode}' should be parsable");
@@ -47,30 +48,6 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
 
         public static IEnumerable<object[]> ValidPpnParsingBarcodes()
         {
-            //Random Order #1
-            yield return new object[]
-            {
-                $"{Prefix}9N111234568408{GroupSeparator}SHAHASERIAL12385{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
-                new PpnBarcode()
-                {
-                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
-                    BatchNumber = "ANDSOMEBatchNumber20",
-                    SerialNumber = "HAHASERIAL12385"
-                }
-            };
-
-            //Random Order #1 - QRCode
-            yield return new object[]
-            {
-                $"]Q2{Prefix}9N111234568408{GroupSeparator}SHAHASERIAL12385{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
-                new PpnBarcode()
-                {
-                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
-                    BatchNumber = "ANDSOMEBatchNumber20",
-                    SerialNumber = "HAHASERIAL12385"
-                }
-            };
-
             //Random Order #2
             yield return new object[]
             {
@@ -86,12 +63,12 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
             //Random Order #2 - DataMatrix
             yield return new object[]
             {
-                $"]d1{Prefix}SHAHASERIAL12385{GroupSeparator}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
-                new PpnBarcode()
+                $"]d1{Prefix}SHAHASERIAL12385{GroupSeparator}1TANDSOMEBatchNumber20{GroupSeparator}9N111234568408{Suffix}",
+                new PpnBarcode(AimSymbologyIdentifier.ParseString("]d1"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
                     BatchNumber = "ANDSOMEBatchNumber20",
-                    SerialNumber = "HAHASERIAL12385"
+                    SerialNumber = "HAHASERIAL12385",
                 }
             };
 
@@ -99,11 +76,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
             yield return new object[]
             {
                 $"]z5{Prefix}SHAHASERIAL12385{GroupSeparator}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{Suffix}",
-                new PpnBarcode()
+                new PpnBarcode(AimSymbologyIdentifier.ParseString("]z5"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
                     BatchNumber = "ANDSOMEBatchNumber20",
-                    SerialNumber = "HAHASERIAL12385"
+                    SerialNumber = "HAHASERIAL12385",
                 }
             };
         }
@@ -193,6 +170,30 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
                     ProductionDate = new TestBarcodeDateTime(new DateTime(2020, 12, 31), "20201231", PPNDateFormat)
                 }
             };
+
+            //Random Order #1
+            yield return new object[]
+            {
+                $"{Prefix}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{GroupSeparator}SHAHASERIAL12385{Suffix}",
+                new PpnBarcode()
+                {
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
+                    BatchNumber = "ANDSOMEBatchNumber20",
+                    SerialNumber = "HAHASERIAL12385"
+                }
+            };
+
+            //Random Order #1 - QRCode
+            yield return new object[]
+            {
+                $"]Q2{Prefix}9N111234568408{GroupSeparator}1TANDSOMEBatchNumber20{GroupSeparator}SHAHASERIAL12385{Suffix}",
+                new PpnBarcode(AimSymbologyIdentifier.ParseString("]Q2"))
+                {
+                    ProductCode = TestProductCode.CreateProductCode<PpnProductCode>("111234568408"),
+                    BatchNumber = "ANDSOMEBatchNumber20",
+                    SerialNumber = "HAHASERIAL12385",
+                }
+            };
         }
 
         [Theory]
@@ -200,8 +201,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.PPN
         public void InvalidBarcodeStringThrowsException(string barcode, string expectedMessage)
         {
             //Arrange & Act
-            var parsed = PpnBarcodeParserBuilder.TryParse(barcode, out var result);
-            Action parseAction = () => PpnBarcodeParserBuilder.Parse(barcode);
+            var parsed = PpnBarcodeParserBuilder.TryParse(barcode, null, out var result);
+            Action parseAction = () => PpnBarcodeParserBuilder.Parse(barcode, null);
 
             //Assert
             parsed.Should().BeFalse($"'{barcode}' should not be parsable");

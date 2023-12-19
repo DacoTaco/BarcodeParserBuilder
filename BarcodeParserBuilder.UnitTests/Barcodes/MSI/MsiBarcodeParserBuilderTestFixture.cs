@@ -1,4 +1,5 @@
-﻿using BarcodeParserBuilder.Barcodes.MSI;
+﻿using BarcodeParserBuilder.Aim;
+using BarcodeParserBuilder.Barcodes.MSI;
 using BarcodeParserBuilder.Exceptions.MSI;
 using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
@@ -10,12 +11,11 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
     {
         [Theory]
         [MemberData(nameof(ValidMsiBarcodes))]
-        [MemberData(nameof(ValidMsiParseBarcodes))]
         public void CanParseBarcodeString(string barcode, MsiBarcode expectedBarcode)
         {
             //Arrange & Act
-            Action buildAction = () => MsiBarcodeParserBuilder.Parse(barcode);
-            var parsed = MsiBarcodeParserBuilder.TryParse(barcode, out var result);
+            Action buildAction = () => MsiBarcodeParserBuilder.Parse(barcode, expectedBarcode?.ReaderInformation);
+            var parsed = MsiBarcodeParserBuilder.TryParse(barcode, expectedBarcode?.ReaderInformation, out var result);
 
             //Assert
             parsed.Should().BeTrue("barcode should be parsable");
@@ -94,15 +94,12 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
                     ProductCode = TestProductCode.CreateProductCode<MsiProductCode>("123456741"),
                 }
             };
-        }
 
-        public static IEnumerable<object[]> ValidMsiParseBarcodes()
-        {
             //APB - Dafalgan 500mg
             yield return new object[]
             {
                 $"]M033915059",
-                new MsiBarcode()
+                new MsiBarcode(AimSymbologyIdentifier.ParseString("]M0"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<MsiProductCode>("33915059"),
                 }
@@ -114,8 +111,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.MSI
         public void InvalidBarcodeStringThrowsException(string barcode, string expectedMessage)
         {
             //Arrange & Act
-            Action parseAction = () => MsiBarcodeParserBuilder.Parse(barcode);
-            var parsed = MsiBarcodeParserBuilder.TryParse(barcode, out var result);
+            Action parseAction = () => MsiBarcodeParserBuilder.Parse(barcode, null);
+            var parsed = MsiBarcodeParserBuilder.TryParse(barcode, null, out var result);
 
             //Assert
             parsed.Should().BeFalse("barcode should be not parsable");

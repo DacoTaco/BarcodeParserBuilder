@@ -12,11 +12,11 @@ namespace BarcodeParserBuilder.Barcodes.EAN
             return parserBuider.BuildString(barcode);
         }
 
-        public static bool TryParse(string? barcode, out EanBarcode? eanBarcode)
+        public static bool TryParse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier, out EanBarcode? eanBarcode)
         {
             try
             {
-                eanBarcode = Parse(barcode);
+                eanBarcode = Parse(barcode, symbologyIdentifier);
                 return true;
             }
             catch
@@ -26,23 +26,23 @@ namespace BarcodeParserBuilder.Barcodes.EAN
             return false;
         }
 
-        public static EanBarcode? Parse(string? barcode)
+        public static EanBarcode? Parse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             var parserBuider = new EanBarcodeParserBuilder();
-            return parserBuider.ParseString(barcode);
+            return parserBuider.ParseString(barcode, symbologyIdentifier);
         }
 
-        protected override string? BuildString(EanBarcode? barcode) => barcode?.ProductCode?.Code;
+        protected override string? BuildString(EanBarcode? barcode) => barcode?.Fields[nameof(barcode.ProductCode)].Build();
 
-        protected override EanBarcode? ParseString(string? inputBarcode)
+        protected override EanBarcode? ParseString(string? inputBarcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(inputBarcode))
                     return null;
 
-                inputBarcode = AimParser.StripBarcodePrefix(inputBarcode!);
-                return new EanBarcode()
+                inputBarcode = symbologyIdentifier?.StripSymbologyIdentifier(inputBarcode!) ?? inputBarcode!;
+                return new EanBarcode(symbologyIdentifier as EanSymbologyIdentifier)
                 {
                     ProductCode = new GtinProductCode(inputBarcode)
                 };

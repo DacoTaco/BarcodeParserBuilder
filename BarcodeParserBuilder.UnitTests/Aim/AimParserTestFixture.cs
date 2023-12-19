@@ -1,5 +1,4 @@
-﻿using BarcodeParserBuilder.Abstraction;
-using BarcodeParserBuilder.Aim;
+﻿using BarcodeParserBuilder.Aim;
 using BarcodeParserBuilder.Barcodes.CODE128;
 using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Barcodes.EAN;
@@ -14,11 +13,11 @@ namespace BarcodeParserBuilder.UnitTests.Aim
 {
     public class AimParserTestFixture
     {
-        private readonly IAimParser _aimParser = new AimParser();
+        private readonly AimParser _aimParser = new();
 
         [Theory]
         [MemberData(nameof(ValidAimPrefixTestCases))]
-        public void PrefixReturnsCorrectParserBuilders(string prefix, IEnumerable<Type> expectedParserBuilders)
+        public void PrefixReturnsCorrectParserBuilders(string prefix, IEnumerable<Type> expectedParserBuilders, AimSymbologyIdentifier expectedIdentifier)
         {
             //Arrange
             var barcode = $"{prefix}49654";
@@ -28,13 +27,16 @@ namespace BarcodeParserBuilder.UnitTests.Aim
 
             //Assert
             result.Should().NotBeNull();
-            result.Should().HaveCount(expectedParserBuilders.Count());
+            if (expectedIdentifier != null)
+                result.SymbologyIdentifier.Should().BeOfType(expectedIdentifier.GetType());
+            result.SymbologyIdentifier.Should().Be(expectedIdentifier);
+            result.ParserBuilders.Should().HaveCount(expectedParserBuilders.Count());
 
             if (expectedParserBuilders.Any())
-                result.Should().Contain(expectedParserBuilders);
+                result.ParserBuilders.Should().Contain(expectedParserBuilders);
         }
 
-        public static TheoryData<string, IEnumerable<Type>> ValidAimPrefixTestCases()
+        public static TheoryData<string, IEnumerable<Type>, AimSymbologyIdentifier> ValidAimPrefixTestCases()
         {
             var code39Parsers = new[]
             {
@@ -54,80 +56,80 @@ namespace BarcodeParserBuilder.UnitTests.Aim
                 typeof(MsiBarcodeParserBuilder),
             };
 
-            return new TheoryData<string, IEnumerable<Type>>()
+            return new TheoryData<string, IEnumerable<Type>, AimSymbologyIdentifier>()
             {
                 //Code39
-                { "]A0", code39Parsers },
-                { "]A1", code39Parsers },
-                { "]A2", code39Parsers },
-                { "]A3", code39Parsers },
-                { "]A4", code39Parsers },
-                { "]A5", code39Parsers },
-                { "]A7", code39Parsers },
+                { "]A0", code39Parsers, new Code39SymbologyIdentifier("A0") },
+                { "]A1", code39Parsers, new Code39SymbologyIdentifier("A1") },
+                { "]A2", code39Parsers, new Code39SymbologyIdentifier("A2") },
+                { "]A3", code39Parsers, new Code39SymbologyIdentifier("A3") },
+                { "]A4", code39Parsers, new Code39SymbologyIdentifier("A4") },
+                { "]A5", code39Parsers, new Code39SymbologyIdentifier("A5") },
+                { "]A7", code39Parsers, new Code39SymbologyIdentifier("A7") },
 
                 //Code128
-                { "]C1", new[] {typeof(GS1128BarcodeParserBuilder)} },
-                { "]C0", code128Parsers },
-                { "]C2", gs1Parsers },
-                { "]C4", gs1Parsers },
+                { "]C1", new[] {typeof(GS1128BarcodeParserBuilder)}, new Code128SymbologyIdentifier("C1") },
+                { "]C0", code128Parsers, new Code128SymbologyIdentifier("C0") },
+                { "]C2", gs1Parsers, new Code128SymbologyIdentifier("C2") },
+                { "]C4", gs1Parsers, new Code128SymbologyIdentifier("C4") },
 
                 //DataMatrix
-                { "]d2", new[] {typeof(GS1BarcodeParserBuilder)} },
-                { "]d0", AimParser.ParserBuilders },
-                { "]d1", AimParser.ParserBuilders },
-                { "]d3", AimParser.ParserBuilders },
-                { "]d4", AimParser.ParserBuilders },
-                { "]d5", AimParser.ParserBuilders },
-                { "]d6", AimParser.ParserBuilders },
+                { "]d2", new[] {typeof(GS1BarcodeParserBuilder)}, new GS1AimSymbologyIdentifier("d2") },
+                { "]d0", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]d0") },
+                { "]d1", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]d1") },
+                { "]d3", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]d3") },
+                { "]d4", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]d4") },
+                { "]d5", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]d5") },
+                { "]d6", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]d6") },
 
                 //EAN
-                { "]E0", new[] {typeof(EanBarcodeParserBuilder)} },
-                { "]E1", new[] {typeof(EanBarcodeParserBuilder)} },
-                { "]E2", new[] {typeof(EanBarcodeParserBuilder)} },
-                { "]E3", new[] {typeof(EanBarcodeParserBuilder)} },
-                { "]E4", new[] {typeof(EanBarcodeParserBuilder)} },
+                { "]E0", new[] {typeof(EanBarcodeParserBuilder)}, new EanSymbologyIdentifier("E0") },
+                { "]E1", new[] {typeof(EanBarcodeParserBuilder)}, new EanSymbologyIdentifier("E1") },
+                { "]E2", new[] {typeof(EanBarcodeParserBuilder)}, new EanSymbologyIdentifier("E2") },
+                { "]E3", new[] {typeof(EanBarcodeParserBuilder)}, new EanSymbologyIdentifier("E3") },
+                { "]E4", new[] {typeof(EanBarcodeParserBuilder)}, new EanSymbologyIdentifier("E4") },
 
                 //GS1
-                { "]e0", new[] {typeof(GS1BarcodeParserBuilder) } },
-                { "]e1", new[] {typeof(GS1BarcodeParserBuilder) } },
-                { "]e2", new[] {typeof(GS1BarcodeParserBuilder) } },
-                { "]e3", new[] {typeof(GS1BarcodeParserBuilder) } },
+                { "]e0", new[] {typeof(GS1BarcodeParserBuilder) }, new GS1AimSymbologyIdentifier("e0") },
+                { "]e1", new[] {typeof(GS1BarcodeParserBuilder) }, new GS1AimSymbologyIdentifier("e1") },
+                { "]e2", new[] {typeof(GS1BarcodeParserBuilder) }, new GS1AimSymbologyIdentifier("e2") },
+                { "]e3", new[] {typeof(GS1BarcodeParserBuilder) }, new GS1AimSymbologyIdentifier("e3") },
 
                 //MSI
-                { "]M0", new[] {typeof(MsiBarcodeParserBuilder)} },
-                { "]M1", new[] {typeof(MsiBarcodeParserBuilder) } },
-                { "]M2", new[] {typeof(MsiBarcodeParserBuilder) } },
-                { "]M3", new[] {typeof(MsiBarcodeParserBuilder) } },
+                { "]M0", new[] {typeof(MsiBarcodeParserBuilder) }, AimSymbologyIdentifier.ParseString("]M0") },
+                { "]M1", new[] {typeof(MsiBarcodeParserBuilder) }, AimSymbologyIdentifier.ParseString("]M1") },
+                { "]M2", new[] {typeof(MsiBarcodeParserBuilder) }, AimSymbologyIdentifier.ParseString("]M2") },
+                { "]M3", new[] {typeof(MsiBarcodeParserBuilder) }, AimSymbologyIdentifier.ParseString("]M3") },
 
                 //??
-                { "]J1", new[] {typeof(GS1BarcodeParserBuilder) } },
+                { "]J1", new[] {typeof(GS1BarcodeParserBuilder) }, new GS1AimSymbologyIdentifier("J1") },
 
                 //QR Code
-                { "]Q3", new[] {typeof(GS1BarcodeParserBuilder)} },
-                { "]Q0", AimParser.ParserBuilders },
-                { "]Q1", AimParser.ParserBuilders },
-                { "]Q2", AimParser.ParserBuilders },
-                { "]Q4", AimParser.ParserBuilders },
-                { "]Q5", AimParser.ParserBuilders },
-                { "]Q6", AimParser.ParserBuilders },
+                { "]Q3", new[] {typeof(GS1BarcodeParserBuilder)}, new GS1AimSymbologyIdentifier("Q3") },
+                { "]Q0", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]Q0") },
+                { "]Q1", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]Q1") },
+                { "]Q2", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]Q2") },
+                { "]Q4", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]Q4") },
+                { "]Q5", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]Q5") },
+                { "]Q6", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]Q6") },
 
                 //No Barcode
-                { "]Z", Enumerable.Empty<Type>() },
+                { "]Z", Enumerable.Empty<Type>(), null },
 
                 //Aztec
-                { "]z0", AimParser.ParserBuilders },
-                { "]z1", AimParser.ParserBuilders },
-                { "]z2", AimParser.ParserBuilders },
-                { "]z3", AimParser.ParserBuilders },
-                { "]z4", AimParser.ParserBuilders },
-                { "]z5", AimParser.ParserBuilders },
-                { "]z6", AimParser.ParserBuilders },
-                { "]z7", AimParser.ParserBuilders },
-                { "]z8", AimParser.ParserBuilders },
-                { "]z9", AimParser.ParserBuilders },
-                { "]zA", AimParser.ParserBuilders },
-                { "]zB", AimParser.ParserBuilders },
-                { "]zC", AimParser.ParserBuilders },
+                { "]z0", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z0") },
+                { "]z1", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z1") },
+                { "]z2", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z2") },
+                { "]z3", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z3") },
+                { "]z4", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z4") },
+                { "]z5", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z5") },
+                { "]z6", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z6") },
+                { "]z7", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z7") },
+                { "]z8", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z8") },
+                { "]z9", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]z9") },
+                { "]zA", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]zA") },
+                { "]zB", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]zB") },
+                { "]zC", AimParser.ParserBuilders, AimSymbologyIdentifier.ParseString("]zC") },
             };
         }
     }

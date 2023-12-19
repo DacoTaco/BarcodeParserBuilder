@@ -4,7 +4,8 @@ namespace BarcodeParserBuilder.Barcodes.MSI
 {
     public class MsiBarcode : Barcode
     {
-        public MsiBarcode() : base() { }
+        public MsiBarcode() : this(null) { }
+        public MsiBarcode(AimSymbologyIdentifier? identifier) : base(identifier) { }
         public override BarcodeType BarcodeType => BarcodeType.MSI;
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()
         {

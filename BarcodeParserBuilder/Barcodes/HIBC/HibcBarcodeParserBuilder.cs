@@ -16,11 +16,11 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             return parserBuider.BuildString(barcode);
         }
 
-        public static bool TryParse(string? barcode, out HibcBarcode? hibcBarcode)
+        public static bool TryParse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier, out HibcBarcode? hibcBarcode)
         {
             try
             {
-                hibcBarcode = Parse(barcode);
+                hibcBarcode = Parse(barcode, symbologyIdentifier);
                 return true;
             }
             catch
@@ -30,10 +30,10 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             return false;
         }
 
-        public static HibcBarcode? Parse(string? barcode)
+        public static HibcBarcode? Parse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             var parserBuider = new HibcBarcodeParserBuilder();
-            return parserBuider.ParseString(barcode);
+            return parserBuider.ParseString(barcode, symbologyIdentifier);
         }
 
         public static IList<string> BuildList(HibcBarcode? barcode) => new HibcBarcodeParserBuilder().BuildBarcodes(barcode);
@@ -42,8 +42,11 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
         {
             var list = BuildBarcodes(barcode);
             var barcodeString = (list.Count <= 0) ? "" : list.Select(s => s).Aggregate((i, s) => i + s);
+            var identifier = string.IsNullOrEmpty(barcode?.ReaderInformation?.SymbologyIdentifier)
+                ? string.Empty
+                : $"]{barcode!.ReaderInformation!.SymbologyIdentifier}";
 
-            return string.IsNullOrWhiteSpace(barcodeString) ? null : barcodeString;
+            return string.IsNullOrWhiteSpace(barcodeString) ? null : $"{identifier}{barcodeString}";
         }
 
         protected override IList<string> BuildBarcodes(HibcBarcode? barcode)
@@ -176,14 +179,14 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
             return segments;
         }
 
-        protected override HibcBarcode? ParseString(string? barcodeString)
+        protected override HibcBarcode? ParseString(string? barcodeString, AimSymbologyIdentifier? symbologyIdentifier)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return null;
 
-                barcodeString = AimParser.StripBarcodePrefix(barcodeString!);
+                barcodeString = symbologyIdentifier?.StripSymbologyIdentifier(barcodeString!) ?? barcodeString!;
                 if (!Regex.IsMatch(barcodeString, HibcCheckCharacterCalculator.AllowedCharacterRegex))
                     throw new HIBCParseException("Invalid HIBC Character detected.");
 
@@ -223,7 +226,7 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
                     segments[^1] = segment.Remove(segment.Length - 1, 1);
                 }
 
-                var barcode = new HibcBarcode(is2DBarcode);
+                var barcode = new HibcBarcode(symbologyIdentifier, is2DBarcode);
                 char? linkCharacter = null;
                 foreach (var segment in segments)
                 {

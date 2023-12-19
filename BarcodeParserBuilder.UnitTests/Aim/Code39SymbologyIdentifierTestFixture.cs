@@ -1,9 +1,8 @@
-﻿using BarcodeParserBuilder.Barcodes.CODE39;
-using BarcodeParserBuilder.Infrastructure;
+﻿using BarcodeParserBuilder.Aim;
 using FluentAssertions;
 using Xunit;
 
-namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
+namespace BarcodeParserBuilder.UnitTests.Aim
 {
     public class Code39SymbologyIdentifierTestFixture
     {
@@ -20,7 +19,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
             //Arrange & Act
             Action parseAction = () =>
             {
-                var result = AimSymbologyIdentifier.FromRawReading<Code39SymbologyIdentifier>(readerModifier);
+                var result = AimSymbologyIdentifier.ParseString<Code39SymbologyIdentifier>(readerModifier);
                 result.SymbologyIdentifier.Should().Be(readerModifierValue);
             };
 
@@ -38,7 +37,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
             //Arrange & Act
             Action parseAction = () =>
             {
-                var result = AimSymbologyIdentifier.FromRawReading<Code39SymbologyIdentifier>(readerModifier);
+                var result = AimSymbologyIdentifier.ParseString<Code39SymbologyIdentifier>(readerModifier);
             };
 
             //Assert

@@ -1,4 +1,4 @@
-﻿namespace BarcodeParserBuilder.Barcodes.CODE39
+﻿namespace BarcodeParserBuilder.Infrastructure.ProductCodes
 {
     internal class Code39Productcode : ProductCode
     {

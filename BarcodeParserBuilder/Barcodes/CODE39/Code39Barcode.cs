@@ -4,8 +4,8 @@ namespace BarcodeParserBuilder.Barcodes.CODE39;
 
 public class Code39Barcode : Barcode
 {
-    public Code39Barcode() : base() { }
-    public Code39Barcode(Code39SymbologyIdentifier symbologyIdentifier) : base(symbologyIdentifier) { }
+    public Code39Barcode() : this(null) { }
+    public Code39Barcode(Code39SymbologyIdentifier? symbologyIdentifier) : base(symbologyIdentifier) { }
 
     public override ProductCode? ProductCode
     {
@@ -43,17 +43,5 @@ public class Code39Barcode : Barcode
     {
         get => throw new UnusedFieldException(nameof(SerialNumber));
         set => throw new UnusedFieldException(nameof(SerialNumber));
-    }
-
-    public static string StripCheckCharacter(string inputString, Code39SymbologyIdentifier symbologyIdentifier)
-    {
-        if (string.IsNullOrEmpty(inputString) || inputString!.Length < 2)
-            return inputString;
-
-        return symbologyIdentifier.SymbologyIdentifier switch
-        {
-            Code39SymbologyIdentifier.NoFullASCIIMod43ChecksumTransmittedValue or Code39SymbologyIdentifier.FullASCIIMod43ChecksumTransmittedValue => inputString[0..^1].ToString(),
-            _ => inputString,
-        };
     }
 }

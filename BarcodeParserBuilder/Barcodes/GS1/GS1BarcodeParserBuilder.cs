@@ -9,11 +9,11 @@ namespace BarcodeParserBuilder.Barcodes.GS1
         //Overwrite the internal orderNumber to be a high number. this should make it last when ordered
         internal static new int ParsingOrderNumber => 0xFF;
 
-        public static bool TryParse(string barcode, out GS1Barcode? gs1Barcode)
+        public static bool TryParse(string barcode, AimSymbologyIdentifier? symbologyIdentifier, out GS1Barcode? gs1Barcode)
         {
             try
             {
-                gs1Barcode = Parse(barcode);
+                gs1Barcode = Parse(barcode, symbologyIdentifier);
                 return true;
             }
             catch
@@ -23,10 +23,10 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return false;
         }
 
-        public static GS1Barcode? Parse(string? barcode)
+        public static GS1Barcode? Parse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             var parserBuider = new GS1BarcodeParserBuilder();
-            return parserBuider.ParseString(barcode);
+            return parserBuider.ParseString(barcode, symbologyIdentifier);
         }
 
         public static string? Build(GS1Barcode? barcode)
@@ -69,18 +69,18 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return barcodeString;
         }
 
-        protected override T? ParseString(string? barcodeString)
+        protected override T? ParseString(string? barcodeString, AimSymbologyIdentifier? symbologyIdentifier)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return default;
 
-                barcodeString = AimParser.StripBarcodePrefix(barcodeString!);
+                barcodeString = symbologyIdentifier?.StripSymbologyIdentifier(barcodeString!) ?? barcodeString!;
                 if (barcodeString.FirstOrDefault() == GS1Barcode.GroupSeparator)
                     barcodeString = barcodeString[1..];
 
-                var barcode = Activator.CreateInstance<T>();
+                var barcode = (T)Activator.CreateInstance(typeof(T), symbologyIdentifier);
                 var codeStream = new StringReader(barcodeString);
                 var applicationIdentifier = "";
                 while (codeStream.Peek() > -1)

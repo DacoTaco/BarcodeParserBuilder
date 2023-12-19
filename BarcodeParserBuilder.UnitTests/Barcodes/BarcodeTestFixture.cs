@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using BarcodeParserBuilder.Abstraction;
+using BarcodeParserBuilder.Aim;
 using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
@@ -38,9 +39,10 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes
                     .GetParameters()
                     .ToList();
 
-                parameters.Should().HaveCount(2, $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should have 2 parameters");
-                parameters.First().ParameterType.Should().Be(typeof(string), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, out barcode)");
-                parameters.Last().IsOut.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, out barcode)");
+                parameters.Should().HaveCount(3, $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should have 3 parameters");
+                parameters.First().ParameterType.Should().Be(typeof(string), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, AimSymbologyIdentifier? identifier, out barcode)");
+                parameters.ElementAt(1).ParameterType.Should().Be(typeof(AimSymbologyIdentifier), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, AimSymbologyIdentifier? identifier, out barcode)");
+                parameters.Last().IsOut.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, AimSymbologyIdentifier? identifier, out barcode)");
             }
         }
 

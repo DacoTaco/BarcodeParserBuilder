@@ -5,7 +5,9 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
     public class HibcBarcode : Barcode
     {
         public HibcBarcode() : this(true) { }
-        public HibcBarcode(bool is2DBarcode) : base()
+        public HibcBarcode(bool is2DBarcode) : this(null, is2DBarcode) { }
+        public HibcBarcode(AimSymbologyIdentifier? symbologyIdentifier) : this(symbologyIdentifier, true) { }
+        public HibcBarcode(AimSymbologyIdentifier? symbologyIdentifier, bool is2DBarcode) : base(symbologyIdentifier)
         {
             Is2DBarcode = is2DBarcode;
         }

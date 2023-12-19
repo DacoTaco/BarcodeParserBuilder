@@ -1,4 +1,4 @@
-﻿using BarcodeParserBuilder.Abstraction;
+﻿using BarcodeParserBuilder.Aim;
 using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Barcodes.GS1;
@@ -6,6 +6,8 @@ using BarcodeParserBuilder.Barcodes.HIBC;
 using BarcodeParserBuilder.Barcodes.MSI;
 using BarcodeParserBuilder.Barcodes.PPN;
 using BarcodeParserBuilder.Infrastructure.ProductCodes;
+using BarcodeParserBuilder.UnitTests.Barcodes.CODE128;
+using BarcodeParserBuilder.UnitTests.Barcodes.CODE39;
 using BarcodeParserBuilder.UnitTests.Barcodes.EAN;
 using BarcodeParserBuilder.UnitTests.Barcodes.GS1;
 using BarcodeParserBuilder.UnitTests.Barcodes.HIBC;
@@ -30,8 +32,10 @@ namespace BarcodeParserBuilder.UnitTests
         public static IEnumerable<object[]> ValidMsiBarcodes() => MsiBarcodeParserBuilderTestFixture.ValidMsiBarcodes();
         public static IEnumerable<object[]> ValidPpnBarcodes() => PpnBarcodeParserBuilderTestFixture.ValidPpnBarcodes();
         public static IEnumerable<object[]> ValidHibcBarcodes() => HibcBarcodeParserBuilderTestFixture.ValidHibcParserBuilderBarcodes();
+        public static IEnumerable<object[]> ValidCode39Barcodes() => Code39ParserBuilderTestFixture.ValidCode39ParsingBarcodes();
+        public static IEnumerable<object[]> ValidCode128Barcodes() => Code128ParserBuilderTestFixture.ValidCode128ParsingBarcodes();
 
-        private readonly IBarcodeParserBuilder _parserBuilder;
+        private readonly BarcodeParserBuilder _parserBuilder;
 
         public BarcodeParserBuilderTestFixture()
         {
@@ -47,14 +51,16 @@ namespace BarcodeParserBuilder.UnitTests
         [MemberData(nameof(ValidMsiBarcodes))]
         [MemberData(nameof(ValidPpnBarcodes))]
         [MemberData(nameof(ValidHibcBarcodes))]
+        [MemberData(nameof(ValidCode39Barcodes))]
+        [MemberData(nameof(ValidCode128Barcodes))]
         public void CanParseBarcodes(string barcode, Barcode expectedBarcode)
         {
             //Arrange & Act
             var parsed = _parserBuilder.TryParse(barcode, out var result, out var feedback);
 
             //Assert
-            parsed.Should().BeTrue();
             feedback.Should().BeNull();
+            parsed.Should().BeTrue();
             CompareBarcodeObjects(expectedBarcode, result);
         }
 
@@ -66,6 +72,8 @@ namespace BarcodeParserBuilder.UnitTests
         [MemberData(nameof(ValidMsiBarcodes))]
         [MemberData(nameof(ValidPpnBarcodes))]
         [MemberData(nameof(ValidHibcBarcodes))]
+        [MemberData(nameof(ValidCode39Barcodes))]
+        [MemberData(nameof(ValidCode128Barcodes))]
         public void CanBuildBarcodes(string expectedString, Barcode barcode)
         {
             //Arrange
@@ -88,14 +96,13 @@ namespace BarcodeParserBuilder.UnitTests
 
             //Assert
             result.Should().BeFalse($" feedback must not signal success: {feedback}");
-            feedback.Should().Be("Failed to parse barcode : no parser could accept barcode.");
+            feedback.Should().Be($"Failed to parse barcode : no parser could accept barcode '{barcode}'.");
         }
 
         public static IEnumerable<object[]> ValidParseBarcodes()
         => EanBarcodeParserBuilderTestFixture.ValidEanParsingBarcodes()
             .Concat(GS1BarcodeParserBuilderTestFixture.ValidGs1ParsingBarcodes())
             .Concat(GS1128BarcodeParserBuilderTestFixture.ValidGs1128ParsingBarcodes())
-            .Concat(MsiBarcodeParserBuilderTestFixture.ValidMsiParseBarcodes())
             .Concat(HibcBarcodeParserBuilderTestFixture.ValidHibcParsingBarcodes())
             .Concat(PpnBarcodeParserBuilderTestFixture.ValidPpnParsingBarcodes());
 
@@ -112,7 +119,7 @@ namespace BarcodeParserBuilder.UnitTests
                 BatchNumber = null,
                 SerialNumber = null,
                 ExpirationDate = new TestBarcodeDateTime(new DateTime(2099, 12, 31), "991200", GS1BarcodeParserBuilderTestFixture.GS1DateFormat),
-                ProductionDate = new TestBarcodeDateTime(new DateTime(2002, 05, 04), "020504", GS1BarcodeParserBuilderTestFixture.GS1DateFormat)
+                ProductionDate = new TestBarcodeDateTime(new DateTime(2002, 05, 04), "020504", GS1BarcodeParserBuilderTestFixture.GS1DateFormat),
             };
             gs1Barcode.Fields["20"].SetValue("BL");
             gs1Barcode.Fields["240"].SetValue("40600199T");
@@ -151,7 +158,7 @@ namespace BarcodeParserBuilder.UnitTests
             yield return new object[]
             {
                 $"{SymbologyPrefix}0134567890123457{SymbologyPrefix}103456789{SymbologyPrefix}11020504{SymbologyPrefix}213456789-012",
-                new GS1128Barcode()
+                new GS1128Barcode(new Code128SymbologyIdentifier("C1"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
@@ -162,7 +169,7 @@ namespace BarcodeParserBuilder.UnitTests
                     BatchNumber = "3456789",
                     SerialNumber = "3456789-012",
                     ExpirationDate = null,
-                    ProductionDate = new TestBarcodeDateTime(new DateTime(2002, 05, 04), "020504", GS1BarcodeParserBuilderTestFixture.GS1DateFormat)
+                    ProductionDate = new TestBarcodeDateTime(new DateTime(2002, 05, 04), "020504", GS1BarcodeParserBuilderTestFixture.GS1DateFormat),
                 }
             };
 

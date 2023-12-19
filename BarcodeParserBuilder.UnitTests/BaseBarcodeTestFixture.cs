@@ -44,6 +44,7 @@ namespace BarcodeParserBuilder.UnitTests
             }
 
             //Some barcode fields are unused in some types. we still need to compare those though.
+            ComparePossibleUnusedFields(() => expectedResult.ReaderInformation, () => parsedResult.ReaderInformation, "ReaderInformation");
             ComparePossibleUnusedFields(() => expectedResult.BatchNumber, () => parsedResult.BatchNumber, "BatchNumber");
             ComparePossibleUnusedFields(() => expectedResult.SerialNumber, () => parsedResult.SerialNumber, "SerialNumber");
             ComparePossibleUnusedFields(() => expectedResult.ExpirationDate?.DateTime, () => parsedResult.ExpirationDate?.DateTime, "ExpirationDate");

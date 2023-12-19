@@ -4,9 +4,9 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
 {
     public class Code128Barcode : Barcode
     {
-        public Code128Barcode() : base() { }
+        public Code128Barcode() : this(null) { }
 
-        public Code128Barcode(Code128SymbologyIdentifier symbologyIdentifier) : base(symbologyIdentifier) { }
+        public Code128Barcode(Code128SymbologyIdentifier? symbologyIdentifier) : base(symbologyIdentifier) { }
 
         public override ProductCode? ProductCode
         {

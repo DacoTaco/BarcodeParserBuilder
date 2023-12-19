@@ -6,7 +6,8 @@ namespace BarcodeParserBuilder.Barcodes.GS1
     {
         internal const char GroupSeparator = (char)0x1D;
 
-        public GS1Barcode() : base() { }
+        public GS1Barcode() : this(null) { }
+        public GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : base(symbologyIdentifier) { }
 
         public override BarcodeType BarcodeType => BarcodeType.GS1;
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()

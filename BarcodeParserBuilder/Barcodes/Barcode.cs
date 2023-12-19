@@ -11,7 +11,7 @@ namespace BarcodeParserBuilder.Barcodes
         /// But the barcode should still be usable without the reader information information
         /// </summary>
         /// <param name="information">Parsed and validated information</param>
-        public Barcode(AimSymbologyIdentifier information)
+        public Barcode(AimSymbologyIdentifier? information)
         {
             ReaderInformation = information;
         }
@@ -42,8 +42,7 @@ namespace BarcodeParserBuilder.Barcodes
         /// ReaderInformation is not part of the barcode but is crucial to interpret the reading correctly.
         /// Barcode readers can be configured to behave differently on the same reading and reader information informs about it
         /// </summary>
-        public AimSymbologyIdentifier? ReaderInformation { get; private set; }
-
+        public AimSymbologyIdentifier? ReaderInformation { get; private set; } = null;
     }
 
     public class FieldCollection : KeyedCollection<string, IBarcodeField>
@@ -64,6 +63,4 @@ namespace BarcodeParserBuilder.Barcodes
 
         internal bool Contains(string identifier) => _innerCollection.Contains(identifier);
     }
-
-
 }

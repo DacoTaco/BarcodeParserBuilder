@@ -1,4 +1,5 @@
-﻿using BarcodeParserBuilder.Barcodes.EAN;
+﻿using BarcodeParserBuilder.Aim;
+using BarcodeParserBuilder.Barcodes.EAN;
 using BarcodeParserBuilder.Exceptions.EAN;
 using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
@@ -14,8 +15,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
         public void CanParseBarcodeString(string barcode, EanBarcode expectedBarcode)
         {
             //Arrange & Act
-            EanBarcodeParserBuilder.TryParse(barcode, out var result).Should().BeTrue($"'{barcode}' should be parsable");
-            Action parseAction = () => EanBarcodeParserBuilder.Parse(barcode);
+            EanBarcodeParserBuilder.TryParse(barcode, expectedBarcode.ReaderInformation, out var result).Should().BeTrue($"'{barcode}' should be parsable");
+            Action parseAction = () => EanBarcodeParserBuilder.Parse(barcode, expectedBarcode.ReaderInformation);
 
             //Assert
             parseAction.Should().NotThrow($"'{barcode}' should be parsable");
@@ -43,14 +44,14 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
             yield return new object[]
             {
                 $"]E05420046520228",
-                new EanBarcode
+                new EanBarcode(new EanSymbologyIdentifier("E0"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("5420046520228", (productCode) =>
                     {
                         productCode.Type = ProductCodeType.EAN;
                         productCode.Schema = GtinProductScheme.Unknown;
                         productCode.Value = "542004652022";
-                    }),
+                    })
                 }
             };
 
@@ -58,14 +59,14 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
             yield return new object[]
             {
                 "]E01234567890128",
-                new EanBarcode
+                new EanBarcode(new EanSymbologyIdentifier("E0"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("1234567890128", (productCode) =>
                     {
                         productCode.Type = ProductCodeType.EAN;
                         productCode.Value = "123456789012";
                         productCode.Code = "1234567890128";
-                    }),
+                    })
                 }
             };
         }
@@ -169,8 +170,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
         public void InvalidBarcodeStringThrowsException(string barcode, string expectedMessage)
         {
             //Arrange & Act
-            EanBarcodeParserBuilder.TryParse(barcode, out var result).Should().BeFalse($"'{barcode}' should not be parsable");
-            Action parseAction = () => EanBarcodeParserBuilder.Parse(barcode);
+            EanBarcodeParserBuilder.TryParse(barcode, null, out var result).Should().BeFalse($"'{barcode}' should not be parsable");
+            Action parseAction = () => EanBarcodeParserBuilder.Parse(barcode, null);
 
             //Assert
             parseAction.Should()

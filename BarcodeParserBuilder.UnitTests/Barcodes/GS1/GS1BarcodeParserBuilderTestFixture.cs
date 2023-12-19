@@ -1,4 +1,5 @@
-﻿using BarcodeParserBuilder.Barcodes.GS1;
+﻿using BarcodeParserBuilder.Aim;
+using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Exceptions.GS1;
 using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
@@ -17,8 +18,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
         public void CanParseBarcodeString(string barcode, GS1Barcode expectedBarcode)
         {
             //Arrange & Act
-            var parsed = GS1BarcodeParserBuilder.TryParse(barcode, out var result);
-            Action parseAction = () => GS1BarcodeParserBuilder.Parse(barcode);
+            var parsed = GS1BarcodeParserBuilder.TryParse(barcode, expectedBarcode.ReaderInformation, out var result);
+            Action parseAction = () => GS1BarcodeParserBuilder.Parse(barcode, expectedBarcode.ReaderInformation);
 
             //Assert
             parsed.Should().BeTrue();
@@ -84,7 +85,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             yield return new object[]
             {
                 $"]d220BL0103574661451947301{GroupSeparator}9915489{GroupSeparator}9815647{GroupSeparator}24040600199T{GroupSeparator}71025862471",
-                new GS1Barcode()
+                new GS1Barcode(new GS1AimSymbologyIdentifier("d2"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
                     {
@@ -93,7 +94,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                         productCode.Indicator = 0;
                     }),
                     BatchNumber = null,
-                    SerialNumber = null
+                    SerialNumber = null,
                 }
             };
 
@@ -137,7 +138,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             yield return new object[]
             {
                 $"]Q30134567890123457103456789",
-                new GS1Barcode()
+                new GS1Barcode(new GS1AimSymbologyIdentifier("Q3"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
@@ -146,7 +147,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                         productCode.Indicator = 3;
                     }),
                     BatchNumber = "3456789",
-                    SerialNumber = null
+                    SerialNumber = null,
                 }
             };
 
@@ -154,7 +155,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             yield return new object[]
             {
                 $"]d20134567890123457103456789",
-                new GS1Barcode()
+                new GS1Barcode(new GS1AimSymbologyIdentifier("d2"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
@@ -163,7 +164,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                         productCode.Indicator = 3;
                     }),
                     BatchNumber = "3456789",
-                    SerialNumber = null
+                    SerialNumber = null,
                 }
             };
 
@@ -171,7 +172,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             yield return new object[]
             {
                 $"]J10134567890123457103456789",
-                new GS1Barcode()
+                new GS1Barcode(new GS1AimSymbologyIdentifier("J1"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("34567890123457", (productCode) =>
                     {
@@ -180,7 +181,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                         productCode.Indicator = 3;
                     }),
                     BatchNumber = "3456789",
-                    SerialNumber = null
+                    SerialNumber = null,
                 }
             };
 
@@ -188,7 +189,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
             yield return new object[]
             {
                 "]d20108430215011539112212221724022021S3736",
-                new GS1Barcode
+                new GS1Barcode(new GS1AimSymbologyIdentifier("d2"))
                 {
                     ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("08430215011539", (productCode) =>
                     {
@@ -198,13 +199,13 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                         productCode.Code = "08430215011539";
                     }),
                     SerialNumber = "S3736",
-                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2024, 02, 20), "240220", GS1BarcodeParserBuilderTestFixture.GS1DateFormat),
-                    ProductionDate = new TestBarcodeDateTime(new DateTime(2022, 12, 22), "221222", GS1BarcodeParserBuilderTestFixture.GS1DateFormat)
+                    ExpirationDate = new TestBarcodeDateTime(new DateTime(2024, 02, 20), "240220", GS1DateFormat),
+                    ProductionDate = new TestBarcodeDateTime(new DateTime(2022, 12, 22), "221222", GS1DateFormat),
                 }
             };
 
             //GS1 example 2
-            var gs1Barcode = new GS1Barcode()
+            var gs1Barcode = new GS1Barcode(new GS1AimSymbologyIdentifier("e0"))
             {
                 ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
                 {
@@ -214,8 +215,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
                 }),
                 BatchNumber = null,
                 SerialNumber = null,
-                ExpirationDate = new TestBarcodeDateTime(new DateTime(2099, 12, 31), "991200", GS1BarcodeParserBuilderTestFixture.GS1DateFormat),
-                ProductionDate = new TestBarcodeDateTime(new DateTime(2002, 05, 04), "020504", GS1BarcodeParserBuilderTestFixture.GS1DateFormat)
+                ExpirationDate = new TestBarcodeDateTime(new DateTime(2099, 12, 31), "991200", GS1DateFormat),
+                ProductionDate = new TestBarcodeDateTime(new DateTime(2002, 05, 04), "020504", GS1DateFormat),
             };
             gs1Barcode.Fields["20"].SetValue("BL");
             gs1Barcode.Fields["240"].SetValue("40600199T");
@@ -496,8 +497,8 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
         public void InvalidBarcodeStringThrowsException(string barcode, string expectedMessage)
         {
             //Arrange & Act
-            var parsed = GS1BarcodeParserBuilder.TryParse(barcode, out var result);
-            Action parseAction = () => GS1BarcodeParserBuilder.Parse(barcode);
+            var parsed = GS1BarcodeParserBuilder.TryParse(barcode, null, out var result);
+            Action parseAction = () => GS1BarcodeParserBuilder.Parse(barcode, null);
 
             //Assert
             parsed.Should().BeFalse();

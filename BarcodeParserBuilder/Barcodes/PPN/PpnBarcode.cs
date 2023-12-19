@@ -16,7 +16,9 @@ namespace BarcodeParserBuilder.Barcodes.PPN
         internal static string Prefix => $"[)>{RecordSeparator}06{GroupSeparator}";
         internal static string Suffix => $"{RecordSeparator}{EndOfTransmission}";
 
-        public PpnBarcode() : base() { }
+        public PpnBarcode() : this(null) { }
+        public PpnBarcode(AimSymbologyIdentifier? identifier) : base(identifier) { }
+
         public override BarcodeType BarcodeType => BarcodeType.PPN;
         public override ProductCode? ProductCode
         {

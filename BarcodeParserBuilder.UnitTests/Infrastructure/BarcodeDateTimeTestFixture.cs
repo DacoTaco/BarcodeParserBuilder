@@ -16,7 +16,7 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
 
             //Assert
             result.Should().NotBeNull();
-            result.DateTime.Should().Be(expectedDateTime);
+            result!.DateTime.Should().Be(expectedDateTime);
             result.StringValue.Should().Be(value);
         }
 
@@ -97,7 +97,7 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
 
             //Assert
             result.Should().NotBeNull();
-            result.DateTime.Should().Be(expectedDateTime);
+            result!.DateTime.Should().Be(expectedDateTime);
             result.StringValue.Should().Be(value);
         }
 
@@ -177,7 +177,7 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
 
             //Assert
             result.Should().NotBeNull();
-            result.DateTime.Should().Be(expectedDateTime);
+            result!.DateTime.Should().Be(expectedDateTime);
             result.StringValue.Should().Be(value);
         }
 
@@ -190,7 +190,7 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
 
             //Assert
             result.Should().NotBeNull();
-            result.DateTime.Should().Be(date);
+            result!.DateTime.Should().Be(date);
             result.StringValue.Should().Be(expectedValue);
         }
 

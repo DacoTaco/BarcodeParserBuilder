@@ -33,7 +33,7 @@
     /// Recommended:
     /// Implement also static properties which names and values represent all possible and allowed types of AIM identifier values
     /// </summary>
-    public abstract class AimSymbologyIdentifier : IComparable
+    public class AimSymbologyIdentifier : IComparable
     {
         public const string AimSymbologyIndicator = "]";
 
@@ -46,6 +46,7 @@
             SymbologyIdentifier = symbologyIdentifier;
         }
 
+        public static AimSymbologyIdentifier ParseString(string rawBarcode) => ParseString<AimSymbologyIdentifier>(rawBarcode);
         public static TAimIdentifier ParseString<TAimIdentifier>(string rawReading) where TAimIdentifier : AimSymbologyIdentifier
         {
             if (!rawReading.StartsWith(AimSymbologyIndicator))
@@ -61,7 +62,7 @@
             return (TAimIdentifier)Activator.CreateInstance(typeof(TAimIdentifier), identifier);
         }
 
-        public static string StripSymbologyIdentifier(string barcodeString)
+        public virtual string StripSymbologyIdentifier(string barcodeString)
         {
             return (!barcodeString.StartsWith(AimSymbologyIndicator) || barcodeString.Length <= 3)
                 ? barcodeString

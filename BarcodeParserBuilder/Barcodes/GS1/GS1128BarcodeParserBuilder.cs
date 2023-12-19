@@ -6,11 +6,11 @@ namespace BarcodeParserBuilder.Barcodes.GS1
     {
         protected GS1128BarcodeParserBuilder() { }
 
-        public static bool TryParse(string? barcode, out GS1128Barcode? gs1128Barcode)
+        public static bool TryParse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier, out GS1128Barcode? gs1128Barcode)
         {
             try
             {
-                gs1128Barcode = Parse(barcode);
+                gs1128Barcode = Parse(barcode, symbologyIdentifier);
                 return true;
             }
             catch
@@ -20,10 +20,10 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             return false;
         }
 
-        public static GS1128Barcode? Parse(string? barcode)
+        public static GS1128Barcode? Parse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             var parserBuider = new GS1128BarcodeParserBuilder();
-            return parserBuider.ParseString(barcode);
+            return parserBuider.ParseString(barcode, symbologyIdentifier);
         }
 
         public static string? Build(GS1128Barcode? barcode)
@@ -37,18 +37,21 @@ namespace BarcodeParserBuilder.Barcodes.GS1
 
         public static IList<string> BuildList(GS1128Barcode? barcode) => new GS1128BarcodeParserBuilder().BuildBarcodes(barcode);
 
-        protected override GS1128Barcode? ParseString(string? barcodeString)
+        protected override GS1128Barcode? ParseString(string? barcodeString, AimSymbologyIdentifier? symbologyIdentifier)
         {
             try
             {
+                if (symbologyIdentifier is not Code128SymbologyIdentifier identifier)
+                    throw new GS1128ParseException($"Invalid GS1-128 identifier.");
+
                 if (string.IsNullOrWhiteSpace(barcodeString))
                     return null;
 
-                if (!barcodeString!.StartsWith(GS1128Barcode.SymbologyPrefix, StringComparison.Ordinal))
+                if (identifier.SymbologyIdentifier != Code128SymbologyIdentifier.FNC1InFirstSymbolValue)
                     throw new GS1128ParseException("Barcode does not start with the Symbology Prefix.");
 
-                barcodeString = barcodeString.Replace(GS1128Barcode.SymbologyPrefix, GS1Barcode.GroupSeparator.ToString());
-                return base.ParseString(barcodeString);
+                barcodeString = identifier.StripSymbologyIdentifier(barcodeString!).Replace($"]{Code128SymbologyIdentifier.FNC1InFirstSymbolValue}", GS1Barcode.GroupSeparator.ToString());
+                return base.ParseString(barcodeString, symbologyIdentifier);
             }
             catch (Exception e)
             {
@@ -69,7 +72,7 @@ namespace BarcodeParserBuilder.Barcodes.GS1
                 if (string.IsNullOrWhiteSpace(value))
                     continue;
 
-                list.Add($"{GS1128Barcode.SymbologyPrefix}{field.Identifier}{value}");
+                list.Add($"]{barcode.ReaderInformation!.SymbologyIdentifier}{field.Identifier}{value}");
             }
 
             return list;

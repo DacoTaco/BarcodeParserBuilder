@@ -12,11 +12,11 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
             return parserBuilder.BuildString(barcode);
         }
 
-        public static bool TryParse(string? barcode, out Code128Barcode? code128Barcode)
+        public static bool TryParse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier, out Code128Barcode? code128Barcode)
         {
             try
             {
-                code128Barcode = Parse(barcode);
+                code128Barcode = Parse(barcode, symbologyIdentifier);
                 return true;
             }
             catch
@@ -26,41 +26,53 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
             return false;
         }
 
-        public static Code128Barcode? Parse(string? barcode)
+        public static Code128Barcode? Parse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             var parserBuider = new Code128BarcodeParserBuilder();
-            return parserBuider.ParseString(barcode);
+            return parserBuider.ParseString(barcode, symbologyIdentifier);
         }
 
-        protected override string? BuildString(Code128Barcode? barcode) => barcode?.ProductCode?.Code;
+        protected override string? BuildString(Code128Barcode? barcode)
+        {
+            if (barcode?.ProductCode?.Code == null)
+                return string.Empty;
 
-        protected override Code128Barcode? ParseString(string? inputBarcode)
+            var barcodeStr = barcode.Fields[nameof(barcode.ProductCode)].Build();
+            if (!string.IsNullOrWhiteSpace(barcode.ReaderInformation?.SymbologyIdentifier))
+                barcodeStr = $"]{barcode.ReaderInformation!.SymbologyIdentifier}{barcodeStr}";
+
+            return barcodeStr;
+        }
+
+        protected override Code128Barcode? ParseString(string? inputBarcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(inputBarcode))
                     return null;
 
-                // Try to initialize the symbology identifier. This should succeed if the reading looks like having AIM identifier
-                // But it may not be from the correct set of the supported identifiers of particular barcode class
-                // AimSymbologyIdentifier is not responsible of validating that although
-                Code128SymbologyIdentifier code128identifier = AimSymbologyIdentifier.ParseString<Code128SymbologyIdentifier>(inputBarcode!);
+                if (symbologyIdentifier is not Code128SymbologyIdentifier code128identifier)
+                    throw new Code128ParseException("Invalid Code128 Identifier");
 
-                if (!code128identifier.Equals(Code128SymbologyIdentifier.StandardNoFNC1))
+                if (code128identifier.SymbologyIdentifier != Code128SymbologyIdentifier.StandardNoFNC1Value)
                     throw new Code128ParseException("Not a standard Code128 barcode by the symbology identifier");
 
-                var dataContent = AimSymbologyIdentifier.StripSymbologyIdentifier(inputBarcode!);
+                inputBarcode = code128identifier.StripSymbologyIdentifier(inputBarcode!);
+
+                // There is no strict rules, how long the Code128 reading can be. But most readers are not able to read more than 55 symbols
+                if (inputBarcode.Length == 0 || inputBarcode.Length >= 55)
+                    throw new Code128ParseException("Invalid Code128 length");
 
                 // Reading is validated now in the context of obtained identifier information 
                 // Same reading may give different validation results depending on the AIM identifier
-                if (!Code128StringParserBuilder.Validate(dataContent, code128identifier))
+                if (!Validate(inputBarcode, code128identifier))
                     throw new Code128ParseException("Code content does not match reader information");
 
                 // Although Code128 does not specify any structure whether the reading is ProductCode or SerialNumber
                 // or something else, we initialize the ProductCode, because it is most aligned with the current implementation
                 return new Code128Barcode(code128identifier)
                 {
-                    ProductCode = new Code128ProductCode(dataContent)
+                    ProductCode = new Code128ProductCode(inputBarcode)
                 };
             }
             catch (Exception e)

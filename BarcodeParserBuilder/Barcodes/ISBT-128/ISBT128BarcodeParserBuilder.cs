@@ -4,11 +4,11 @@
     {
         protected ISBT128BarcodeParserBuilder() { }
 
-        public static bool TryParse(string? barcode, out ISBT128Barcode? isbt128Barcode)
+        public static bool TryParse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier, out ISBT128Barcode? isbt128Barcode)
         {
             try
             {
-                isbt128Barcode = Parse(barcode);
+                isbt128Barcode = Parse(barcode, symbologyIdentifier);
                 return true;
             }
             catch
@@ -18,10 +18,10 @@
             return false;
         }
 
-        public static ISBT128Barcode? Parse(string? barcode)
+        public static ISBT128Barcode? Parse(string? barcode, AimSymbologyIdentifier? symbologyIdentifier)
         {
             var parserBuider = new ISBT128BarcodeParserBuilder();
-            return parserBuider.ParseString(barcode);
+            return parserBuider.ParseString(barcode, symbologyIdentifier);
         }
 
         public static string? Build(ISBT128Barcode? barcode)
@@ -38,7 +38,7 @@
             throw new NotImplementedException();
         }
 
-        protected override ISBT128Barcode ParseString(string? barcodeString)
+        protected override ISBT128Barcode ParseString(string? barcodeString, AimSymbologyIdentifier? symbologyIdentifier)
         {
             throw new NotImplementedException();
         }

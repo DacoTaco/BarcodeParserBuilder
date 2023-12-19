@@ -12,8 +12,8 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
             if (string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if (!Code39StringParserBuilder.ValidateFullASCII(value))
-                throw new Code39ValidateException($"Invalid Code39 value '{value}'.");
+            if (!value.Any(c => c > 0xFF))
+                throw new Code39ValidateException($"Invalid Code128 value '{value}'.");
 
             return true;
         }

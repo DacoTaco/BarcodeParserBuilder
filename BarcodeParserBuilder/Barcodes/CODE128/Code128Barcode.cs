@@ -14,9 +14,16 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
             set => BarcodeFields[nameof(ProductCode)].SetValue(value);
         }
 
+        public override AimSymbologyIdentifier? ReaderInformation
+        {
+            get => (AimSymbologyIdentifier?)BarcodeFields[nameof(ReaderInformation)].Value;
+            protected set => BarcodeFields[nameof(ReaderInformation)].SetValue(value);
+        }
+
         protected override FieldCollection BarcodeFields { get; } = new()
         {
-            new BarcodeField<ProductCode>(BarcodeType.CODE128, nameof(ProductCode), 2, 48)
+            new BarcodeField<ProductCode>(BarcodeType.CODE128, nameof(ProductCode), 2, 48),
+            new BarcodeField<AimSymbologyIdentifier?>(BarcodeType.CODE128, nameof(ReaderInformation), 3),
         };
 
         public override BarcodeType BarcodeType => BarcodeType.CODE128;
@@ -44,6 +51,5 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
             get => throw new UnusedFieldException(nameof(SerialNumber));
             set => throw new UnusedFieldException(nameof(SerialNumber));
         }
-
     }
 }

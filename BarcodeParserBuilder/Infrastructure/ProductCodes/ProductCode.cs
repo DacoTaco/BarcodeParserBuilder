@@ -36,6 +36,7 @@
         public static HibcProductCode? ParseHibc(string? code) => string.IsNullOrWhiteSpace(code) ? null : new HibcProductCode(code!);
         public static MsiProductCode? ParseMsi(string? code) => string.IsNullOrWhiteSpace(code) ? null : new MsiProductCode(code!);
         public static PpnProductCode? ParsePpn(string? code) => string.IsNullOrWhiteSpace(code) ? null : new PpnProductCode(code!);
+        public static Code39ProductCode? ParseCode39(string? value) => string.IsNullOrEmpty(value) ? null : new Code39ProductCode(value!);
         public static Code128ProductCode? ParseCode128(string? value) => string.IsNullOrEmpty(value) ? null : new Code128ProductCode(value!);
     }
 }

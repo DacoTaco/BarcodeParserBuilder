@@ -57,19 +57,9 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
                 if (code128identifier.SymbologyIdentifier != Code128SymbologyIdentifier.StandardNoFNC1Value)
                     throw new Code128ParseException("Not a standard Code128 barcode by the symbology identifier");
 
-                inputBarcode = code128identifier.StripSymbologyIdentifier(inputBarcode!);
-
-                // There is no strict rules, how long the Code128 reading can be. But most readers are not able to read more than 55 symbols
-                if (inputBarcode.Length == 0 || inputBarcode.Length >= 55)
-                    throw new Code128ParseException("Invalid Code128 length");
-
-                // Reading is validated now in the context of obtained identifier information 
-                // Same reading may give different validation results depending on the AIM identifier
-                if (!Validate(inputBarcode, code128identifier))
-                    throw new Code128ParseException("Code content does not match reader information");
-
                 // Although Code128 does not specify any structure whether the reading is ProductCode or SerialNumber
                 // or something else, we initialize the ProductCode, because it is most aligned with the current implementation
+                inputBarcode = code128identifier.StripSymbologyIdentifier(inputBarcode!);
                 return new Code128Barcode(code128identifier)
                 {
                     ProductCode = new Code128ProductCode(inputBarcode)

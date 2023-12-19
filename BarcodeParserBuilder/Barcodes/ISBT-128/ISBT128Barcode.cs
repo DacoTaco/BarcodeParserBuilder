@@ -1,4 +1,4 @@
-namespace BarcodeParserBuilder.Barcodes.ISBT128
+﻿namespace BarcodeParserBuilder.Barcodes.ISBT128
 {
     public class ISBT128Barcode : Barcode
     {
@@ -9,7 +9,7 @@ namespace BarcodeParserBuilder.Barcodes.ISBT128
         public override BarcodeDateTime? ProductionDate { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public override string? BatchNumber { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public override string? SerialNumber { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public override AimSymbologyIdentifier? ReaderInformation { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
         protected override FieldCollection BarcodeFields => throw new System.NotImplementedException();
     }
 }

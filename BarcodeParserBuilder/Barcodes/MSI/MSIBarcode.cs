@@ -9,9 +9,15 @@ namespace BarcodeParserBuilder.Barcodes.MSI
         public override BarcodeType BarcodeType => BarcodeType.MSI;
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()
         {
-            new BarcodeField<ProductCode>(BarcodeType.MSI, nameof(ProductCode), 3, null)
+            new BarcodeField<ProductCode>(BarcodeType.MSI, nameof(ProductCode), 3, null),
+            new BarcodeField<AimSymbologyIdentifier?>(BarcodeType.MSI, nameof(ReaderInformation), 3),
         };
 
+        public override AimSymbologyIdentifier? ReaderInformation
+        {
+            get => (AimSymbologyIdentifier?)BarcodeFields[nameof(ReaderInformation)].Value;
+            protected set => BarcodeFields[nameof(ReaderInformation)].SetValue(value);
+        }
 
         public override ProductCode? ProductCode
         {

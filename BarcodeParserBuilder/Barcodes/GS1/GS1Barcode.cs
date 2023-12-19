@@ -115,6 +115,8 @@ namespace BarcodeParserBuilder.Barcodes.GS1
             new GS1Field("99", 90),
         };
 
+        public override AimSymbologyIdentifier? ReaderInformation { get; protected set; }
+
         public override ProductCode? ProductCode
         {
             get => (ProductCode?)BarcodeFields["01"].Value;

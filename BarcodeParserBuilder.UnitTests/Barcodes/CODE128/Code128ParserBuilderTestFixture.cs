@@ -80,7 +80,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE128
             },
             {
                 $"]C01234444\u263A222",
-                new Code128ParseException($"Failed to parse Code128 Barcode :{Environment.NewLine}Code content does not match reader information")
+                new Code128ParseException($"Failed to parse Code128 Barcode :{Environment.NewLine}Invalid Code128 value in '1234444\u263A222'.")
             }
         };
     }

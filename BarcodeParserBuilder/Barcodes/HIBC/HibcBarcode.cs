@@ -13,6 +13,8 @@ namespace BarcodeParserBuilder.Barcodes.HIBC
         }
         public bool Is2DBarcode { get; internal set; }
         public override BarcodeType BarcodeType => BarcodeType.HIBC;
+        public override AimSymbologyIdentifier? ReaderInformation { get; protected set; }
+
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()
         {
             new HibcField<ProductCode?>(nameof(ProductCode), 18),

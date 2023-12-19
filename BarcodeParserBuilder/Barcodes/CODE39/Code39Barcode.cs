@@ -13,9 +13,16 @@ public class Code39Barcode : Barcode
         set => BarcodeFields[nameof(ProductCode)].SetValue(value);
     }
 
+    public override AimSymbologyIdentifier? ReaderInformation
+    {
+        get => (AimSymbologyIdentifier?)BarcodeFields[nameof(ReaderInformation)].Value;
+        protected set => BarcodeFields[nameof(ReaderInformation)].SetValue(value);
+    }
+
     protected override FieldCollection BarcodeFields { get; } = new()
     {
-        new BarcodeField<ProductCode>(BarcodeType.CODE39, nameof(ProductCode), 2, 55)
+        new BarcodeField<ProductCode>(BarcodeType.CODE39, nameof(ProductCode), 2, 55),
+        new BarcodeField<AimSymbologyIdentifier?>(BarcodeType.CODE39, nameof(ReaderInformation), 3),
     };
 
     public override BarcodeType BarcodeType => BarcodeType.CODE39;

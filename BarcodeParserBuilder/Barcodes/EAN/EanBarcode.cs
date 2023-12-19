@@ -9,7 +9,8 @@ namespace BarcodeParserBuilder.Barcodes.EAN
 
         protected override FieldCollection BarcodeFields { get; } = new FieldCollection()
         {
-            new BarcodeField<ProductCode>(BarcodeType.EAN, nameof(ProductCode), 6, 10)
+            new BarcodeField<ProductCode>(BarcodeType.EAN, nameof(ProductCode), 6, 10),
+            new BarcodeField<AimSymbologyIdentifier?>(BarcodeType.EAN, nameof(ReaderInformation), 3)
         };
 
         public override BarcodeType BarcodeType => BarcodeType.EAN;
@@ -17,10 +18,13 @@ namespace BarcodeParserBuilder.Barcodes.EAN
         public override ProductCode? ProductCode
         {
             get => (ProductCode?)BarcodeFields[nameof(ProductCode)].Value;
-            set
-            {
-                BarcodeFields[nameof(ProductCode)].SetValue(value);
-            }
+            set => BarcodeFields[nameof(ProductCode)].SetValue(value);
+        }
+
+        public override AimSymbologyIdentifier? ReaderInformation
+        {
+            get => (AimSymbologyIdentifier?)BarcodeFields[nameof(ReaderInformation)].Value;
+            protected set => BarcodeFields[nameof(ReaderInformation)].SetValue(value);
         }
 
         public string? CompanyPrefix

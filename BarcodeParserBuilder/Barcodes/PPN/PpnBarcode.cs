@@ -20,6 +20,8 @@ namespace BarcodeParserBuilder.Barcodes.PPN
         public PpnBarcode(AimSymbologyIdentifier? identifier) : base(identifier) { }
 
         public override BarcodeType BarcodeType => BarcodeType.PPN;
+        public override AimSymbologyIdentifier? ReaderInformation { get; protected set; }
+
         public override ProductCode? ProductCode
         {
             get => (ProductCode?)(BarcodeFields["9N"].Value ?? BarcodeFields["8P"].Value);

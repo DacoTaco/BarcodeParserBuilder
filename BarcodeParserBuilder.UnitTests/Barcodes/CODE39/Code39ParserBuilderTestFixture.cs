@@ -48,7 +48,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                 $"]A01293AAS-.$/+% ",
                 new Code39Barcode(new Code39SymbologyIdentifier("A0"))
                 {
-                    ProductCode = new Code39Productcode("1293AAS-.$/+% "),
+                    ProductCode = new Code39ProductCode("1293AAS-.$/+% "),
                 }
             };
 
@@ -58,7 +58,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                 $"]A1CODE39W",
                 new Code39Barcode(new Code39SymbologyIdentifier("A1"))
                 {
-                    ProductCode = new Code39Productcode("CODE39"),
+                    ProductCode = new Code39ProductCode("CODE39"),
                 }
             };
 
@@ -68,7 +68,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                 $"]A2CODE39",
                 new Code39Barcode(new Code39SymbologyIdentifier("A2"))
                 {
-                    ProductCode = new Code39Productcode("CODE39"),
+                    ProductCode = new Code39ProductCode("CODE39"),
                 }
             };
 
@@ -78,7 +78,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                 $"]A3CODE39",
                 new Code39Barcode(new Code39SymbologyIdentifier("A3"))
                 {
-                    ProductCode = new Code39Productcode("CODE39"),
+                    ProductCode = new Code39ProductCode("CODE39"),
                 }
             };
 
@@ -88,7 +88,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                 $"]A4aaabbcre",
                 new Code39Barcode(new Code39SymbologyIdentifier("A4"))
                 {
-                    ProductCode = new Code39Productcode("aaabbcre"),
+                    ProductCode = new Code39ProductCode("aaabbcre"),
                 }
             };
 
@@ -98,7 +98,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                 $"]A5C39exO",
                 new Code39Barcode(new Code39SymbologyIdentifier("A5"))
                 {
-                    ProductCode = new Code39Productcode("C39ex"),
+                    ProductCode = new Code39ProductCode("C39ex"),
                 }
             };
 
@@ -108,7 +108,7 @@ namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
                 $"]A7C39ex",
                 new Code39Barcode(new Code39SymbologyIdentifier("A7"))
                 {
-                    ProductCode = new Code39Productcode("C39ex"),
+                    ProductCode = new Code39ProductCode("C39ex"),
                 }
             };
         }

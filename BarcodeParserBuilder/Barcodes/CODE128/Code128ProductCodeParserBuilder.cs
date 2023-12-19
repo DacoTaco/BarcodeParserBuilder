@@ -12,7 +12,7 @@ namespace BarcodeParserBuilder.Barcodes.CODE128
             if (string.IsNullOrWhiteSpace(value))
                 return true;
 
-            if (!Code128StringParserBuilder.ValidateFullASCII(value))
+            if (!value.Any(c => c > 0xFF))
                 throw new Code128ValidateException($"Invalid Code128 value '{value}'.");
 
             return true;

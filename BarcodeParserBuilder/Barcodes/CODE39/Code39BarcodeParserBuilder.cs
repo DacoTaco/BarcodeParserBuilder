@@ -44,6 +44,11 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
             if (!string.IsNullOrWhiteSpace(barcode.ReaderInformation?.SymbologyIdentifier))
                 barcodeStr = $"]{barcode.ReaderInformation!.SymbologyIdentifier}{barcodeStr}";
 
+            // Reading is validated now in the context of obtained identifier information 
+            // Same reading may give different validation results depending on the AIM identifier
+            if (!Validate(barcodeStr, (Code39SymbologyIdentifier)barcode.ReaderInformation!))
+                throw new Code39ParseException("Code content does not match reader information");
+
             return barcodeStr;
         }
 
@@ -72,13 +77,73 @@ namespace BarcodeParserBuilder.Barcodes.CODE39
                 // or something else, we initialize the ProductCode, because it is most aligned with the current implementation
                 return new Code39Barcode(code39identifier)
                 {
-                    ProductCode = new Code39Productcode(strippedInput)
+                    ProductCode = new Code39ProductCode(strippedInput)
                 };
             }
             catch (Exception e)
             {
                 throw new Code39ParseException($"Failed to parse Code39 Barcode :{Environment.NewLine}{e.Message}", e);
             }
+        }
+
+        /// <summary>
+        /// The validation depends from the reader symbology identifier and describes how the reading should be interpreted
+        /// </summary>
+        /// <param name="value">reading</param>
+        /// <param name="information">AimSymbologyIdentifier for the Code39</param>
+        /// <returns></returns>
+        internal bool Validate(string? value, Code39SymbologyIdentifier information)
+        {
+            return information.SymbologyIdentifier switch
+            {
+                Code39SymbologyIdentifier.FullASCIIOlnyModChecksumValue or
+                Code39SymbologyIdentifier.FullASCIINoChecksumValue or
+                Code39SymbologyIdentifier.FullASCIIMod43ChecksumTransmittedValue or
+                Code39SymbologyIdentifier.FullASCIIMod43ChecksumStrippedValue => ValidateFullASCII(value),
+                _ => ValidateCode39String(value),
+            };
+        }
+
+        /// <summary>
+        /// Code39 can contain full ASCII set of symbols
+        /// </summary>
+        /// <param name="value">reading</param>
+        /// <returns>whether the reading is subset of full ASCII</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        internal bool ValidateFullASCII(string? value)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            return System.Text.RegularExpressions.Regex.IsMatch(value!, "^[\x0-\x7F]+$");
+        }
+
+        /// <summary>
+        /// Regular Code39 can contain limited number of ASCII symbols A-Z, 0-9 and characters -,.,$,+,%,/
+        /// </summary>
+        /// <param name="value">reading</param>
+        /// <returns>whether reading is valid set of Code39 default charset</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        internal bool ValidateCode39String(string? value)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            return System.Text.RegularExpressions.Regex.IsMatch(value!, @"^[A-Z0-9\s\-\.\$\+\%\/]+$");
+        }
+
+        /// <summary>
+        /// There is no strict rules, how long the Code39 reading can be. But most readers are not able to read more than 55 symbols
+        /// </summary>
+        /// <param name="value">read string</param>
+        /// <returns>whether the reading is within the limit</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        internal bool ValidateCode39ContentLength(string? value)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            return value.Length > 1 && value.Length < 56;
         }
     }
 }

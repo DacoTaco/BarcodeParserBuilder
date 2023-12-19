@@ -42,7 +42,7 @@ namespace BarcodeParserBuilder.Barcodes
         /// ReaderInformation is not part of the barcode but is crucial to interpret the reading correctly.
         /// Barcode readers can be configured to behave differently on the same reading and reader information informs about it
         /// </summary>
-        public AimSymbologyIdentifier? ReaderInformation { get; private set; } = null;
+        public abstract AimSymbologyIdentifier? ReaderInformation { get; protected set; }
     }
 
     public class FieldCollection : KeyedCollection<string, IBarcodeField>

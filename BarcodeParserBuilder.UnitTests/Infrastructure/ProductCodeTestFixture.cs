@@ -162,5 +162,65 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure
                 .WithMessage(expectedMessage);
             result.Should().BeNull();
         }
+
+        [Theory]
+        [InlineData("AGBDOSIZ45973456O8")]
+        [InlineData("14F")]
+        public void CanParseCode128(string value)
+        {
+            //Arrange & Act
+            var result = ProductCode.ParseCode128(value);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Type.Should().Be(ProductCodeType.CODE128);
+            result.Code.Should().Be(value);
+        }
+
+        [Theory]
+        [InlineData("123456789\xFF\x100", "Invalid Code128 value in '123456789ÿĀ'.")] //Code128 - Invalid Characters
+        [InlineData("1234567890123456789123456789012345678912345678901234567891234567890123456789", "Invalid Code128 length.")] //Code128 - Max length
+        public void CanDetectInvalidCode128(string value, string expectedMessage)
+        {
+            //Arrange & Act
+            ProductCode result = null;
+            Action parseAction = () => result = ProductCode.ParseCode128(value);
+
+            //Assert
+            parseAction.Should()
+                .Throw<ArgumentException>()
+                .WithMessage(expectedMessage);
+            result.Should().BeNull();
+        }
+
+        [Theory]
+        [InlineData("AGBDOSIZ45973456O8")]
+        [InlineData("14F")]
+        public void CanParseCode39(string value)
+        {
+            //Arrange & Act
+            var result = ProductCode.ParseCode39(value);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Type.Should().Be(ProductCodeType.CODE39);
+            result.Code.Should().Be(value);
+        }
+
+        [Theory]
+        [InlineData("123456789\xFF\x100", "Invalid Code39 value in '123456789ÿĀ'.")] //Code128 - Invalid Characters
+        [InlineData("1234567890123456789123456789012345678912345678901234567891234567890123456789", "Invalid Code39 length.")] //Code128 - Max length
+        public void CanDetectInvalidCode39(string value, string expectedMessage)
+        {
+            //Arrange & Act
+            ProductCode result = null;
+            Action parseAction = () => result = ProductCode.ParseCode39(value);
+
+            //Assert
+            parseAction.Should()
+                .Throw<ArgumentException>()
+                .WithMessage(expectedMessage);
+            result.Should().BeNull();
+        }
     }
 }

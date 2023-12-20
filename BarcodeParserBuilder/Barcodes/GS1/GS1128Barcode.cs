@@ -1,11 +1,8 @@
-﻿using BarcodeParserBuilder.Infrastructure;
+﻿namespace BarcodeParserBuilder.Barcodes.GS1;
 
-namespace BarcodeParserBuilder.Barcodes.GS1
+public class GS1128Barcode(Code128SymbologyIdentifier? symbologyIdentifier) : GS1Barcode(symbologyIdentifier)
 {
-    public class GS1128Barcode : GS1Barcode
-    {
-        internal static string SymbologyPrefix => "]C1";
-        public GS1128Barcode() : base() { }
-        public override BarcodeType BarcodeType => BarcodeType.GS1128;
-    }
+    public GS1128Barcode() : this(null) { }
+
+    public override BarcodeType BarcodeType => BarcodeType.GS1128;
 }

@@ -1,82 +1,81 @@
 ﻿using BarcodeParserBuilder.Barcodes.GS1;
 using BarcodeParserBuilder.Exceptions.GS1;
-using BarcodeParserBuilder.Infrastructure;
+using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
 using Xunit;
 
-namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1
+namespace BarcodeParserBuilder.UnitTests.Barcodes.GS1;
+
+public class GS1ProductCodeParserBuilderTestFixture
 {
-    public class GS1ProductCodeParserBuilderTestFixture
+    [Theory]
+    [InlineData("91197253403428")] //GTIN
+    [InlineData("07038319110380")] //GTIN (EAN13)
+    public void FieldParserBuilderAcceptsValidProductCodes(string productCode)
     {
-        [Theory]
-        [InlineData("91197253403428")] //GTIN
-        [InlineData("07038319110380")] //GTIN (EAN13)
-        public void FieldParserBuilderAcceptsValidProductCodes(string productCode)
-        {
-            //Arrange
-            var fieldParserBuilder = new GS1ProductCodeParserBuilder();
-            ProductCode result = null;
+        //Arrange
+        var fieldParserBuilder = new GS1ProductCodeParserBuilder();
+        ProductCode? result = null;
 
-            //Act
-            Action parseAction = () => result = (ProductCode)fieldParserBuilder.Parse(productCode, null, null);
+        //Act
+        Action parseAction = () => result = (ProductCode?)fieldParserBuilder.Parse(productCode, null, null);
 
-            //Assert
-            parseAction.Should().NotThrow();
-            result.Should().NotBeNull();
-            result.Type.Should().Be(ProductCodeType.GTIN);
-            result.Code.Should().Be(productCode);
-        }
+        //Assert
+        parseAction.Should().NotThrow();
+        result.Should().NotBeNull();
+        result!.Type.Should().Be(ProductCodeType.GTIN);
+        result.Code.Should().Be(productCode);
+    }
 
-        [Theory]
-        [InlineData("911972534034286")] //Code Too long
-        [InlineData("911972534034 #A")] //Invalid Character
-        [InlineData("1118999881193")] //EAN13
-        [InlineData("45861734")] //EAN8
-        public void FieldParserBuilderRejectsInvalidProductCodes(string productCode)
-        {
-            //Arrange
-            var fieldParserBuilder = new GS1ProductCodeParserBuilder();
+    [Theory]
+    [InlineData("911972534034286")] //Code Too long
+    [InlineData("911972534034 #A")] //Invalid Character
+    [InlineData("1118999881193")] //EAN13
+    [InlineData("45861734")] //EAN8
+    public void FieldParserBuilderRejectsInvalidProductCodes(string productCode)
+    {
+        //Arrange
+        var fieldParserBuilder = new GS1ProductCodeParserBuilder();
 
-            //Act
-            Action parseAction = () => fieldParserBuilder.Parse(productCode, null, null);
+        //Act
+        Action parseAction = () => fieldParserBuilder.Parse(productCode, null, null);
 
-            //Assert
-            parseAction.Should()
-                .Throw<GS1ValidateException>()
-                .WithMessage($"Invalid GTIN value '{productCode}'.");
-        }
+        //Assert
+        parseAction.Should()
+            .Throw<GS1ValidateException>()
+            .WithMessage($"Invalid GTIN value '{productCode}'.");
+    }
 
-        [Theory]
-        [InlineData("91197253403428", "91197253403428")] //GTIN code
-        [InlineData("   ", null)] //spaces
-        [InlineData(null, null)] //null
-        public void FieldParserBuilderBuildsCorrectString(string code, string expectedOutput)
-        {
-            //Arrange
-            var fieldParserBuilder = new GS1ProductCodeParserBuilder();
-            var productCode = ProductCode.ParseGtin(code);
+    [Theory]
+    [InlineData("91197253403428", "91197253403428")] //GTIN code
+    [InlineData("   ", null)] //spaces
+    [InlineData(null, null)] //null
+    public void FieldParserBuilderBuildsCorrectString(string? code, string? expectedOutput)
+    {
+        //Arrange
+        var fieldParserBuilder = new GS1ProductCodeParserBuilder();
+        var productCode = ProductCode.ParseGtin(code);
 
-            //Act
-            var output = fieldParserBuilder.Build(productCode);
+        //Act
+        var output = fieldParserBuilder.Build(productCode);
 
-            //Assert
-            output.Should().Be(expectedOutput);
-        }
+        //Assert
+        output.Should().Be(expectedOutput);
+    }
 
-        [Fact]
-        public void FieldParserBuilderRejectsWrongProductCode()
-        {
-            //Arrange
-            var fieldParserBuilder = new GS1ProductCodeParserBuilder();
-            var productCode = ProductCode.ParseGtin("1118999881193");
+    [Fact]
+    public void FieldParserBuilderRejectsWrongProductCode()
+    {
+        //Arrange
+        var fieldParserBuilder = new GS1ProductCodeParserBuilder();
+        var productCode = ProductCode.ParseGtin("1118999881193");
 
-            //Act
-            Action buildAction = () => fieldParserBuilder.Build(productCode);
+        //Act
+        Action buildAction = () => fieldParserBuilder.Build(productCode);
 
-            //Assert
-            buildAction.Should()
-                .Throw<GS1ValidateException>()
-                .WithMessage("Invalid ProductCode type 'EAN'.");
-        }
+        //Assert
+        buildAction.Should()
+            .Throw<GS1ValidateException>()
+            .WithMessage("Invalid ProductCode type 'EAN'.");
     }
 }

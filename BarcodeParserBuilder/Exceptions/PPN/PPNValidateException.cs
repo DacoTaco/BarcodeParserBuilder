@@ -1,7 +1,5 @@
-﻿namespace BarcodeParserBuilder.Exceptions.PPN
+﻿namespace BarcodeParserBuilder.Exceptions.PPN;
+
+public class PPNValidateException(string message, Exception? e = null) : ValidateException(message, e)
 {
-    public class PPNValidateException : ValidateException
-    {
-        public PPNValidateException(string message, Exception? e = null) : base(message, e) { }
-    }
 }

@@ -29,7 +29,7 @@ When combined with barcode imaging projects like Zxing you can scan, parse, buil
     <RepositoryType>GIT</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
     <!-- I hate having to define the C# language, but otherwise Nullable & ImplicitUsings won't work as it is a newer language feature than netstandard 2.0 ...-->
-    <LangVersion>11.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
@@ -51,8 +51,12 @@ When combined with barcode imaging projects like Zxing you can scan, parse, buil
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="MinVer" Version="4.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="PolySharp" Version="1.14.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

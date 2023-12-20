@@ -1,7 +1,5 @@
-﻿namespace BarcodeParserBuilder.Exceptions.MSI
+﻿namespace BarcodeParserBuilder.Exceptions.MSI;
+
+public class MsiParseException(string message, Exception? e = null) : ParseException(message, e)
 {
-    public class MsiParseException : ParseException
-    {
-        public MsiParseException(string message, Exception? e = null) : base(message, e) { }
-    }
 }

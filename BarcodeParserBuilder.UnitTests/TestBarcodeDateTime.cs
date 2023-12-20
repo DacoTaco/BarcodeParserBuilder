@@ -1,9 +1,7 @@
 ﻿using BarcodeParserBuilder.Infrastructure;
 
-namespace BarcodeParserBuilder.UnitTests
+namespace BarcodeParserBuilder.UnitTests;
+
+public class TestBarcodeDateTime(DateTime date, string value, string format) : BarcodeDateTime(date, value, format)
 {
-    public class TestBarcodeDateTime : BarcodeDateTime
-    {
-        public TestBarcodeDateTime(DateTime date, string value, string format) : base(date, value, format) { }
-    }
 }

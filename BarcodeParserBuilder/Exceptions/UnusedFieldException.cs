@@ -1,7 +1,5 @@
-﻿namespace BarcodeParserBuilder.Exceptions
+﻿namespace BarcodeParserBuilder.Exceptions;
+
+public class UnusedFieldException(string fieldName, Exception? e = null) : Exception($"{fieldName} is an unused field.", e)
 {
-    public class UnusedFieldException : Exception
-    {
-        public UnusedFieldException(string fieldName, Exception? e = null) : base($"{fieldName} is an unused field.", e) { }
-    }
 }

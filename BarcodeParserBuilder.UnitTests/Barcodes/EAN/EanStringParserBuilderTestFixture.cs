@@ -3,45 +3,44 @@ using BarcodeParserBuilder.Exceptions;
 using FluentAssertions;
 using Xunit;
 
-namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN
+namespace BarcodeParserBuilder.UnitTests.Barcodes.EAN;
+
+public class EanStringParserBuilderTestFixture
 {
-    public class EanStringParserBuilderTestFixture
+    private readonly EanStringParserBuilder _parserBuilder;
+
+    public EanStringParserBuilderTestFixture()
     {
-        private readonly EanStringParserBuilder _parserBuilder;
+        _parserBuilder = new EanStringParserBuilder();
+    }
 
-        public EanStringParserBuilderTestFixture()
-        {
-            _parserBuilder = new EanStringParserBuilder();
-        }
+    [Fact]
+    public void FieldParserBuilderAcceptsStringCharacters()
+    {
+        //Arrange
+        var acceptedCharacters = "0123456789";
+        var result = "";
 
-        [Fact]
-        public void FieldParserBuilderAcceptsStringCharacters()
-        {
-            //Arrange
-            var acceptedCharacters = "0123456789";
-            var result = "";
+        //Act
+        Action parseAction = () => result = (string?)_parserBuilder.Parse(acceptedCharacters, null, null);
 
-            //Act
-            Action parseAction = () => result = (string)_parserBuilder.Parse(acceptedCharacters, null, null);
+        //Assert
+        parseAction.Should().NotThrow();
+        result.Should().Be(acceptedCharacters);
+    }
 
-            //Assert
-            parseAction.Should().NotThrow();
-            result.Should().Be(acceptedCharacters);
-        }
+    [Fact]
+    public void FieldParserBuilderRejectsInvalidStringCharacters()
+    {
+        //Arrange
+        var rejectedString = $"0123456789abcdefghijklmnopqrstuvwxyz";
 
-        [Fact]
-        public void FieldParserBuilderRejectsInvalidStringCharacters()
-        {
-            //Arrange
-            var rejectedString = $"0123456789abcdefghijklmnopqrstuvwxyz";
+        //Act
+        Action parseAction = () => _parserBuilder.Parse(rejectedString, null, null);
 
-            //Act
-            Action parseAction = () => _parserBuilder.Parse(rejectedString, null, null);
-
-            //Assert
-            parseAction.Should()
-                .Throw<ValidateException>()
-                .WithMessage($"Failed to validate object (value rejected).");
-        }
+        //Assert
+        parseAction.Should()
+            .Throw<ValidateException>()
+            .WithMessage($"Failed to validate object (value rejected).");
     }
 }

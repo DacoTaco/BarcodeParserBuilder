@@ -1,133 +1,120 @@
-﻿using BarcodeParserBuilder.Barcodes.CODE39;
+﻿using BarcodeParserBuilder.Aim;
+using BarcodeParserBuilder.Barcodes.CODE39;
 using BarcodeParserBuilder.Exceptions.CODE39;
-using BarcodeParserBuilder.Infrastructure;
+using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
 using Xunit;
-using Xunit.Sdk;
 
+namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39;
 
-namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE39
+public class Code39ParserBuilderTestFixture : BaseBarcodeTestFixture
 {
-    public class Code39ParserBuilderTestFixture : BaseBarcodeTestFixture
+    [Theory]
+    [MemberData(nameof(ValidCode39ParsingBarcodes))]
+    public void CanParseBarcodeString(string barcode, Code39Barcode expectedBarcode)
     {
-        [Theory]
-        [MemberData(nameof(ValidCode39arsingBarcodes))]
-        public void CanParseBarcodeString(string barcode, Code39Barcode expectedBarcode)
-        {
-            //Arrange & Act
-            
-            Code39BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeTrue($"'{barcode}' should be parsable");
-            Action parseAction = () => Code39BarcodeParserBuilder.Parse(barcode);
+        //Arrange & Act
+        Code39BarcodeParserBuilder.TryParse(barcode, expectedBarcode.ReaderInformation, out var result).Should().BeTrue($"'{barcode}' should be parsable");
+        Action parseAction = () => Code39BarcodeParserBuilder.Parse(barcode, expectedBarcode.ReaderInformation);
 
-            //Assert
-            parseAction.Should().NotThrow($"'{barcode}' should be parsable");
-            result.Should().NotBeNull();
-            CompareBarcodeObjects(expectedBarcode, result);
-        }
-
-        [Theory]
-        [MemberData(nameof(InvalidCode39ParsingBarcodes))]
-        public void CanInvalidateBarcodeString<TException>(string barcode, TException exceptionType) where TException : Exception 
-        {
-            //Arrange & Act
-            Code39BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeFalse($"'{barcode}' should not be parsable");
-            Action parseAction = () => Code39BarcodeParserBuilder.Parse(barcode);
-
-            //Assert
-            parseAction.Should().ThrowExactly<TException>();
-            
-        }
-
-        public static IEnumerable<object[]> ValidCode39arsingBarcodes()
-        {
-            // base symbols, no checksum
-            yield return new object[]
-            {
-                $"]A01293AAS-.$/+% ",
-                new Code39Barcode()
-                {
-                    ProductCode = new Code39Productcode("1293AAS-.$/+% ")
-                }
-            };
-            
-            // base symbols, checksum transmitted
-            yield return new object[]
-            {
-                $"]A1CODE39W",
-                new Code39Barcode()
-                {
-                    ProductCode = new Code39Productcode("CODE39")
-                }
-            };
-
-            // base symbols, checksum stripped
-            yield return new object[]
-            {
-                $"]A2CODE39",
-                new Code39Barcode()
-                {
-                    ProductCode = new Code39Productcode("CODE39")
-                }
-            };
-
-            // base symbols, checksum stripped
-            yield return new object[]
-            {
-                $"]A3CODE39",
-                new Code39Barcode()
-                {
-                    ProductCode = new Code39Productcode("CODE39")
-                }
-            };
-
-            // full ascii, no checksum
-            yield return new object[]
-            {
-                $"]A4aaabbcre",
-                new Code39Barcode()
-                {
-                    ProductCode = new Code39Productcode("aaabbcre")
-                }
-            };
-
-            // full ascii, checksum, transmitted
-            yield return new object[]
-            {
-                $"]A5C39exO",
-                new Code39Barcode()
-                {
-                    ProductCode = new Code39Productcode("C39ex")
-                }
-            };
-
-            // full ascii, checksum, stripped
-            yield return new object[]
-            {
-                $"]A7C39ex",
-                new Code39Barcode()
-                {
-                    ProductCode = new Code39Productcode("C39ex")
-                }
-            };
-
-
-
-        }
-
-        public static IEnumerable<object[]> InvalidCode39ParsingBarcodes()
-        {
-            
-            yield return new object[]
-            {
-                $"]A0aaaabbbb",
-                new Code39ParseException("Modifier 0 allows only base Code39 characters")
-            };
-            yield return new object[]
-            {
-                $"]A7abcüüü",
-                new Code39ParseException("characters outside of full ascii")
-            };
-
-        }
+        //Assert
+        parseAction.Should().NotThrow($"'{barcode}' should be parsable");
+        result.Should().NotBeNull();
+        CompareBarcodeObjects(expectedBarcode, result!);
     }
+
+    [Theory]
+    [MemberData(nameof(InvalidCode39ParsingBarcodes))]
+    public void CanInvalidateBarcodeString<TException>(string barcode, TException exception) where TException : Exception
+    {
+        //Arrange
+        var symbologyParser = barcode.First() == ']'
+            ? AimSymbologyIdentifier.ParseString<Code39SymbologyIdentifier>(barcode)
+            : null;
+
+        //Act
+        Code39BarcodeParserBuilder.TryParse(barcode, symbologyParser, out var result).Should().BeFalse($"'{barcode}' should not be parsable");
+        Action parseAction = () => Code39BarcodeParserBuilder.Parse(barcode, symbologyParser);
+
+        //Assert
+        parseAction.Should().ThrowExactly<TException>().Which.Message.Should().Be(exception.Message);
+    }
+
+    public static TheoryData<string, Code39Barcode> ValidCode39ParsingBarcodes() => new()
+    {
+        // base symbols, no checksum
+        {
+            $"]A01293AAS-.$/+% ",
+            new Code39Barcode(new Code39SymbologyIdentifier("A0"))
+            {
+                ProductCode = new Code39ProductCode("1293AAS-.$/+% "),
+            }
+        },
+
+        // base symbols, checksum transmitted
+        {
+            $"]A1CODE39W",
+            new Code39Barcode(new Code39SymbologyIdentifier("A1"))
+            {
+                ProductCode = new Code39ProductCode("CODE39"),
+            }
+        },
+
+        // base symbols, checksum stripped
+        {
+            $"]A2CODE39",
+            new Code39Barcode(new Code39SymbologyIdentifier("A2"))
+            {
+                ProductCode = new Code39ProductCode("CODE39"),
+            }
+        },
+
+        // base symbols, checksum stripped
+        {
+            $"]A3CODE39",
+            new Code39Barcode(new Code39SymbologyIdentifier("A3"))
+            {
+                ProductCode = new Code39ProductCode("CODE39"),
+            }
+        },
+
+        // full ascii, no checksum
+        {
+            $"]A4aaabbcre",
+            new Code39Barcode(new Code39SymbologyIdentifier("A4"))
+            {
+                ProductCode = new Code39ProductCode("aaabbcre"),
+            }
+        },
+
+        // full ascii, checksum, transmitted
+        {
+            $"]A5C39exO",
+            new Code39Barcode(new Code39SymbologyIdentifier("A5"))
+            {
+                ProductCode = new Code39ProductCode("C39ex"),
+            }
+        },
+
+        // full ascii, checksum, stripped
+        {
+            $"]A7C39ex",
+            new Code39Barcode(new Code39SymbologyIdentifier("A7"))
+            {
+                ProductCode = new Code39ProductCode("C39ex"),
+            }
+        },
+    };
+
+    public static TheoryData<string, Code39ParseException> InvalidCode39ParsingBarcodes() => new()
+    {
+        {
+            $"]A0aaaabbbb",
+            new Code39ParseException($"Failed to parse Code39 Barcode :{Environment.NewLine}Code content does not match reader information")
+        },
+        {
+            $"]A7abcüüü",
+            new Code39ParseException($"Failed to parse Code39 Barcode :{Environment.NewLine}Code content does not match reader information")
+        },
+    };
 }

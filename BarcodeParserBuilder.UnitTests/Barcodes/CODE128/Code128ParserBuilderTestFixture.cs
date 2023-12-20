@@ -1,102 +1,86 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BarcodeParserBuilder.Aim;
 using BarcodeParserBuilder.Barcodes.CODE128;
 using BarcodeParserBuilder.Exceptions.CODE128;
+using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
 using Xunit;
 
-namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE128
+namespace BarcodeParserBuilder.UnitTests.Barcodes.CODE128;
+
+public class Code128ParserBuilderTestFixture : BaseBarcodeTestFixture
 {
-    public class Code128ParserBuilderTestFixture : BaseBarcodeTestFixture
+    [Theory]
+    [MemberData(nameof(ValidCode128ParsingBarcodes))]
+    public void CanParseBarcodeString(string barcode, Code128Barcode expectedBarcode)
     {
-        [Theory]
-        [MemberData(nameof(ValidCode128ParsingBarcodes))]
-        public void CanParseBarcodeString(string barcode, Code128Barcode expectedBarcode)
-        {
-            //Arrange & Act
+        //Arrange & Act
+        Code128BarcodeParserBuilder.TryParse(barcode, expectedBarcode.ReaderInformation, out var result).Should().BeTrue($"'{barcode}' should be parsable");
+        Action parseAction = () => Code128BarcodeParserBuilder.Parse(barcode, expectedBarcode.ReaderInformation);
 
-            Code128BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeTrue($"'{barcode}' should be parsable");
-            Action parseAction = () => Code128BarcodeParserBuilder.Parse(barcode);
-
-            //Assert
-            parseAction.Should().NotThrow($"'{barcode}' should be parsable");
-            result.Should().NotBeNull();
-            CompareBarcodeObjects(expectedBarcode, result);
-        }
-
-        [Theory]
-        [MemberData(nameof(InvalidCode128ParsingBarcodes))]
-        public void CanInvalidateBarcodeString<TException>(string barcode, TException exceptionType) where TException : Exception
-        {
-            //Arrange & Act
-            Code128BarcodeParserBuilder.TryParse(barcode, out var result).Should().BeFalse($"'{barcode}' should not be parsable");
-            Action parseAction = () => Code128BarcodeParserBuilder.Parse(barcode);
-
-            //Assert
-            parseAction.Should().ThrowExactly<TException>();
-
-        }
-
-        public static IEnumerable<object[]> ValidCode128ParsingBarcodes()
-        {
-            
-            yield return new object[]
-            {
-                $"]C01234567890ABSDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvxyz",
-                new Code128Barcode()
-                {
-                    ProductCode = new Code128ProductCode("1234567890ABSDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvxyz")
-                }
-            };
-
-            yield return new object[]
-            {
-                $"]C01234567890!#$%&/()=?",
-                new Code128Barcode()
-                {
-                    ProductCode = new Code128ProductCode("1234567890!#$%&/()=?")
-                }
-            };
-
-            yield return new object[]
-            {
-                $"]C01293AAS-.$/+% ",
-                new Code128Barcode()
-                {
-                    ProductCode = new Code128ProductCode("1293AAS-.$/+% ")
-                }
-            };
-
-
-            yield return new object[]
-            {
-                $"]C01293AAS-.$/+%õ ",
-                new Code128Barcode()
-                {
-                    ProductCode = new Code128ProductCode("1293AAS-.$/+%õ ")
-                }
-            };
-
-
-        }
-
-        public static IEnumerable<object[]> InvalidCode128ParsingBarcodes()
-        {
-
-            
-            yield return new object[]
-            {
-                $"1234444",
-                new Code128ParseException("Should NOT parse as Code128 without symbology prefix, causing ambiguity")
-            };
-            yield return new object[]
-            {
-                $"]C01234444\u263A222",
-                new Code128ParseException("Not extended ASCII")
-            };
-        }
+        //Assert
+        parseAction.Should().NotThrow($"'{barcode}' should be parsable");
+        result.Should().NotBeNull();
+        CompareBarcodeObjects(expectedBarcode, result);
     }
+
+    [Theory]
+    [MemberData(nameof(InvalidCode128ParsingBarcodes))]
+    public void CanInvalidateBarcodeString<TException>(string barcode, TException exception) where TException : Exception
+    {
+        //Arrange
+        var symbologyParser = barcode.First() == ']'
+            ? AimSymbologyIdentifier.ParseString<Code128SymbologyIdentifier>(barcode)
+            : null;
+
+        //Act
+        Code128BarcodeParserBuilder.TryParse(barcode, symbologyParser, out var result).Should().BeFalse($"'{barcode}' should not be parsable");
+        Action parseAction = () => Code128BarcodeParserBuilder.Parse(barcode, symbologyParser);
+
+        //Assert
+        parseAction.Should().ThrowExactly<TException>().Which.Message.Should().Be(exception.Message);
+    }
+
+    public static TheoryData<string, Code128Barcode> ValidCode128ParsingBarcodes() => new()
+    {
+        {
+            $"]C01234567890ABSDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrs",
+            new Code128Barcode(new Code128SymbologyIdentifier("C0"))
+            {
+                ProductCode = new Code128ProductCode("1234567890ABSDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrs"),
+            }
+        },
+        {
+            $"]C01234567890!#$%&/()=?",
+            new Code128Barcode(new Code128SymbologyIdentifier("C0"))
+            {
+                ProductCode = new Code128ProductCode("1234567890!#$%&/()=?"),
+            }
+        },
+        {
+            $"]C01293AAS-.$/+% ",
+            new Code128Barcode(new Code128SymbologyIdentifier("C0"))
+            {
+                ProductCode = new Code128ProductCode("1293AAS-.$/+% "),
+            }
+        },
+        {
+            $"]C01293AAS-.$/+%õ ",
+            new Code128Barcode(new Code128SymbologyIdentifier("C0"))
+            {
+                ProductCode = new Code128ProductCode("1293AAS-.$/+%õ "),
+            }
+        },
+    };
+
+    public static TheoryData<string, Code128ParseException> InvalidCode128ParsingBarcodes() => new()
+    {
+        {
+            $"1234444",
+            new Code128ParseException($"Failed to parse Code128 Barcode :{Environment.NewLine}Invalid Code128 Identifier")
+        },
+        {
+            $"]C01234444\u263A222",
+            new Code128ParseException($"Failed to parse Code128 Barcode :{Environment.NewLine}Invalid Code128 value in '1234444\u263A222'.")
+        }
+    };
 }

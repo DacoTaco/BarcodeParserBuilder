@@ -1,7 +1,5 @@
-﻿namespace BarcodeParserBuilder.Exceptions
+﻿namespace BarcodeParserBuilder.Exceptions;
+
+public class ValidateException(string message, Exception? e = null) : Exception(message, e)
 {
-    public class ValidateException : Exception
-    {
-        public ValidateException(string message, Exception? e = null) : base(message, e) { }
-    }
 }

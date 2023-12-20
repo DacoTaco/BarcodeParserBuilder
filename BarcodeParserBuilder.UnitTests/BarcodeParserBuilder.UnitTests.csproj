@@ -3,8 +3,9 @@
   <PropertyGroup>
     <TargetFrameworks>net8;net6;net48</TargetFrameworks>
     <!-- I hate having to define the C# language, but otherwise Nullable & ImplicitUsings won't work as it is a newer language feature than netstandard 2.0 ...-->
-    <LangVersion>11.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

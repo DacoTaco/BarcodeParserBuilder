@@ -7,106 +7,105 @@ using BarcodeParserBuilder.Barcodes.GS1;
 using FluentAssertions;
 using Xunit;
 
-namespace BarcodeParserBuilder.UnitTests.Barcodes
+namespace BarcodeParserBuilder.UnitTests.Barcodes;
+
+public class BarcodeTestFixture
 {
-    public class BarcodeTestFixture
+    [Fact]
+    public void AllBarcodeParserBuilderClassesHaveTryParseMethod()
     {
-        [Fact]
-        public void AllBarcodeParserBuilderClassesHaveTryParseMethod()
-        {
-            //Arrange
-            var barcodeTypes = Assembly
-                        .GetAssembly(typeof(Barcode))
-                        .GetTypes()
-                        .ToList()
-                        .Where(c => c.IsClass &&
-                                    !c.IsAbstract &&
-                                    c.GetInterfaces().Contains(typeof(IBaseBarcodeParserBuilder)) &&
-                                    (c.BaseType?.GenericTypeArguments?.Any(t => t.IsSubclassOf(typeof(Barcode))) ?? false))
-                        .ToList();
-
-            //Act & Assert
-            foreach (var type in barcodeTypes)
-            {
-                var methodInfo = type.GetMethod(nameof(GS1BarcodeParserBuilder.TryParse));
-
-                methodInfo.Should().NotBeNull($"barcode type '{type.Name}' should contain '{nameof(GS1BarcodeParserBuilder.TryParse)}' method");
-                methodInfo.IsStatic.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be static");
-                methodInfo.IsPublic.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be public");
-                methodInfo.ReturnType.Should().Be(typeof(bool), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should return a boolean");
-
-                var parameters = methodInfo
-                    .GetParameters()
+        //Arrange
+        var barcodeTypes = Assembly
+                    .GetAssembly(typeof(Barcode))!
+                    .GetTypes()
+                    .ToList()
+                    .Where(c => c.IsClass &&
+                                !c.IsAbstract &&
+                                c.GetInterfaces().Contains(typeof(IBaseBarcodeParserBuilder)) &&
+                                (c.BaseType?.GenericTypeArguments?.Any(t => t.IsSubclassOf(typeof(Barcode))) ?? false))
                     .ToList();
 
-                parameters.Should().HaveCount(3, $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should have 3 parameters");
-                parameters.First().ParameterType.Should().Be(typeof(string), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, AimSymbologyIdentifier? identifier, out barcode)");
-                parameters.ElementAt(1).ParameterType.Should().Be(typeof(AimSymbologyIdentifier), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, AimSymbologyIdentifier? identifier, out barcode)");
-                parameters.Last().IsOut.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, AimSymbologyIdentifier? identifier, out barcode)");
-            }
-        }
-
-        [Fact]
-        public void AllBarcodeParserBuilderClassesHaveBuildMethod()
+        //Act & Assert
+        foreach (var type in barcodeTypes)
         {
-            //Arrange
-            var barcodeTypes = Assembly
-                        .GetAssembly(typeof(Barcode))
-                        .GetTypes()
-                        .ToList()
-                        .Where(c => c.IsClass &&
-                                    !c.IsAbstract &&
-                                    c.GetInterfaces().Contains(typeof(IBaseBarcodeParserBuilder)) &&
-                                    (c.BaseType?.GenericTypeArguments?.Any(t => t.IsSubclassOf(typeof(Barcode))) ?? false))
-                        .ToList();
+            var methodInfo = type.GetMethod(nameof(GS1BarcodeParserBuilder.TryParse));
 
-            //Act & Assert
-            foreach (var type in barcodeTypes)
-            {
-                var methodInfo = type.GetMethod(nameof(EanBarcodeParserBuilder.Build));
+            methodInfo.Should().NotBeNull($"barcode type '{type.Name}' should contain '{nameof(GS1BarcodeParserBuilder.TryParse)}' method");
+            methodInfo!.IsStatic.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be static");
+            methodInfo.IsPublic.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be public");
+            methodInfo.ReturnType.Should().Be(typeof(bool), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should return a boolean");
 
-                methodInfo.Should().NotBeNull($"barcode type '{type.Name}' should contain '{nameof(GS1BarcodeParserBuilder.Build)}' method");
-                methodInfo.IsStatic.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should be static");
-                methodInfo.IsPublic.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should be public");
-                methodInfo.ReturnType.Should().Be(typeof(string), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should return a string");
+            var parameters = methodInfo
+                .GetParameters()
+                .ToList();
 
-                var parameters = methodInfo
-                    .GetParameters()
+            parameters.Should().HaveCount(3, $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should have 3 parameters");
+            parameters.First().ParameterType.Should().Be(typeof(string), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, AimSymbologyIdentifier? identifier, out barcode)");
+            parameters.ElementAt(1).ParameterType.Should().Be(typeof(AimSymbologyIdentifier), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, AimSymbologyIdentifier? identifier, out barcode)");
+            parameters.Last().IsOut.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.TryParse)}' should be TryParse(string, AimSymbologyIdentifier? identifier, out barcode)");
+        }
+    }
+
+    [Fact]
+    public void AllBarcodeParserBuilderClassesHaveBuildMethod()
+    {
+        //Arrange
+        var barcodeTypes = Assembly
+                    .GetAssembly(typeof(Barcode))!
+                    .GetTypes()
+                    .ToList()
+                    .Where(c => c.IsClass &&
+                                !c.IsAbstract &&
+                                c.GetInterfaces().Contains(typeof(IBaseBarcodeParserBuilder)) &&
+                                (c.BaseType?.GenericTypeArguments?.Any(t => t.IsSubclassOf(typeof(Barcode))) ?? false))
                     .ToList();
 
-                parameters.Should().ContainSingle($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should have a single parameter");
-                type.BaseType.GenericTypeArguments.Should().Contain(parameters.First().ParameterType, $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should only accept it's barcode type");
-            }
-        }
-
-        [Fact]
-        public void AllBarcodeClassesHaveParserBuilder()
+        //Act & Assert
+        foreach (var type in barcodeTypes)
         {
-            //Arrange
-            var barcodeTypes = Assembly
-                        .GetAssembly(typeof(Barcode))
-                        .GetTypes()
-                        .ToList()
-                        .Where(c => c.IsClass &&
-                                    !c.IsAbstract &&
-                                    c.IsSubclassOf(typeof(Barcode)))
-                        .ToList();
+            var methodInfo = type.GetMethod(nameof(EanBarcodeParserBuilder.Build));
 
-            //Act & Assert
-            foreach (var type in barcodeTypes)
-            {
-                var barcodeType = Assembly
-                        .GetAssembly(typeof(Barcode))
-                        .GetTypes()
-                        .ToList()
-                        .Where(c => c.IsClass &&
-                                    !c.IsAbstract &&
-                                    c.GetInterfaces().Contains(typeof(IBaseBarcodeParserBuilder)) &&
-                                    (c.BaseType?.GenericTypeArguments?.Any(t => t == type) ?? false))
-                        .SingleOrDefault();
+            methodInfo.Should().NotBeNull($"barcode type '{type.Name}' should contain '{nameof(GS1BarcodeParserBuilder.Build)}' method");
+            methodInfo!.IsStatic.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should be static");
+            methodInfo.IsPublic.Should().BeTrue($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should be public");
+            methodInfo.ReturnType.Should().Be(typeof(string), $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should return a string");
 
-                barcodeType.Should().NotBeNull($"'{type}' should have a BarcodeParserBuilder");
-            }
+            var parameters = methodInfo
+                .GetParameters()
+                .ToList();
+
+            parameters.Should().ContainSingle($"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should have a single parameter");
+            type.BaseType.Should().NotBeNull().And.Subject.GenericTypeArguments.Should().Contain(parameters.First().ParameterType, $"'{type.Name}.{nameof(GS1BarcodeParserBuilder.Build)}' should only accept it's barcode type");
+        }
+    }
+
+    [Fact]
+    public void AllBarcodeClassesHaveParserBuilder()
+    {
+        //Arrange
+        var barcodeTypes = Assembly
+                    .GetAssembly(typeof(Barcode))!
+                    .GetTypes()
+                    .ToList()
+                    .Where(c => c.IsClass &&
+                                !c.IsAbstract &&
+                                c.IsSubclassOf(typeof(Barcode)))
+                    .ToList();
+
+        //Act & Assert
+        foreach (var type in barcodeTypes)
+        {
+            var barcodeType = Assembly
+                    .GetAssembly(typeof(Barcode))!
+                    .GetTypes()
+                    .ToList()
+                    .Where(c => c.IsClass &&
+                                !c.IsAbstract &&
+                                c.GetInterfaces().Contains(typeof(IBaseBarcodeParserBuilder)) &&
+                                (c.BaseType?.GenericTypeArguments?.Any(t => t == type) ?? false))
+                    .SingleOrDefault();
+
+            barcodeType.Should().NotBeNull($"'{type}' should have a BarcodeParserBuilder");
         }
     }
 }

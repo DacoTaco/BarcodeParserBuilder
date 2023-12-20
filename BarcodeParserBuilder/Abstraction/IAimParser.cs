@@ -1,7 +1,6 @@
-﻿namespace BarcodeParserBuilder.Abstraction
+﻿namespace BarcodeParserBuilder.Abstraction;
+
+internal interface IAimParser
 {
-    internal interface IAimParser
-    {
-        public AimProcessorResult GetParsers(string barcodeString);
-    }
+    public AimProcessorResult GetParsers(string barcodeString);
 }

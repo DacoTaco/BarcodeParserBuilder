@@ -1,4 +1,3 @@
-﻿namespace BarcodeParserBuilder.Abstraction
-{
-    internal interface IBaseBarcodeParserBuilder { }
-}
+﻿namespace BarcodeParserBuilder.Abstraction;
+
+internal interface IBaseBarcodeParserBuilder { }

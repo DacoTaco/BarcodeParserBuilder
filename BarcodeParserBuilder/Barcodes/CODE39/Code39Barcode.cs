@@ -2,10 +2,9 @@
 
 namespace BarcodeParserBuilder.Barcodes.CODE39;
 
-public class Code39Barcode : Barcode
+public class Code39Barcode(Code39SymbologyIdentifier? symbologyIdentifier) : Barcode(symbologyIdentifier)
 {
     public Code39Barcode() : this(null) { }
-    public Code39Barcode(Code39SymbologyIdentifier? symbologyIdentifier) : base(symbologyIdentifier) { }
 
     public override ProductCode? ProductCode
     {
@@ -19,11 +18,11 @@ public class Code39Barcode : Barcode
         protected set => BarcodeFields[nameof(ReaderInformation)].SetValue(value);
     }
 
-    protected override FieldCollection BarcodeFields { get; } = new()
-    {
+    protected override FieldCollection BarcodeFields { get; } =
+    [
         new BarcodeField<ProductCode>(BarcodeType.CODE39, nameof(ProductCode), 2, 55),
         new BarcodeField<AimSymbologyIdentifier?>(BarcodeType.CODE39, nameof(ReaderInformation), 3),
-    };
+    ];
 
     public override BarcodeType BarcodeType => BarcodeType.CODE39;
 

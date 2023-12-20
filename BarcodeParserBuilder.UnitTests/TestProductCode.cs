@@ -1,16 +1,14 @@
 ﻿using BarcodeParserBuilder.Infrastructure.ProductCodes;
 
-namespace BarcodeParserBuilder.UnitTests
+namespace BarcodeParserBuilder.UnitTests;
+public class TestProductCode
 {
-    public class TestProductCode
+    public static T CreateProductCode<T>(string value, Action<T>? setProperties = null) where T : ProductCode
     {
-        public static T CreateProductCode<T>(string value, Action<T> setProperties = null) where T : ProductCode
-        {
-            var productCode = (T)Activator.CreateInstance(typeof(T), true);
-            productCode.Code = value;
-            setProperties?.Invoke(productCode);
+        var productCode = (T)Activator.CreateInstance(typeof(T), true)!;
+        productCode.Code = value;
+        setProperties?.Invoke(productCode);
 
-            return productCode;
-        }
+        return productCode;
     }
 }

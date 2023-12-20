@@ -1,7 +1,5 @@
-﻿namespace BarcodeParserBuilder.Exceptions.HIBC
+﻿namespace BarcodeParserBuilder.Exceptions.HIBC;
+
+public class HIBCValidateException(string message, Exception? e = null) : ValidateException(message, e)
 {
-    public class HIBCValidateException : ValidateException
-    {
-        public HIBCValidateException(string message, Exception? e = null) : base(message, e) { }
-    }
 }

@@ -1,7 +1,5 @@
-﻿namespace BarcodeParserBuilder.Exceptions
+﻿namespace BarcodeParserBuilder.Exceptions;
+
+public abstract class BuildException(string message, Exception? e = null) : Exception(message, e)
 {
-    public abstract class BuildException : Exception
-    {
-        public BuildException(string message, Exception? e = null) : base(message, e) { }
-    }
 }

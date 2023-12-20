@@ -1,7 +1,5 @@
-﻿namespace BarcodeParserBuilder.Aim
+﻿namespace BarcodeParserBuilder.Aim;
+
+public class EanSymbologyIdentifier(string symbologyIdentifier) : AimSymbologyIdentifier(symbologyIdentifier)
 {
-    public class EanSymbologyIdentifier : AimSymbologyIdentifier
-    {
-        public EanSymbologyIdentifier(string symbologyIdentifier) : base(symbologyIdentifier) { }
-    }
 }

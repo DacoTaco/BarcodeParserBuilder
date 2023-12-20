@@ -1,7 +1,5 @@
-﻿namespace BarcodeParserBuilder.Exceptions.PPN
+﻿namespace BarcodeParserBuilder.Exceptions.PPN;
+
+public class PPNParseException(string message, Exception? e = null) : ParseException(message, e)
 {
-    public class PPNParseException : ParseException
-    {
-        public PPNParseException(string message, Exception? e = null) : base(message, e) { }
-    }
 }

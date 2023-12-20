@@ -1,7 +1,5 @@
-﻿namespace BarcodeParserBuilder.Exceptions.EAN
+﻿namespace BarcodeParserBuilder.Exceptions.EAN;
+
+public class EanParseException(string message, Exception? e = null) : ParseException(message, e)
 {
-    public class EanParseException : ParseException
-    {
-        public EanParseException(string message, Exception? e = null) : base(message, e) { }
-    }
 }

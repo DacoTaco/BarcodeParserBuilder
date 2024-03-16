@@ -29,7 +29,7 @@ internal class GS1DoubleParserBuilder : BaseFieldParserBuilder<double?>
         var location = int.Parse(value.First().ToString());
         value = value![1..];
 
-        return double.Parse(value) * Math.Pow(10, -location);
+        return Math.Round(double.Parse(value) * Math.Pow(10, -location), location);
     }
 
     protected override bool ValidateObjectLength(double? obj, int? minimumLength, int? maximumLength)

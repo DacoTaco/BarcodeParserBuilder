@@ -1,6 +1,7 @@
 ﻿using BarcodeParserBuilder.Barcodes;
 using BarcodeParserBuilder.Exceptions;
 using BarcodeParserBuilder.Infrastructure;
+using BarcodeParserBuilder.Infrastructure.ProductCodes;
 using FluentAssertions;
 
 namespace BarcodeParserBuilder.UnitTests;
@@ -44,40 +45,64 @@ public class BaseBarcodeTestFixture
         }
 
         //Some barcode fields are unused in some types. we still need to compare those though.
-        ComparePossibleUnusedFields(() => expectedResult.ReaderInformation, () => parsedResult.ReaderInformation, "ReaderInformation");
-        ComparePossibleUnusedFields(() => expectedResult.BatchNumber, () => parsedResult.BatchNumber, "BatchNumber");
-        ComparePossibleUnusedFields(() => expectedResult.SerialNumber, () => parsedResult.SerialNumber, "SerialNumber");
-        ComparePossibleUnusedFields(() => expectedResult.ExpirationDate?.DateTime, () => parsedResult.ExpirationDate?.DateTime, "ExpirationDate");
-        ComparePossibleUnusedFields(() => expectedResult.ExpirationDate?.StringValue, () => parsedResult.ExpirationDate?.StringValue, "ExpirationDate (StringValue)");
-        ComparePossibleUnusedFields(() => expectedResult.ExpirationDate?.FormatString, () => parsedResult.ExpirationDate?.FormatString, "ExpirationDate (Format)");
+        foreach (var propertyInfo in expectedResult.GetType().GetProperties())
+        {
+            if (propertyInfo.Name == nameof(Barcode.Fields))
+                continue;
+
+            switch (GetPossibleUnusedField(() => propertyInfo.GetValue(expectedResult)))
+            {
+                case BarcodeType _:
+                case ProductCode _:
+                    continue;
+                case BarcodeDateTime _:
+                    var datetimeProperties = typeof(BarcodeDateTime).GetProperties();
+                    foreach (var property in datetimeProperties)
+                    {
+                        ComparePossibleUnusedFields(
+                        () =>
+                            {
+                                var v = propertyInfo.GetValue(expectedResult);
+                                return v == null ? null : property.GetValue(v);
+                            },
+                        () =>
+                            {
+                                var v = propertyInfo.GetValue(parsedResult);
+                                return v == null ? null : property.GetValue(v);
+                            },
+                        propertyInfo.Name);
+                    }
+                    break;
+                default:
+                    ComparePossibleUnusedFields(() => propertyInfo.GetValue(expectedResult), () => propertyInfo.GetValue(parsedResult), propertyInfo.Name);
+                    break;
+            }
+        }
+    }
+
+    private static object? GetPossibleUnusedField(Func<object?> getter)
+    {
+        try
+        {
+            return getter();
+        }
+        catch (Exception e)
+        {
+            if (e is not UnusedFieldException && e.InnerException is not UnusedFieldException)
+                throw;
+
+            return null;
+        }
     }
 
     private static void ComparePossibleUnusedFields(Func<object?> expectedGetter, Func<object?> actualGetter, string propertyName)
     {
-        object? expectedValue;
-        object? actualValue;
-
         var because = "";
         if (!string.IsNullOrWhiteSpace(propertyName))
             because = $"{propertyName} should be equal";
 
-        try
-        {
-            expectedValue = expectedGetter();
-        }
-        catch (UnusedFieldException)
-        {
-            expectedValue = null;
-        }
-
-        try
-        {
-            actualValue = actualGetter();
-        }
-        catch (UnusedFieldException)
-        {
-            actualValue = null;
-        }
+        var expectedValue = GetPossibleUnusedField(expectedGetter);
+        var actualValue = GetPossibleUnusedField(actualGetter);
 
         if (expectedValue == null)
             actualValue.Should().BeNull($"'{propertyName}' should be null");

@@ -171,6 +171,19 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
                 ProductionDate = new TestBarcodeDateTime(new DateTime(2011, 12, 12), "20111212", "yyyyMMdd")
             }
         },
+
+        //+E203PB414109/$$8243280112R00089525J
+        {
+            "+E203PB414109/$$8243280112R00089525J",
+            new HibcBarcode()
+            {
+                ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("PB41410"),
+                LabelerIdentificationCode = "E203",
+                UnitOfMeasure = 9,
+                BatchNumber = "3280112R00089525",
+                Quantity = 24
+            }
+        },
     };
 
     public static TheoryData<string, HibcBarcode> ValidHibcBuildingBarcodes() => new()

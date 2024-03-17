@@ -142,7 +142,7 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
 
         //2D - Quantity
         {
-            "+A99912345/$$81210X3/16D20111212/14D20200906/S77DEFG45$",
+            "+A99912345/$$812710X3/16D20111212/14D20200906/S77DEFG453",
             new HibcBarcode()
             {
                 ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
@@ -158,7 +158,7 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
 
         //2D - Quantity #2
         {
-            "+A99912345/$$90234510X3/16D20111212/14D20200906/S77DEFG458",
+            "+A99912345/$$902345710X3/16D20111212/14D20200906/S77DEFG45F",
             new HibcBarcode()
             {
                 ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
@@ -180,7 +180,8 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
                 ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("PB41410"),
                 LabelerIdentificationCode = "E203",
                 UnitOfMeasure = 9,
-                BatchNumber = "3280112R00089525",
+                BatchNumber = "R00089525",
+                ExpirationDate = new TestBarcodeDateTime(new DateTime(2028, 01, 12), "280112", "yyMMdd"),
                 Quantity = 24
             }
         },
@@ -233,7 +234,7 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
 
         //2D - Quantity
         {
-            "+A99912345/$$81210X3/$$+320090677DEFG45/16D20111212U",
+            "+A99912345/$$812710X3/$$+320090677DEFG45/16D20111212.",
             new HibcBarcode()
             {
                 ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
@@ -249,7 +250,7 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
 
         //2D - Quantity #2
         {
-            "+A99912345/$$90234510X3/$$+320090677DEFG45/16D20111212%",
+            "+A99912345/$$902345710X3/$$+320090677DEFG45/16D201112126",
             new HibcBarcode()
             {
                 ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),

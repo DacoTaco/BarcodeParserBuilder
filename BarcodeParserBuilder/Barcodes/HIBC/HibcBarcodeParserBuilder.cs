@@ -109,7 +109,8 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
             hasQuantity = false;
             var format = HibcBarcodeSegmentFormat.SegmentFormats[quantityFormatNumber];
             var prefix = $"$${(hasBatchNumber ? "" : "+")}";
-            var segment = $"{prefix}{(quantityFormatNumber)}{barcode.Quantity.ToString(format)}";
+            //prefix + quatity + (possible)7, which is the indicator that a batch or serial is following the date
+            var segment = $"{prefix}{(quantityFormatNumber)}{barcode.Quantity.ToString(format)}{(quantityFormatNumber > 7 ? "7" : string.Empty)}";
 
             if (hasBatchNumber)
             {
@@ -131,7 +132,8 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
 
             prefix += (expirationFormatNumber < 2 || expirationFormatNumber > 6) ? "" : expirationFormatNumber.ToString();
             var date = BarcodeDateTime.HibcDate(barcode.ExpirationDate!.DateTime, HibcBarcodeSegmentFormat.SegmentFormats[expirationFormatNumber]);
-            var segment = $"{prefix}{date?.StringValue}";
+            //prefix + date + (possible)7, which is the indicator that a batch or serial is following the date
+            var segment = $"{prefix}{date?.StringValue}{(expirationFormatNumber > 7 ? "7" : string.Empty)}";
 
             if (hasBatchNumber)
             {
@@ -289,34 +291,55 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                         barcode.SerialNumber = segmentData[1..];
                         break;
                     case '$':
-                        var QuantityDateLine = segmentData.StartsWith("$$", StringComparison.Ordinal);
-                        segmentData = segmentData[(QuantityDateLine ? 2 : 1)..];
+                        var isMultiDataLine = segmentData.StartsWith("$$", StringComparison.Ordinal);
+                        segmentData = segmentData[(isMultiDataLine ? 2 : 1)..];
                         var isSerialLine = segmentData.First() == '+';
                         if (isSerialLine)
                             segmentData = segmentData[1..];
 
                         //$$2 - $$6 -> dated batch or serial line
                         //$$7 -> only batch/serial
-                        //$$8 - $$9 -> quantity + batch/serial lines
-                        //format 8 = QQ, format 9 = QQQQQ
-                        if (QuantityDateLine && int.TryParse(segmentData.First().ToString(), out var formatNumber))
+                        //$$8 - $$9 -> quantity + (optional) date & batch/serial lines
+                        //in hibc specs 2.6 $$8 & $$9 have been depricated, and are replaced with /Q, but in <= 2.5 they are allowed...
+                        //flippin' hibc specs man
+                        if (isMultiDataLine && int.TryParse(segmentData.First().ToString(), out var formatNumber))
                         {
-                            if (formatNumber > 1)
-                                segmentData = segmentData[1..];
-
                             var format = HibcBarcodeSegmentFormat.SegmentFormats[formatNumber];
-                            var data = segmentData[..format.Length];
-                            segmentData = segmentData[format.Length..];
-
-                            if (formatNumber > 7)
-                                barcode.Quantity = int.Parse(data);
-
-                            else if (formatNumber < 7)
+                            switch (formatNumber)
                             {
-                                if (!string.IsNullOrWhiteSpace(barcode.ExpirationDate?.StringValue))
-                                    throw new HIBCParseException($"ExpirationDate already parsed before '{segmentData}'.");
+                                //quantity ( + optional date ) + batch/serial
+                                case 8:
+                                case 9:
+                                    segmentData = segmentData[1..];
+                                    barcode.Quantity = int.Parse(segmentData[..format.Length]);
+                                    segmentData = segmentData[format.Length..];
+                                    if (int.TryParse(segmentData.First().ToString(), out var newFormat))
+                                    {
+                                        formatNumber = int.Parse(segmentData.First().ToString());
+                                        format = HibcBarcodeSegmentFormat.SegmentFormats[formatNumber];
+                                    }
+                                    goto default;
+                                //formats none - 6
+                                default:
+                                    //just batch/serial
+                                    if (formatNumber == 7)
+                                    {
+                                        segmentData = segmentData[1..];
+                                        break;
+                                    }
 
-                                barcode.ExpirationDate = BarcodeDateTime.HibcDate(data, format);
+                                    if (formatNumber > 7)
+                                        break;
+
+                                    if (formatNumber > 1)
+                                        segmentData = segmentData[1..];
+
+                                    if (!string.IsNullOrWhiteSpace(barcode.ExpirationDate?.StringValue))
+                                        throw new HIBCParseException($"ExpirationDate already parsed before '{segmentData}'.");
+
+                                    barcode.ExpirationDate = BarcodeDateTime.HibcDate(segmentData[..format.Length], format);
+                                    segmentData = segmentData[format.Length..];
+                                    break;
                             }
                         }
 

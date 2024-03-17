@@ -226,7 +226,7 @@ public class BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
 
             //HIBC - 2D
             {
-                "+A99912345/$$90999910X3/$$+320011577DEFG45/16D20111212D",
+                "+A99912345/$$909999710X3/$$+320011577DEFG45/16D20111212K",
                 new HibcBarcode()
                 {
                     ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
@@ -242,7 +242,7 @@ public class BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
 
             //HIBC - 1D
             {
-                "+A999123457+$$90999910X37-+$$+320011577DEFG4572+16D201112127Z",
+                "+A999123457+$$909999710X370+$$+320011577DEFG4572+16D201112127Z",
                 new HibcBarcode(false)
                 {
                     ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),

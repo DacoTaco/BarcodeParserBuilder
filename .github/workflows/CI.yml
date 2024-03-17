@@ -22,13 +22,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: echo type
+      run: echo "is tag build ${{env.isTagBuild}} -> ${{env.publishDirectory}}"
     - name: Checkout
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 50
-        fetch-tags: true
-    - name: echo type
-      run: echo "is tag build $isTagBuild -> $publishDirectory"
     - name: Setup .NET8
       uses: actions/setup-dotnet@v3
       with:
@@ -50,6 +47,6 @@ jobs:
         name: nuget-packages
         path: ${{ env.publishDirectory }}
     - name: Publish
-      if: ${{ env.isTagBuild == true}}
+      if: ${{ env.isTagBuild }}
       run: find $publishDirectory -name '*.nupkg' | xargs dotnet nuget push --api-key $nugetApiKey -s https://api.nuget.org/v3/index.json
           

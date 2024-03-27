@@ -74,6 +74,14 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new FixedLengthGS1Field<double?>("367", 7),
         new FixedLengthGS1Field<double?>("368", 7),
         new FixedLengthGS1Field<double?>("369", 7),
+        new FixedLengthGS1Field("410", 13),
+        new FixedLengthGS1Field("411", 13),
+        new FixedLengthGS1Field("412", 13),
+        new FixedLengthGS1Field("413", 13),
+        new FixedLengthGS1Field("414", 13),
+        new FixedLengthGS1Field("415", 13),
+        new FixedLengthGS1Field("416", 13),
+        new FixedLengthGS1Field("417", 13),
 
         new GS1Field("10", 20),
         new GS1Field("21", 20),
@@ -83,7 +91,6 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new GS1Field("241", 30),
         new GS1Field("242", 6),
         new GS1Field("243", 20),
-        new GS1Field("25"),
         new GS1Field<int?>("30", 8),
         new GS1Field("37"),
         new GS1Field("390"),
@@ -93,7 +100,6 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new GS1Field("394"),
         new GS1Field("395"),
         new GS1Field("40"),
-        new GS1Field("41"),
         new GS1Field("42"),
         new GS1Field("43"),
         new GS1Field("70"),
@@ -112,6 +118,11 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new GS1Field("97", 90),
         new GS1Field("98", 90),
         new GS1Field("99", 90),
+        new GS1Field("250", 30),
+        new GS1Field("251", 30),
+        new GS1Field("253", 30),
+        new GS1Field("254", 20),
+        new GS1Field("255", 25),
     ];
 
     public override AimSymbologyIdentifier? ReaderInformation { get; protected set; }

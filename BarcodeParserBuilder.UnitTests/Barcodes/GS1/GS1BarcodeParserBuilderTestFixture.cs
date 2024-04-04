@@ -62,6 +62,69 @@ public class GS1BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
         else
             result.Fields["314"].Value.Should().BeNull();
 
+        if (expectedBarcode.Fields["410"].Value != null)
+            (result!.Fields["410"].Value).Should().Be(expectedBarcode.Fields["410"].Value);
+        else
+            result!.Fields["410"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["411"].Value != null)
+            (result!.Fields["411"].Value).Should().Be(expectedBarcode.Fields["411"].Value);
+        else
+            result!.Fields["411"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["412"].Value != null)
+            (result!.Fields["412"].Value).Should().Be(expectedBarcode.Fields["412"].Value);
+        else
+            result!.Fields["412"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["413"].Value != null)
+            (result!.Fields["413"].Value).Should().Be(expectedBarcode.Fields["413"].Value);
+        else
+            result!.Fields["413"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["414"].Value != null)
+            (result!.Fields["414"].Value).Should().Be(expectedBarcode.Fields["414"].Value);
+        else
+            result!.Fields["414"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["415"].Value != null)
+            (result!.Fields["415"].Value).Should().Be(expectedBarcode.Fields["415"].Value);
+        else
+            result!.Fields["415"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["416"].Value != null)
+            (result!.Fields["416"].Value).Should().Be(expectedBarcode.Fields["416"].Value);
+        else
+            result!.Fields["416"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["417"].Value != null)
+            (result!.Fields["417"].Value).Should().Be(expectedBarcode.Fields["417"].Value);
+        else
+            result!.Fields["417"].Value.Should().BeNull();
+        if (expectedBarcode.Fields["250"].Value != null)
+            (result!.Fields["250"].Value).Should().Be(expectedBarcode.Fields["250"].Value);
+        else
+            result!.Fields["250"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["251"].Value != null)
+            (result!.Fields["251"].Value).Should().Be(expectedBarcode.Fields["251"].Value);
+        else
+            result!.Fields["251"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["253"].Value != null)
+            (result!.Fields["253"].Value).Should().Be(expectedBarcode.Fields["253"].Value);
+        else
+            result!.Fields["253"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["254"].Value != null)
+            (result!.Fields["254"].Value).Should().Be(expectedBarcode.Fields["254"].Value);
+        else
+            result!.Fields["254"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["255"].Value != null)
+            (result!.Fields["255"].Value).Should().Be(expectedBarcode.Fields["255"].Value);
+        else
+            result!.Fields["255"].Value.Should().BeNull();
     }
 
     [Theory]
@@ -265,6 +328,50 @@ public class GS1BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
         gs1BarcodeDimension.Fields["312"].SetValue(1234.56); // Width in metres
         gs1BarcodeDimension.Fields["313"].SetValue(0.01234); // Deepth in metres
         gs1BarcodeDimension.Fields["314"].SetValue(123456d); // Area in square metres
+
+        var gs1Barcode41x = new GS1Barcode()
+        {
+            ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+            {
+                productCode.Type = ProductCodeType.GTIN;
+                productCode.Value = "357466145194";
+                productCode.Indicator = 0;
+            })
+        };
+        gs1Barcode41x.Fields["410"].SetValue("10101xxx10101");
+        gs1Barcode41x.Fields["412"].SetValue("1212121212lol");
+        gs1Barcode41x.Fields["414"].SetValue("34343434asc43");
+        gs1Barcode41x.Fields["417"].SetValue("1717171717inc");
+
+        var gs1Barcode41x2 = new GS1Barcode()
+        {
+            ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+            {
+                productCode.Type = ProductCodeType.GTIN;
+                productCode.Value = "357466145194";
+                productCode.Indicator = 0;
+            }),
+            BatchNumber = "3456789",
+            SerialNumber = "54321"
+        };
+        gs1Barcode41x2.Fields["410"].SetValue("10101xxx10101");
+        gs1Barcode41x2.Fields["412"].SetValue("1212121212lol");
+        gs1Barcode41x2.Fields["414"].SetValue("34343434asc43");
+
+        var gs1Barcode25x = new GS1Barcode()
+        {
+            ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+            {
+                productCode.Type = ProductCodeType.GTIN;
+                productCode.Value = "357466145194";
+                productCode.Indicator = 0;
+            })
+        };
+        gs1Barcode25x.Fields["250"].SetValue("t250");
+        gs1Barcode25x.Fields["251"].SetValue("t251");
+        gs1Barcode25x.Fields["253"].SetValue("t253");
+        gs1Barcode25x.Fields["254"].SetValue("t254");
+        gs1Barcode25x.Fields["255"].SetValue("t255");
 
         return new TheoryData<string, GS1Barcode>()
         {
@@ -475,6 +582,20 @@ public class GS1BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
                $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226{GroupSeparator}31151234563122123456313500123431401234563205354777",
                 gs1BarcodeDimension
             },
+            //Check prefix 41 AIs
+            {
+                $"010357466145194741010101xxx101014121212121212lol41434343434asc434171717171717inc",
+                gs1Barcode41x
+            },
+            {
+                $"0103574661451947103456789{GroupSeparator}2154321{GroupSeparator}41010101xxx101014121212121212lol41434343434asc43",
+                gs1Barcode41x2
+            },
+            //Check prefix 25 AIs
+            {
+                $"0103574661451947250t250{GroupSeparator}251t251{GroupSeparator}253t253{GroupSeparator}254t254{GroupSeparator}255t255",
+                gs1Barcode25x
+            },
         };
     }
 
@@ -568,168 +689,4 @@ public class GS1BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
             $"Failed to parse GS1 Barcode :{Environment.NewLine}30 : Invalid value Length 10. Expected Max 8 Bytes."
         },
     };
-
-    [Theory]
-    [MemberData(nameof(ValidGs1ParsingBarcodes41x))]
-    public void CanParseBarcodeString41x(string barcode, GS1Barcode expectedBarcode)
-    {
-        //Arrange & Act
-        var parsed = GS1BarcodeParserBuilder.TryParse(barcode, expectedBarcode.ReaderInformation, out var result);
-        Action parseAction = () => GS1BarcodeParserBuilder.Parse(barcode, expectedBarcode.ReaderInformation);
-
-        //Assert
-        parsed.Should().BeTrue();
-        parseAction.Should().NotThrow();
-        CompareBarcodeObjects(expectedBarcode, result);
-
-        if (expectedBarcode.Fields["410"].Value != null)
-            (result!.Fields["410"].Value).Should().Be(expectedBarcode.Fields["410"].Value);
-        else
-            result!.Fields["410"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["411"].Value != null)
-            (result!.Fields["411"].Value).Should().Be(expectedBarcode.Fields["411"].Value);
-        else
-            result!.Fields["411"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["412"].Value != null)
-            (result!.Fields["412"].Value).Should().Be(expectedBarcode.Fields["412"].Value);
-        else
-            result!.Fields["412"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["413"].Value != null)
-            (result!.Fields["413"].Value).Should().Be(expectedBarcode.Fields["413"].Value);
-        else
-            result!.Fields["413"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["414"].Value != null)
-            (result!.Fields["414"].Value).Should().Be(expectedBarcode.Fields["414"].Value);
-        else
-            result!.Fields["414"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["415"].Value != null)
-            (result!.Fields["415"].Value).Should().Be(expectedBarcode.Fields["415"].Value);
-        else
-            result!.Fields["415"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["416"].Value != null)
-            (result!.Fields["416"].Value).Should().Be(expectedBarcode.Fields["416"].Value);
-        else
-            result!.Fields["416"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["417"].Value != null)
-            (result!.Fields["417"].Value).Should().Be(expectedBarcode.Fields["417"].Value);
-        else
-            result!.Fields["417"].Value.Should().BeNull();
-
-    }
-    public static TheoryData<string, GS1Barcode> ValidGs1ParsingBarcodes41x()
-    {
-        var gs1Barcode41x = new GS1Barcode(new GS1AimSymbologyIdentifier("d2"))
-        {
-            ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
-            {
-                productCode.Type = ProductCodeType.GTIN;
-                productCode.Value = "357466145194";
-                productCode.Indicator = 0;
-            })
-        };
-        gs1Barcode41x.Fields["410"].SetValue("10101xxx10101");
-        gs1Barcode41x.Fields["412"].SetValue("1212121212lol");
-        gs1Barcode41x.Fields["414"].SetValue("34343434asc43");
-        gs1Barcode41x.Fields["417"].SetValue("1717171717inc");
-
-        var gs1Barcode41x2 = new GS1Barcode(new GS1AimSymbologyIdentifier("d2"))
-        {
-            ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
-            {
-                productCode.Type = ProductCodeType.GTIN;
-                productCode.Value = "357466145194";
-                productCode.Indicator = 0;
-            }),
-            BatchNumber = "3456789",
-            SerialNumber = "54321"
-        };
-        gs1Barcode41x2.Fields["410"].SetValue("10101xxx10101");
-        gs1Barcode41x2.Fields["412"].SetValue("1212121212lol");
-        gs1Barcode41x2.Fields["414"].SetValue("34343434asc43");
-
-        return new TheoryData<string, GS1Barcode>()
-        {
-            {
-                $"]d2010357466145194741010101xxx101014121212121212lol41434343434asc434171717171717inc",
-                gs1Barcode41x
-            },
-            {
-                //$"]d2010345678901234541010101xxx10101103456789{GroupSeparator}2154321{GroupSeparator}41434343434asc43",
-                $"]d2010357466145194741010101xxx101014121212121212lol103456789{GroupSeparator}2154321{GroupSeparator}41434343434asc43",
-                gs1Barcode41x2
-            }
-        };
-    }
-
-    [Theory]
-    [MemberData(nameof(ValidGs1ParsingBarcodes25x))]
-    public void CanParseBarcodeString25x(string barcode, GS1Barcode expectedBarcode)
-    {
-        //Arrange & Act
-        var parsed = GS1BarcodeParserBuilder.TryParse(barcode, expectedBarcode.ReaderInformation, out var result);
-        Action parseAction = () => GS1BarcodeParserBuilder.Parse(barcode, expectedBarcode.ReaderInformation);
-
-        //Assert
-        parsed.Should().BeTrue();
-        parseAction.Should().NotThrow();
-        CompareBarcodeObjects(expectedBarcode, result);
-
-        if (expectedBarcode.Fields["250"].Value != null)
-            (result!.Fields["250"].Value).Should().Be(expectedBarcode.Fields["250"].Value);
-        else
-            result!.Fields["250"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["251"].Value != null)
-            (result!.Fields["251"].Value).Should().Be(expectedBarcode.Fields["251"].Value);
-        else
-            result!.Fields["251"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["253"].Value != null)
-            (result!.Fields["253"].Value).Should().Be(expectedBarcode.Fields["253"].Value);
-        else
-            result!.Fields["253"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["254"].Value != null)
-            (result!.Fields["254"].Value).Should().Be(expectedBarcode.Fields["254"].Value);
-        else
-            result!.Fields["254"].Value.Should().BeNull();
-
-        if (expectedBarcode.Fields["255"].Value != null)
-            (result!.Fields["255"].Value).Should().Be(expectedBarcode.Fields["255"].Value);
-        else
-            result!.Fields["255"].Value.Should().BeNull();
-    }
-
-    public static TheoryData<string, GS1Barcode> ValidGs1ParsingBarcodes25x()
-    {
-        var gs1Barcode25x = new GS1Barcode(new GS1AimSymbologyIdentifier("d2"))
-        {
-            ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
-            {
-                productCode.Type = ProductCodeType.GTIN;
-                productCode.Value = "357466145194";
-                productCode.Indicator = 0;
-            })
-        };
-        gs1Barcode25x.Fields["250"].SetValue("t250");
-        gs1Barcode25x.Fields["251"].SetValue("t251");
-        gs1Barcode25x.Fields["253"].SetValue("t253");
-        gs1Barcode25x.Fields["254"].SetValue("t254");
-        gs1Barcode25x.Fields["255"].SetValue("t255");
-
-        return new TheoryData<string, GS1Barcode>()
-        {
-            {
-                $"]d20103574661451947250t250{GroupSeparator}251t251{GroupSeparator}253t253{GroupSeparator}254t254{GroupSeparator}255t255",
-                gs1Barcode25x
-            }
-        };
-    }
 }

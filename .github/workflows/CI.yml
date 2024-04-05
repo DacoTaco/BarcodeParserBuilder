@@ -47,6 +47,6 @@ jobs:
         name: nuget-packages
         path: ${{ env.publishDirectory }}
     - name: Publish
-      if: ${{ env.isTagBuild == true }}
+      if: env.isTagBuild == 'true'
       run: find $publishDirectory -name '*.nupkg' | xargs dotnet nuget push --api-key $nugetApiKey -s https://api.nuget.org/v3/index.json
           

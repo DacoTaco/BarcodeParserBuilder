@@ -19,42 +19,40 @@ public class BaseBarcodeTestFixture
         parsedResult.Should().NotBeNull();
         parsedResult!.BarcodeType.Should().Be(expectedBarcodeType ?? expectedResult.BarcodeType);
 
-        var parsedProductCode = parsedResult.ProductCode;
-        var expectedProductCode = expectedResult.ProductCode;
-        if (expectedProductCode == null)
-        {
-            parsedProductCode.Should().BeNull();
-        }
-        else
-        {
-            parsedProductCode.Should().NotBeNull();
-            parsedProductCode.Should().BeOfType(expectedProductCode.GetType());
-
-            foreach (var property in expectedProductCode.GetType().GetProperties())
-            {
-                var actualValue = property.GetValue(parsedProductCode, null);
-                var expectedValue = property.GetValue(expectedProductCode, null);
-
-                if (expectedValue == null)
-                    actualValue.Should().BeNull($"'{property.Name}' should be null");
-                else
-                    actualValue.Should().NotBeNull($"'{property.Name}' should be equal to {expectedValue}");
-
-                actualValue.Should().Be(expectedValue, $"'{property.Name}' should be equal");
-            }
-        }
-
         //Some barcode fields are unused in some types. we still need to compare those though.
         foreach (var propertyInfo in expectedResult.GetType().GetProperties())
         {
-            if (propertyInfo.Name == nameof(Barcode.Fields))
+            if (propertyInfo.Name == nameof(Barcode.Fields) || propertyInfo.Name == nameof(Barcode.BarcodeType))
                 continue;
 
             switch (GetPossibleUnusedField(() => propertyInfo.GetValue(expectedResult)))
             {
-                case BarcodeType _:
-                case ProductCode _:
-                    continue;
+                case ProductCode expectedProductCode:
+                    var parsedProductCode = parsedResult.ProductCode;
+                    if (expectedProductCode == null)
+                    {
+                        parsedProductCode.Should().BeNull();
+                    }
+                    else
+                    {
+                        parsedProductCode.Should().NotBeNull();
+                        parsedProductCode.Should().BeOfType(expectedProductCode.GetType());
+
+                        foreach (var property in expectedProductCode.GetType().GetProperties())
+                        {
+                            var actualValue = property.GetValue(parsedProductCode, null);
+                            var expectedValue = property.GetValue(expectedProductCode, null);
+
+                            if (expectedValue == null)
+                                actualValue.Should().BeNull($"'{property.Name}' should be null");
+                            else
+                                actualValue.Should().NotBeNull($"'{property.Name}' should be equal to {expectedValue}");
+
+                            actualValue.Should().Be(expectedValue, $"'{property.Name}' should be equal");
+                        }
+                    }
+
+                    break;
                 case BarcodeDateTime _:
                     var datetimeProperties = typeof(BarcodeDateTime).GetProperties();
                     foreach (var property in datetimeProperties)

@@ -25,9 +25,9 @@ jobs:
 #    - name: echo type
 #      run: echo "is tag build ${{env.isTagBuild}} -> ${{env.publishDirectory}}"
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup .NET8
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
@@ -42,7 +42,7 @@ jobs:
           find . -wholename '*/Release/*.nupkg' | xargs cp -t $publishDirectory
           ls -al $publishDirectory
     - name: Publish Artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: nuget-packages
         path: ${{ env.publishDirectory }}

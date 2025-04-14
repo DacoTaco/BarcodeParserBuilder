@@ -284,6 +284,12 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                         }
 
                         break;
+                    case 'Q': // Quantity /Q as of Spec 2.6 version
+                        if (barcode.UnitOfMeasure != 9)
+                            throw new HIBCParseException($"Using Quantity /Q requires UnitOfMeasure of 9!");
+                        segmentData = segmentData[1..];
+                        barcode.Quantity = int.Parse(segmentData);
+                        break;                        
                     case 'S': //Supplimentary Serial Number
                         if (!string.IsNullOrWhiteSpace(barcode.SerialNumber))
                             throw new HIBCParseException($"Serial already parsed before '{segmentData}'.");

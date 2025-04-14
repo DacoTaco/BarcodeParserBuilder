@@ -1,7 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8;net6;net48</TargetFrameworks>
+    <BaseTargetFrameworks>net8;net6</BaseTargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(BaseTargetFrameworks);net48</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">$(BaseTargetFrameworks)</TargetFrameworks>
+
     <!-- I hate having to define the C# language, but otherwise Nullable & ImplicitUsings won't work as it is a newer language feature than netstandard 2.0 ...-->
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>

@@ -185,6 +185,21 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
                 Quantity = 24
             }
         },
+
+        // +A99912349/$10X3/16D20111231/14D20200131/Q500Z  sample data from HIBC 2.6 Spec
+        {
+            "+A99912349/$10X3/16D20111231/14D20200131/Q500Z",
+            new HibcBarcode()
+            {
+                ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("1234"),
+                LabelerIdentificationCode = "A999",
+                UnitOfMeasure = 9,
+                BatchNumber = "10X3",
+                ExpirationDate = new TestBarcodeDateTime(new DateTime(2020, 01, 31), "20200131", "yyyyMMdd"),
+                ProductionDate = new TestBarcodeDateTime(new DateTime(2011, 12, 31), "20111231", "yyyyMMdd"),
+                Quantity = 500
+            }
+        },        
     };
 
     public static TheoryData<string, HibcBarcode> ValidHibcBuildingBarcodes() => new()
@@ -440,6 +455,12 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
         {
             "+A123BJC5D6E71G+$$52001510X3+ ",
             $"Failed to parse HIBC Barcode :{Environment.NewLine}Link Character did not match: expected 'G' but got '+'."
+        },
+
+        // Using Quantity /Q requires UnitOfMeasure of 9!
+        {
+            "+A99912341/$10X3/16D20111231/14D20200131/Q500R",
+            $"Failed to parse HIBC Barcode :{Environment.NewLine}Using Quantity /Q requires UnitOfMeasure of 9!"
         },
     };
 }

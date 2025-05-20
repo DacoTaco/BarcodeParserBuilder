@@ -305,7 +305,7 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
 
                         //$$2 - $$6 -> dated batch or serial line
                         //$$7 -> only batch/serial
-                        //$$8 - $$9 -> quantity + (optional) date & batch/serial lines
+                        //$$8 - $$9 -> quantity + (optional) date + (optional) batch/serial lines
                         //in hibc specs 2.6 $$8 & $$9 have been depricated, and are replaced with /Q, but in <= 2.5 they are allowed...
                         //flippin' hibc specs man
                         if (isMultiDataLine && int.TryParse(segmentData.First().ToString(), out var formatNumber))
@@ -313,12 +313,17 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                             var format = HibcBarcodeSegmentFormat.SegmentFormats[formatNumber];
                             switch (formatNumber)
                             {
-                                //quantity ( + optional date ) + batch/serial
+                                //quantity ( + optional date ) ( + optional batch/serial )
                                 case 8:
                                 case 9:
                                     segmentData = segmentData[1..];
                                     barcode.Quantity = int.Parse(segmentData[..format.Length]);
                                     segmentData = segmentData[format.Length..];
+
+                                    //neither date nor batch follow the quantity
+                                    if (segmentData.Length < 1)
+                                        break;
+
                                     if (int.TryParse(segmentData.First().ToString(), out var newFormat))
                                     {
                                         formatNumber = int.Parse(segmentData.First().ToString());

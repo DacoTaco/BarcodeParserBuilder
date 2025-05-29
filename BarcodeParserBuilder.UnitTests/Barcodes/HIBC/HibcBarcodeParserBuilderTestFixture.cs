@@ -199,7 +199,19 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
                 ProductionDate = new TestBarcodeDateTime(new DateTime(2011, 12, 31), "20111231", "yyyyMMdd"),
                 Quantity = 500
             }
-        },        
+        },
+
+        //2D - example of quantity without expiration date
+        {
+            "+EHWD3551419/$$900100F",
+            new HibcBarcode()
+            {
+                LabelerIdentificationCode = "EHWD",
+                ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("355141"),
+                UnitOfMeasure = 9,
+                Quantity = 100
+            }
+        },
     };
 
     public static TheoryData<string, HibcBarcode> ValidHibcBuildingBarcodes() => new()
@@ -411,6 +423,18 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
                 UnitOfMeasure = 0,
                 ExpirationDate = new TestBarcodeDateTime(new DateTime(2026, 04, 13), "20260413", "yyyyMMdd"),
                 BatchNumber = "230513",
+            }
+        },
+        
+        //2D - example of quantity without expiration date
+        {
+            "+EHWD3551419/Q100/",
+            new HibcBarcode()
+            {
+                LabelerIdentificationCode = "EHWD",
+                ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("355141"),
+                UnitOfMeasure = 9,
+                Quantity = 100
             }
         },
     };

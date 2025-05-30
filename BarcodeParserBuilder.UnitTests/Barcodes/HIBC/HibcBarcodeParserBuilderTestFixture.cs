@@ -201,7 +201,7 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
             }
         },
 
-        //2D - example of quantity without expiration date
+        //2D - example of quantity without batch number
         {
             "+EHWD3551419/$$900100F",
             new HibcBarcode()
@@ -426,9 +426,9 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
             }
         },
         
-        //2D - example of quantity without expiration date
+        //2D - example of quantity without batch number
         {
-            "+EHWD3551419/Q100/",
+            "+EHWD3551419/$/Q100X",
             new HibcBarcode()
             {
                 LabelerIdentificationCode = "EHWD",

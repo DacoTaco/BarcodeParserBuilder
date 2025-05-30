@@ -70,7 +70,7 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
             //1D Barcode - Add Link & CheckCharacter
             if (!barcode.Is2DBarcode)
             {
-                ending = (linkCharacter.HasValue) ? linkCharacter.ToString() : "";
+                ending = linkCharacter.HasValue ? linkCharacter.ToString() : "";
                 var checkCharacter = HibcCheckCharacterCalculator.CalculateSegmentCheckCharacter($"{segment}{ending}");
                 ending += checkCharacter;
                 if (index == 0)
@@ -96,26 +96,27 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
             return segments;
 
         var hasBatchNumber = !string.IsNullOrWhiteSpace(barcode!.BatchNumber);
+        var addBatchNumber = hasBatchNumber;
         var hasSerialNumber = !string.IsNullOrWhiteSpace(barcode.SerialNumber);
-        var hasExpirationDate = (barcode.ExpirationDate != null && !string.IsNullOrWhiteSpace(barcode.ExpirationDate.StringValue));
+        var hasExpirationDate = barcode.ExpirationDate != null && !string.IsNullOrWhiteSpace(barcode.ExpirationDate.StringValue);
         var hasQuantity = barcode.Quantity > 0;
         var quantityFormatNumber = barcode.Quantity < 100 ? 8 : 9;
         var expirationFormatNumber = HibcBarcodeSegmentFormat.GetHibcDateTimeFormatIdentifierByFormat(barcode.ExpirationDate?.FormatString ?? string.Empty);
 
         segments.Add($"{barcode.LabelerIdentificationCode}{barcode.ProductCode!.Code}{barcode.UnitOfMeasure}");
 
-        if (hasQuantity && (hasBatchNumber || hasSerialNumber))
+        if (hasQuantity && (addBatchNumber || hasSerialNumber))
         {
             hasQuantity = false;
             var format = HibcBarcodeSegmentFormat.SegmentFormats[quantityFormatNumber];
-            var prefix = $"$${(hasBatchNumber ? "" : "+")}";
+            var prefix = $"$${(addBatchNumber ? "" : "+")}";
             //prefix + quatity + (possible)7, which is the indicator that a batch or serial is following the date
-            var segment = $"{prefix}{(quantityFormatNumber)}{barcode.Quantity.ToString(format)}{(quantityFormatNumber > 7 ? "7" : string.Empty)}";
+            var segment = $"{prefix}{quantityFormatNumber}{barcode.Quantity.ToString(format)}{(quantityFormatNumber > 7 ? "7" : string.Empty)}";
 
-            if (hasBatchNumber)
+            if (addBatchNumber)
             {
                 segment += barcode.BatchNumber;
-                hasBatchNumber = false;
+                addBatchNumber = false;
             }
             else
             {
@@ -125,20 +126,20 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
             segments.Add(segment);
         }
 
-        if (hasExpirationDate && expirationFormatNumber <= 7 && (hasBatchNumber || hasSerialNumber))
+        if (hasExpirationDate && expirationFormatNumber <= 7 && (addBatchNumber || hasSerialNumber))
         {
             hasExpirationDate = false;
-            var prefix = $"$${(hasBatchNumber ? "" : "+")}";
+            var prefix = $"$${(addBatchNumber ? "" : "+")}";
 
             prefix += (expirationFormatNumber < 2 || expirationFormatNumber > 6) ? "" : expirationFormatNumber.ToString();
             var date = BarcodeDateTime.HibcDate(barcode.ExpirationDate!.DateTime, HibcBarcodeSegmentFormat.SegmentFormats[expirationFormatNumber]);
             //prefix + date + (possible)7, which is the indicator that a batch or serial is following the date
             var segment = $"{prefix}{date?.StringValue}{(expirationFormatNumber > 7 ? "7" : string.Empty)}";
 
-            if (hasBatchNumber)
+            if (addBatchNumber)
             {
                 segment += barcode.BatchNumber;
-                hasBatchNumber = false;
+                addBatchNumber = false;
             }
             else
             {
@@ -147,13 +148,13 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
             }
             segments.Add(segment);
         }
-        else if (hasBatchNumber || hasSerialNumber)
+        else if (addBatchNumber || hasSerialNumber)
         {
-            var segment = $"$${(hasBatchNumber ? "" : "+")}7";
-            if (hasBatchNumber)
+            var segment = $"$${(addBatchNumber ? "" : "+")}7";
+            if (addBatchNumber)
             {
                 segment += barcode.BatchNumber;
-                hasBatchNumber = false;
+                addBatchNumber = false;
             }
             else
             {
@@ -163,8 +164,10 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
             segments.Add(segment);
         }
 
-        if (hasBatchNumber)
-            segments.Add($"${barcode.BatchNumber}");
+        //if we have no batch number, but we have additional data to write, we will need to add a empty batch number segment
+        var hasAdditionalFields = barcode.ProductionDate != null || hasSerialNumber || hasExpirationDate || hasQuantity;
+        if (addBatchNumber || (!hasBatchNumber && hasAdditionalFields))
+            segments.Add($"${barcode.BatchNumber ?? string.Empty}");
 
         if (hasQuantity)
             segments.Add($"Q{barcode.Quantity}");
@@ -198,7 +201,7 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
             //separate all hibc segments. all segments either start with :
             // - a +[LabelOrSegmentID] (1D barcodes concat together) 
             // - a +[LabelID] or /[SegmentID] ( 2D barcodes concat and separated by / )
-            var matches = Regex.Matches(barcodeString, @"[+/]{1}[A-Za-z0-9$]{1,3}[A-Za-z0-9+]{1}");
+            var matches = Regex.Matches(barcodeString, @"[+/]{1}[A-Za-z0-9$]{1,3}[A-Za-z0-9+]{0,1}");
             var segments = new List<string>();
             var is2DBarcode = false;
 
@@ -214,8 +217,8 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                 segments.Add(segment);
             }
 
-            // prefix (+ or / ) + identifier + data -> minimum 5 characters
-            if (segments.Any(s => s.Length < 5))
+            // prefix (+ or / ) + identifier -> minimum 2 characters
+            if (segments.Any(s => s.Length < 2))
                 throw new HIBCParseException("Barcode contains segments that are too small.");
 
             //if its a 2D barcode, we will verify the check character & remove it before parsing it
@@ -297,6 +300,10 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                         barcode.SerialNumber = segmentData[1..];
                         break;
                     case '$':
+                        //empty line
+                        if(segmentData.Length == 1)
+                            continue;
+                        
                         var isMultiDataLine = segmentData.StartsWith("$$", StringComparison.Ordinal);
                         segmentData = segmentData[(isMultiDataLine ? 2 : 1)..];
                         var isSerialLine = segmentData.First() == '+';

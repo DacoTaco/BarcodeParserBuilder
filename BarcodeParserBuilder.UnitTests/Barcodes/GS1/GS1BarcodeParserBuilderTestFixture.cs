@@ -62,6 +62,26 @@ public class GS1BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
         else
             result.Fields["314"].Value.Should().BeNull();
 
+        if (expectedBarcode.Fields["400"].Value != null)
+            (result!.Fields["400"].Value).Should().Be(expectedBarcode.Fields["400"].Value);
+        else
+            result!.Fields["400"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["401"].Value != null)
+            (result!.Fields["401"].Value).Should().Be(expectedBarcode.Fields["401"].Value);
+        else
+            result!.Fields["401"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["402"].Value != null)
+            (result!.Fields["402"].Value).Should().Be(expectedBarcode.Fields["402"].Value);
+        else
+            result!.Fields["402"].Value.Should().BeNull();
+
+        if (expectedBarcode.Fields["403"].Value != null)
+            (result!.Fields["403"].Value).Should().Be(expectedBarcode.Fields["403"].Value);
+        else
+            result!.Fields["403"].Value.Should().BeNull();
+
         if (expectedBarcode.Fields["410"].Value != null)
             (result!.Fields["410"].Value).Should().Be(expectedBarcode.Fields["410"].Value);
         else
@@ -329,6 +349,20 @@ public class GS1BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
         gs1BarcodeDimension.Fields["313"].SetValue(0.01234); // Deepth in metres
         gs1BarcodeDimension.Fields["314"].SetValue(123456d); // Area in square metres
 
+        var gs1Barcode40x = new GS1Barcode()
+        {
+            ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
+            {
+                productCode.Type = ProductCodeType.GTIN;
+                productCode.Value = "357466145194";
+                productCode.Indicator = 0;
+            })
+        };
+        gs1Barcode40x.Fields["400"].SetValue("PO-20250612-ABC123");       // ORDER NUMBER
+        gs1Barcode40x.Fields["401"].SetValue("GINC202506120001SHIPMENT"); // GINC
+        gs1Barcode40x.Fields["402"].SetValue("91234567890123456");        // GSIN
+        gs1Barcode40x.Fields["403"].SetValue("HUB-NYC-AREA5");            // ROUTE
+
         var gs1Barcode41x = new GS1Barcode()
         {
             ProductCode = TestProductCode.CreateProductCode<GtinProductCode>("03574661451947", (productCode) =>
@@ -581,6 +615,11 @@ public class GS1BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
             {
                $"0103574661451947101724847.1{GroupSeparator}1721033121118165795226{GroupSeparator}31151234563122123456313500123431401234563205354777",
                 gs1BarcodeDimension
+            },
+            //Check prefix 40 AIs
+            {
+                $"0103574661451947400PO-20250612-ABC123{GroupSeparator}401GINC202506120001SHIPMENT{GroupSeparator}40291234567890123456403HUB-NYC-AREA5",
+                gs1Barcode40x
             },
             //Check prefix 41 AIs
             {

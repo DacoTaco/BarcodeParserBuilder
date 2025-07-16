@@ -106,7 +106,10 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new GS1Field("395"),                                    // Amount payable per unit of measure single monetary area (variable measure trade item): AI (395n)
 
         // GS1 Application Identifiers starting with digit 4
-        new GS1Field("40"),
+        new GS1Field("400", 30),                                // Customer’s purchase order number
+        new GS1Field("401", 30),                                // Global Identification Number for Consignment (GINC)
+        new FixedLengthGS1Field("402", 17),                     // Global Shipment Identification Number (GSIN)
+        new GS1Field("403", 30),                                // Routing code
         new FixedLengthGS1Field("410", 13),                     // Ship to - Deliver to Global Location Number (GLN)
         new FixedLengthGS1Field("411", 13),                     // Bill to - Invoice to Global Location Number (GLN)
         new FixedLengthGS1Field("412", 13),                     // Purchased from Global Location Number (GLN)

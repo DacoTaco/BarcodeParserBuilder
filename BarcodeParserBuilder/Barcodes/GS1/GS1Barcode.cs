@@ -11,16 +11,39 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
     public override BarcodeType BarcodeType => BarcodeType.GS1;
     protected override FieldCollection BarcodeFields { get; } =
     [
-        new FixedLengthGS1Field("00", 18),
-        new FixedLengthGS1Field<ProductCode?>("01", 14),
-        new FixedLengthGS1Field<ProductCode?>("02", 14),
-        new FixedLengthGS1Field<BarcodeDateTime?>("11", 6),
-        new FixedLengthGS1Field<BarcodeDateTime?>("12", 6),
-        new FixedLengthGS1Field<BarcodeDateTime?>("13", 6),
-        new FixedLengthGS1Field<BarcodeDateTime?>("15", 6),
-        new FixedLengthGS1Field<BarcodeDateTime?>("16", 6),
-        new FixedLengthGS1Field<BarcodeDateTime?>("17", 6),
-        new FixedLengthGS1Field("20", 2),
+        // GS1 Application Identifiers starting with digit 0
+        new FixedLengthGS1Field("00", 18),                      // Identification of a logistic unit (SSCC
+        new FixedLengthGS1Field<ProductCode?>("01", 14),        // Identification of a trade item (GTIN
+        new FixedLengthGS1Field<ProductCode?>("02", 14),        // Identification of trade items contained in a logistic unit
+        
+        // GS1 Application Identifiers starting with digit 1
+        new GS1Field("10", 20),                                 // Batch or lot number
+        new FixedLengthGS1Field<BarcodeDateTime?>("11", 6),     // Production date
+        new FixedLengthGS1Field<BarcodeDateTime?>("12", 6),     // Due date for amount on payment slip
+        new FixedLengthGS1Field<BarcodeDateTime?>("13", 6),     // Packaging date
+        new FixedLengthGS1Field<BarcodeDateTime?>("15", 6),     // Best before date
+        new FixedLengthGS1Field<BarcodeDateTime?>("16", 6),     // Sell by date
+        new FixedLengthGS1Field<BarcodeDateTime?>("17", 6),     // Expiration date
+        
+        // GS1 Application Identifiers starting with digit 2
+        new FixedLengthGS1Field("20", 2),                       // Internal product variant
+        new GS1Field("21", 20),                                 // Serial number
+        new GS1Field("22", 20),                                 // Consumer product variant
+        new GS1Field("235", 28),                                // Third Party Controlled, Serialised Extension of Global Trade Item Number (GTIN) (TPX)
+        new GS1Field("240", 30),                                // Additional product identification assigned by the manufacturer
+        new GS1Field("241", 30),                                // Customer part number
+        new GS1Field("242", 6),                                 // Made-to-Order variation number
+        new GS1Field("243", 20),                                // Packaging component number
+        new GS1Field("250", 30),                                // Secondary serial number
+        new GS1Field("251", 30),                                // Reference to source entity
+        new GS1Field("253", 30),                                // Global Document Type Identifier (GDTI)
+        new GS1Field("254", 20),                                // Global Location Number (GLN) extension component
+        new GS1Field("255", 25),                                // Global Coupon Number (GCN)
+
+        // GS1 Application Identifiers starting with digit 3
+        new GS1Field<int?>("30", 8),                           // Variable count of items
+        // Trade measures: AIs (31nn, 32nn, 35nn, 36nn)
+        // Logistic measures: AIs (33nn, 34nn, 35nn, 36nn)
         new FixedLengthGS1Field<double?>("310", 7),
         new FixedLengthGS1Field<double?>("311", 7),
         new FixedLengthGS1Field<double?>("312", 7),
@@ -74,41 +97,40 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new FixedLengthGS1Field<double?>("367", 7),
         new FixedLengthGS1Field<double?>("368", 7),
         new FixedLengthGS1Field<double?>("369", 7),
-        new FixedLengthGS1Field("410", 13),
-        new FixedLengthGS1Field("411", 13),
-        new FixedLengthGS1Field("412", 13),
-        new FixedLengthGS1Field("413", 13),
-        new FixedLengthGS1Field("414", 13),
-        new FixedLengthGS1Field("415", 13),
-        new FixedLengthGS1Field("416", 13),
-        new FixedLengthGS1Field("417", 13),
+        new GS1Field("37"),                                     // Count of trade items or trade item pieces contained in a logistic unit
+        new GS1Field("390"),                                    // Amount payable or coupon value - Single monetary area: AI (390n)
+        new GS1Field("391"),                                    // Amount payable and ISO currency code: AI (391n)
+        new GS1Field<double?>("392", 1, 16),                    // Amount payable for a variable measure trade item – Single monetary area: AI (392n)
+        new GS1Field("393"),                                    // Amount payable for a variable measure trade item and ISO currency code: AI (393n)
+        new GS1Field("394"),                                    // Percentage discount of a coupon: AI (394n)
+        new GS1Field("395"),                                    // Amount payable per unit of measure single monetary area (variable measure trade item): AI (395n)
 
-        new GS1Field("10", 20),
-        new GS1Field("21", 20),
-        new GS1Field("22", 20),
-        new GS1Field("235", 28),
-        new GS1Field("240", 30),
-        new GS1Field("241", 30),
-        new GS1Field("242", 6),
-        new GS1Field("243", 20),
-        new GS1Field<int?>("30", 8),
-        new GS1Field("37"),
-        new GS1Field("390"),
-        new GS1Field("391"),
-        new GS1Field<double?>("392", 1, 16),
-        new GS1Field("393"),
-        new GS1Field("394"),
-        new GS1Field("395"),
+        // GS1 Application Identifiers starting with digit 4
         new GS1Field("40"),
+        new FixedLengthGS1Field("410", 13),                     // Ship to - Deliver to Global Location Number (GLN)
+        new FixedLengthGS1Field("411", 13),                     // Bill to - Invoice to Global Location Number (GLN)
+        new FixedLengthGS1Field("412", 13),                     // Purchased from Global Location Number (GLN)
+        new FixedLengthGS1Field("413", 13),                     // Ship for - Deliver for - Forward to Global Location Number (GLN)
+        new FixedLengthGS1Field("414", 13),                     // Identification of a physical location - Global Location Number (GLN)
+        new FixedLengthGS1Field("415", 13),                     // Global Location Number (GLN) of the invoicing party
+        new FixedLengthGS1Field("416", 13),                     // Global Location Number (GLN) of the production or service location
+        new FixedLengthGS1Field("417", 13),                     // Party Global Location Number (GLN)
         new GS1Field("42"),
         new GS1Field("43"),
+
+        // GS1 Application Identifiers starting with digit 7
         new GS1Field("70"),
         new GS1Field("71"),
         new GS1Field("72"),
+
+        // GS1 Application Identifiers starting with digit 8
         new GS1Field("80"),
         new GS1Field("81"),
         new GS1Field("82"),
-        new GS1Field("90", 30),
+ 
+        // GS1 Application Identifiers starting with digit 9
+        new GS1Field("90", 30),                                 // Information mutually agreed between trading partners
+        // Company internal information: AIs (91 - 99)
         new GS1Field("91", 90),
         new GS1Field("92", 90),
         new GS1Field("93", 90),
@@ -118,11 +140,6 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new GS1Field("97", 90),
         new GS1Field("98", 90),
         new GS1Field("99", 90),
-        new GS1Field("250", 30),
-        new GS1Field("251", 30),
-        new GS1Field("253", 30),
-        new GS1Field("254", 20),
-        new GS1Field("255", 25),
     ];
 
     public override AimSymbologyIdentifier? ReaderInformation { get; protected set; }

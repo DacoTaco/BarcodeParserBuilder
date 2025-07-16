@@ -108,7 +108,7 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new GS1Field("80"),
         new GS1Field("81"),
         new GS1Field("82"),
-        new GS1Field("90", 90),
+        new GS1Field("90", 30),
         new GS1Field("91", 90),
         new GS1Field("92", 90),
         new GS1Field("93", 90),

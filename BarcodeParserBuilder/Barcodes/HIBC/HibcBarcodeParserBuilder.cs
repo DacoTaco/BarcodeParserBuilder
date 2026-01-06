@@ -192,6 +192,10 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                 return null;
 
             barcodeString = symbologyIdentifier?.StripSymbologyIdentifier(barcodeString!) ?? barcodeString!;
+            
+            if (string.IsNullOrWhiteSpace(barcodeString))
+                return null;
+
             if (!Regex.IsMatch(barcodeString, HibcCheckCharacterCalculator.AllowedCharacterRegex))
                 throw new HIBCParseException("Invalid HIBC Character detected.");
 
@@ -288,8 +292,8 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
 
                         break;
                     case 'Q': // Quantity /Q as of Spec 2.6 version
-                        if (barcode.UnitOfMeasure != 9)
-                            throw new HIBCParseException($"Using Quantity /Q requires UnitOfMeasure of 9!");
+                        //if (barcode.UnitOfMeasure != 9)
+                        //    throw new HIBCParseException($"Using Quantity /Q requires UnitOfMeasure of 9!");
                         segmentData = segmentData[1..];
                         barcode.Quantity = int.Parse(segmentData);
                         break;                        
@@ -306,6 +310,8 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                         
                         var isMultiDataLine = segmentData.StartsWith("$$", StringComparison.Ordinal);
                         segmentData = segmentData[(isMultiDataLine ? 2 : 1)..];
+                        if (segmentData.Length == 0)
+                            continue;
                         var isSerialLine = segmentData.First() == '+';
                         if (isSerialLine)
                             segmentData = segmentData[1..];

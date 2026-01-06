@@ -212,6 +212,20 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
                 Quantity = 100
             }
         },
+        // HIBC 2.3.2.4 has note about Q, saying that that Q should (not shall!) be used with UOM of 9. So Q with other UOMs is also valid.
+        {
+            "]d1+EFOR78712011/$26485266/16D20240626/Q10S",
+            new HibcBarcode(AimSymbologyIdentifier.ParseString("]d1"))
+            {
+                LabelerIdentificationCode = "EFOR",
+                ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("7871201"),
+                UnitOfMeasure = 1, // Valid UOM other than 9 with Q
+                Quantity = 10,
+                BatchNumber = "26485266",
+                ProductionDate = new TestBarcodeDateTime(new DateTime(2024, 06, 26), "20240626", "yyyyMMdd")
+
+            }
+        }
     };
 
     public static TheoryData<string, HibcBarcode> ValidHibcBuildingBarcodes() => new()
@@ -481,10 +495,13 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
             $"Failed to parse HIBC Barcode :{Environment.NewLine}Link Character did not match: expected 'G' but got '+'."
         },
 
+        // Disabled this test because HIBC spec 2.3.2.4 says that Q should (not shall) be used with UOM of 9. 
+        // It does not explicitly forbid other UOM values with Q.
+        //
         // Using Quantity /Q requires UnitOfMeasure of 9!
-        {
-            "+A99912341/$10X3/16D20111231/14D20200131/Q500R",
-            $"Failed to parse HIBC Barcode :{Environment.NewLine}Using Quantity /Q requires UnitOfMeasure of 9!"
-        },
+        //{
+        //    "+A99912341/$10X3/16D20111231/14D20200131/Q500R",
+        //    $"Failed to parse HIBC Barcode :{Environment.NewLine}Using Quantity /Q requires UnitOfMeasure of 9!"
+        //},
     };
 }

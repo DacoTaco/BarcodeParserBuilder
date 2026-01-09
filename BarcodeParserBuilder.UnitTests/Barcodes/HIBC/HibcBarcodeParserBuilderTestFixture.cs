@@ -494,14 +494,6 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
             "+A123BJC5D6E71G+$$52001510X3+ ",
             $"Failed to parse HIBC Barcode :{Environment.NewLine}Link Character did not match: expected 'G' but got '+'."
         },
-
-        // Disabled this test because HIBC spec 2.3.2.4 says that Q should (not shall) be used with UOM of 9. 
-        // It does not explicitly forbid other UOM values with Q.
-        //
-        // Using Quantity /Q requires UnitOfMeasure of 9!
-        //{
-        //    "+A99912341/$10X3/16D20111231/14D20200131/Q500R",
-        //    $"Failed to parse HIBC Barcode :{Environment.NewLine}Using Quantity /Q requires UnitOfMeasure of 9!"
-        //},
+        
     };
 }

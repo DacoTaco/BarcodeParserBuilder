@@ -292,8 +292,7 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
 
                         break;
                     case 'Q': // Quantity /Q as of Spec 2.6 version
-                        //if (barcode.UnitOfMeasure != 9)
-                        //    throw new HIBCParseException($"Using Quantity /Q requires UnitOfMeasure of 9!");
+                        // HIBC 2.3.2.4 states that quantity should be used with UoM 9 but it is not strictly enforced
                         segmentData = segmentData[1..];
                         barcode.Quantity = int.Parse(segmentData);
                         break;                        

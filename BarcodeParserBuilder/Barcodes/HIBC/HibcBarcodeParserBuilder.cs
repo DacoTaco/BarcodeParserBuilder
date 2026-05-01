@@ -192,7 +192,7 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                 return null;
 
             barcodeString = symbologyIdentifier?.StripSymbologyIdentifier(barcodeString!) ?? barcodeString!;
-            
+
             if (string.IsNullOrWhiteSpace(barcodeString))
                 return null;
 
@@ -221,6 +221,23 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                 segments.Add(segment);
             }
 
+            // Merge tiny/empty segments (e.g. "+$" or "/$") back into the previous segment
+            // these would generally be edge-case link & check characters that look like new segments
+            // And because HIBC is fun, this should only be done for 1D barcodes
+            // it is valid for 2D barcodes to have empty segments, and those also dont have link characters.
+            if (!is2DBarcode && segments.Count > 1)
+            {
+                var merged = new List<string>();
+                foreach (var segment in segments)
+                {
+                    if (segment.Length <= 2 && merged.Count > 0)
+                        merged[^1] += segment;
+                    else
+                        merged.Add(segment);
+                }
+                segments = merged;
+            }
+
             // prefix (+ or / ) + identifier -> minimum 2 characters
             if (segments.Any(s => s.Length < 2))
                 throw new HIBCParseException("Barcode contains segments that are too small.");
@@ -232,37 +249,47 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                     throw new HIBCParseException("Invalid HIBC Barcode.");
 
                 var segment = segments[^1];
-                segments[^1] = segment.Remove(segment.Length - 1, 1);
+                segments[^1] = segment[..^1];
             }
 
             var barcode = new HibcBarcode(symbologyIdentifier, is2DBarcode);
             char? linkCharacter = null;
+            var isSingleSegmentBarcode = segments.Count == 1;
             foreach (var segment in segments)
             {
-                var isPrimarySegment = barcode.ProductCode == null && (segment.First() == '+') && char.IsLetter(segment[1]);
+                var isPrimarySegment = barcode.ProductCode == null && (segment[0] == '+') && char.IsLetter(segment[1]);
                 var segmentData = segment;
 
                 if (!barcode.Is2DBarcode)
                 {
                     HibcCheckCharacterCalculator.ValidateSegment(segmentData, linkCharacter);
 
-                    //remove or save link character, depending if we are parsing the primary or secondary barcode
-                    if (linkCharacter.HasValue)
-                        segmentData = segmentData.Remove(segmentData.Length - 1, 1);
-                    else if (!linkCharacter.HasValue && isPrimarySegment)
-                        linkCharacter = segmentData.Last();
+                    //read and remove check character (always the last character of the segment)
+                    //if we have a link character, we will validate it (primary = vs check character, secondary = vs segment link character)
+                    //if we dont have a link character we will :
+                    // * save the check character if its the primary segment
+                    // * save the link character from the secondary segment & remove it from the segment data
+                    var checkCharacter = segmentData[^1];
+                    segmentData = segmentData[..^1];
 
-                    segmentData = segmentData.Remove(segmentData.Length - 1, 1);
+                    var readLinkCharacter = !isPrimarySegment ? segmentData[^1] : checkCharacter;
+                    if(!isPrimarySegment)
+                        segmentData = segmentData[..^1];
+
+                    if(linkCharacter.HasValue && linkCharacter.Value != readLinkCharacter)
+                        throw new HIBCParseException($"Invalid link character in {(isPrimarySegment ? "primary" : "secondary")} segment: expected {linkCharacter.Value} but got {readLinkCharacter}.");
+                    else if(!linkCharacter.HasValue) 
+                        linkCharacter = readLinkCharacter;
                 }
 
                 //remove the DI (+ or /)
-                segmentData = segmentData.Remove(0, 1);
+                segmentData = segmentData[1..];
 
                 if (isPrimarySegment)
                 {
                     barcode.LabelerIdentificationCode = segmentData[..4];
                     barcode.ProductCode = ProductCode.ParseHibc(segmentData[4..^1]);
-                    barcode.UnitOfMeasure = int.Parse(segmentData.Last().ToString());
+                    barcode.UnitOfMeasure = int.Parse(segmentData[^1].ToString());
                     continue;
                 }
 
@@ -295,7 +322,7 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                         // HIBC 2.3.2.4 states that quantity should be used with UoM 9 but it is not strictly enforced
                         segmentData = segmentData[1..];
                         barcode.Quantity = int.Parse(segmentData);
-                        break;                        
+                        break;
                     case 'S': //Supplimentary Serial Number
                         if (!string.IsNullOrWhiteSpace(barcode.SerialNumber))
                             throw new HIBCParseException($"Serial already parsed before '{segmentData}'.");
@@ -306,7 +333,7 @@ public class HibcBarcodeParserBuilder : BaseBarcodeParserBuilder<HibcBarcode>
                         //empty line
                         if(segmentData.Length == 1)
                             continue;
-                        
+
                         var isMultiDataLine = segmentData.StartsWith("$$", StringComparison.Ordinal);
                         segmentData = segmentData[(isMultiDataLine ? 2 : 1)..];
                         if (segmentData.Length == 0)

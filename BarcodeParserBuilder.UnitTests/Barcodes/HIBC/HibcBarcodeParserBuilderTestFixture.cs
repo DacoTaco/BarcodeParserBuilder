@@ -82,6 +82,33 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
             }
         },
 
+        //1D - primary + Secondary barcode with edge case link & check characters
+        {
+            "+E260PPAUXEMO19++$$8053290331260301104+$",
+            new HibcBarcode()
+            {
+                LabelerIdentificationCode = "E260",
+                ProductCode = TestProductCode.CreateProductCode<HibcProductCode>("PPAUXEMO1"),
+                UnitOfMeasure = 9,
+                Quantity = 5,
+                ExpirationDate = new TestBarcodeDateTime(new DateTime(2029, 03, 31), "290331", "yyMMdd"),
+                BatchNumber = "260301104",
+                Is2DBarcode = false
+            }
+        },
+
+        //1D - only Secondary barcode with edge case link & check characters
+        {
+            "+$$8053290331260301104+$",
+            new HibcBarcode()
+            {
+                Quantity = 5,
+                ExpirationDate = new TestBarcodeDateTime(new DateTime(2029, 03, 31), "290331", "yyMMdd"),
+                BatchNumber = "260301104",
+                Is2DBarcode = false
+            }
+        },
+
         //2D - Old Format
         {
             "+J123AQ3451/25330BC34567/S4012X",
@@ -439,7 +466,7 @@ public class HibcBarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
                 BatchNumber = "230513",
             }
         },
-        
+
         //2D - example of quantity without batch number
         {
             "+EHWD3551419/$/Q100X",

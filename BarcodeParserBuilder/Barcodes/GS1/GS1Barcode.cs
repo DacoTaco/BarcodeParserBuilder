@@ -15,7 +15,7 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new FixedLengthGS1Field("00", 18),                      // Identification of a logistic unit (SSCC
         new FixedLengthGS1Field<ProductCode?>("01", 14),        // Identification of a trade item (GTIN
         new FixedLengthGS1Field<ProductCode?>("02", 14),        // Identification of trade items contained in a logistic unit
-        
+
         // GS1 Application Identifiers starting with digit 1
         new GS1Field("10", 20),                                 // Batch or lot number
         new DateTimeGS1Field("11"),     // Production date
@@ -24,7 +24,7 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new DateTimeGS1Field("15"),     // Best before date
         new DateTimeGS1Field("16"),     // Sell by date
         new DateTimeGS1Field("17"),     // Expiration date
-        
+
         // GS1 Application Identifiers starting with digit 2
         new FixedLengthGS1Field("20", 2),                       // Internal product variant
         new GS1Field("21", 20),                                 // Serial number
@@ -122,15 +122,75 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         new GS1Field("43"),
 
         // GS1 Application Identifiers starting with digit 7
-        new GS1Field("70"),
-        new GS1Field("71"),
-        new GS1Field("72"),
+
+        new FixedLengthGS1Field<Int64?>("7001", 13),            //NATO Stock Number (NSN)
+        new GS1Field("7002", 30),                               //UNECE meat carcasses classification
+        new DateTimeGS1Field("7003", BarcodeDateTime.GS1DateTimeLongFormat), //Expiration date and time
+        new FixedLengthGS1Field<int?>("7004", 4),               //Active Potency
+        new GS1Field("7005", 12),                               //Catch Area
+        new DateTimeGS1Field("7006"),                           //First freeze date
+        new GS1Field<BarcodeDateTimeRange>("7007", 6, 12, $"{BarcodeDateTime.GS1DateShortFormat}{BarcodeDateTimeRange.DateTimeFormatSeparator}{BarcodeDateTime.GS1DateShortFormat}"), //Harvest Date date
+        new GS1Field("7008", 3),                                // Species for fishery (FAO code)
+        new GS1Field("7009", 10),                               // Fishing gear type
+        new GS1Field("7010", 2),                                // Production method
+        new GS1Field<BarcodeDateTime?>("7011", 6, 10, BarcodeDateTime.GS1DateOptionalTimeFormat),          // Test by date (YYMMDD[hhmm]) | Only 6 or 10 chars valid; optional time component. see 7003
+
+        new GS1Field("7020", 20),                               // Refurbishment lot ID
+        new GS1Field("7021", 20),                               // Functional status
+        new GS1Field("7022", 20),                               // Revision status
+        new GS1Field("7023", 30),                               // GIAI of an assembly
+        new GS1Field("7030", 4, 30),                            // Processor #0 (ISO 3166-1 country + processor ID)
+        new GS1Field("7031", 4, 30),                            // Processor #1
+        new GS1Field("7032", 4, 30),                            // Processor #2
+        new GS1Field("7033", 4, 30),                            // Processor #3
+        new GS1Field("7034", 4, 30),                            // Processor #4
+        new GS1Field("7035", 4, 30),                            // Processor #5
+        new GS1Field("7036", 4, 30),                            // Processor #6
+        new GS1Field("7037", 4, 30),                            // Processor #7
+        new GS1Field("7038", 4, 30),                            // Processor #8
+        new GS1Field("7039", 4, 30),                            // Processor #9
+        new FixedLengthGS1Field("7040", 4),                     // GS1 UIC with Extension 1 and Importer index
+        new GS1Field("7041", 4),                                // UN/CEFACT freight unit type
+
+        new GS1Field("710", 20),                                //NHRN – Germany PZN
+        new GS1Field("711", 20),                                //NHRN – France CIP
+        new GS1Field("712", 20),                                //NHRN – Spain CN
+        new GS1Field("713", 20),                                //NHRN – Brasil DRN
+        new GS1Field("714", 20),                                //NHRN – Portugal AIM
+        new GS1Field("715", 20),                                //NHRN – USA NDC
+        new GS1Field("716", 20),                                //NHRN – Italy AIC
+        new GS1Field("717", 20),                                //NHRN – Costa Rica SRN
+
+        // GS1 Application Identifiers starting with 72
+        new GS1Field("7230", 3, 30, null),                      // Certification reference #0
+    new GS1Field("7231", 3, 30, null),                          // Certification reference #1
+        new GS1Field("7232", 3, 30, null),                      // Certification reference #2
+        new GS1Field("7233", 3, 30, null),                      // Certification reference #3
+        new GS1Field("7234", 3, 30, null),                      // Certification reference #4
+        new GS1Field("7235", 3, 30, null),                      // Certification reference #5
+        new GS1Field("7236", 3, 30, null),                      // Certification reference #6
+        new GS1Field("7237", 3, 30, null),                      // Certification reference #7
+        new GS1Field("7238", 3, 30, null),                      // Certification reference #8
+        new GS1Field("7239", 3, 30, null),                      // Certification reference #9
+        new GS1Field("7240", 20),                               // Protocol ID
+        new FixedLengthGS1Field("7241", 2),                     // AIDC media type
+        new GS1Field("7242", 25),                               // Version Control Number (VCN)
+        new DateTimeGS1Field("7250", BarcodeDateTime.GS1DateLongFormat),         // Date of birth
+        new DateTimeGS1Field("7251", BarcodeDateTime.GS1DateTimeLongFormat),     // Date and time of birth
+        new FixedLengthGS1Field<int?>("7252", 1),               // Biological sex
+        new GS1Field("7253", 40),                               // Family name of person
+        new GS1Field("7254", 40),                               // Given name of person
+        new GS1Field("7255", 10),                               // Name suffix of person
+        new GS1Field("7256", 90),                               // Full name of person
+        new GS1Field("7257", 70),                               // Address of person
+        new FixedLengthGS1Field("7258", 3),                     // Baby birth sequence
+        new GS1Field("7259", 40),                               // Baby of family name
 
         // GS1 Application Identifiers starting with digit 8
         new GS1Field("80"),
         new GS1Field("81"),
         new GS1Field("82"),
- 
+
         // GS1 Application Identifiers starting with digit 9
         new GS1Field("90", 30),                                 // Information mutually agreed between trading partners
         // Company internal information: AIs (91 - 99)
@@ -159,8 +219,14 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
     }
     public override BarcodeDateTime? ExpirationDate
     {
-        get => (BarcodeDateTime?)BarcodeFields["17"].Value;
-        set => BarcodeFields["17"].SetValue(value);
+        get => (BarcodeDateTime?)(BarcodeFields["17"].Value ?? BarcodeFields["7003"].Value);
+        set
+        {
+            if(BarcodeFields["7003"].Value != null)
+                BarcodeFields["7003"].SetValue(value);
+            else
+                BarcodeFields["17"].SetValue(value);
+        }
     }
 
     public override string? BatchNumber
@@ -240,6 +306,7 @@ internal class DateTimeGS1Field(string identifier, string format) : FixedLengthG
 internal class GS1Field : GS1Field<string?>
 {
     public GS1Field(string identifier, int? maxLength = null) : base(identifier, maxLength) { }
+    public GS1Field(string identifier, int minLength, int maxLength) : base(identifier, minLength, maxLength) { }
     public GS1Field(string identifier, int minLength, int maxLength, string? format) : base(identifier, minLength, maxLength, format) { }
 }
 

@@ -141,7 +141,7 @@ public class BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
         gs1Barcode.Fields["20"].SetValue("BL");
         gs1Barcode.Fields["240"].SetValue("40600199T");
         gs1Barcode.Fields["30"].SetValue(1);
-        gs1Barcode.Fields["71"].SetValue("025862471");
+        gs1Barcode.Fields["710"].SetValue("25862471");
         gs1Barcode.Fields["98"].SetValue("15647");
         gs1Barcode.Fields["99"].SetValue("15489");
 

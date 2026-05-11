@@ -18,12 +18,12 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
         
         // GS1 Application Identifiers starting with digit 1
         new GS1Field("10", 20),                                 // Batch or lot number
-        new FixedLengthGS1Field<BarcodeDateTime?>("11", 6),     // Production date
-        new FixedLengthGS1Field<BarcodeDateTime?>("12", 6),     // Due date for amount on payment slip
-        new FixedLengthGS1Field<BarcodeDateTime?>("13", 6),     // Packaging date
-        new FixedLengthGS1Field<BarcodeDateTime?>("15", 6),     // Best before date
-        new FixedLengthGS1Field<BarcodeDateTime?>("16", 6),     // Sell by date
-        new FixedLengthGS1Field<BarcodeDateTime?>("17", 6),     // Expiration date
+        new DateTimeGS1Field("11"),     // Production date
+        new DateTimeGS1Field("12"),     // Due date for amount on payment slip
+        new DateTimeGS1Field("13"),     // Packaging date
+        new DateTimeGS1Field("15"),     // Best before date
+        new DateTimeGS1Field("16"),     // Sell by date
+        new DateTimeGS1Field("17"),     // Expiration date
         
         // GS1 Application Identifiers starting with digit 2
         new FixedLengthGS1Field("20", 2),                       // Internal product variant
@@ -195,8 +195,9 @@ public class GS1Barcode(AimSymbologyIdentifier? symbologyIdentifier) : Barcode(s
 
 internal class GS1Field<T> : BarcodeField<T>
 {
-    public GS1Field(string identifier, int? maxLength = null) : base(BarcodeType.GS1, identifier, 1, maxLength ?? 90) { }
-    public GS1Field(string identifier, int minLength, int maxLength) : base(BarcodeType.GS1, identifier, minLength, maxLength) { }
+    public GS1Field(string identifier, int? maxLength = null) : base(BarcodeType.GS1, identifier, 1, maxLength ?? 90, null) { }
+    public GS1Field(string identifier, int minLength, int maxLength) : base(BarcodeType.GS1, identifier, minLength, maxLength, null) { }
+    public GS1Field(string identifier, int minLength, int maxLength, string? format) : base(BarcodeType.GS1, identifier, minLength, maxLength, format) { }
     public override void Parse(StringReader codeStream)
     {
         if (MinLength <= 0)
@@ -225,8 +226,25 @@ internal class GS1Field<T> : BarcodeField<T>
     }
 }
 
-internal class FixedLengthGS1Field<T>(string identifier, int length) : GS1Field<T>(identifier, length, length) { }
+internal class FixedLengthGS1Field<T> : GS1Field<T>
+{
+    public FixedLengthGS1Field(string identifier, int length) : base(identifier, length, length, null) { }
+    public FixedLengthGS1Field(string identifier, int length, string? format) : base(identifier, length, length, format) { }
+}
 
-internal class GS1Field(string identifier, int? maxLength = null) : GS1Field<string?>(identifier, maxLength) { }
+internal class DateTimeGS1Field(string identifier, string format) : FixedLengthGS1Field<BarcodeDateTime?>(identifier, format.Length, format)
+{
+    internal DateTimeGS1Field(string identifier) : this(identifier, BarcodeDateTime.GS1DateShortFormat) { }
+}
 
-internal class FixedLengthGS1Field(string identifier, int length) : FixedLengthGS1Field<string?>(identifier, length) { }
+internal class GS1Field : GS1Field<string?>
+{
+    public GS1Field(string identifier, int? maxLength = null) : base(identifier, maxLength) { }
+    public GS1Field(string identifier, int minLength, int maxLength, string? format) : base(identifier, minLength, maxLength, format) { }
+}
+
+internal class FixedLengthGS1Field : FixedLengthGS1Field<string?>
+{
+    public FixedLengthGS1Field(string identifier, int length) : base(identifier, length, null) { }
+    public FixedLengthGS1Field(string identifier, int length, string? format) : base(identifier, length, format) { }
+}

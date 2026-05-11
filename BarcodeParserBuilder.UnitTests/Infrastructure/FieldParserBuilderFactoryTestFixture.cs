@@ -15,26 +15,28 @@ namespace BarcodeParserBuilder.UnitTests.Infrastructure;
 public class FieldParserBuilderFactoryTestFixture
 {
     [Theory]
-    [InlineData(BarcodeType.GS1, typeof(string), typeof(GS1StringParserBuilder))] //GS1 stringParserBuilder
-    [InlineData(BarcodeType.GS1, typeof(ProductCode), typeof(GS1ProductCodeParserBuilder))] //GS1 ProductCodeParserBuilder
-    [InlineData(BarcodeType.GS1, typeof(BarcodeDateTime), typeof(GS1DateParserBuilder))] //GS1 BarcodeDateTimeParserBuilder
-    [InlineData(BarcodeType.GS1, typeof(double?), typeof(GS1DoubleParserBuilder))] //GS1 GS1NullableDoubleParserBuilder
-    [InlineData(BarcodeType.EAN, typeof(ProductCode), typeof(EanProductCodeParserBuilder))] //EAN ProductCodeParserBuilder
-    [InlineData(BarcodeType.PPN, typeof(string), typeof(PpnStringParserBuilder))] //PPN stringParserBuilder
-    [InlineData(BarcodeType.PPN, typeof(ProductCode), typeof(PpnProductCodeParserBuilder))] //PPN ProductCodeParserBuilder
-    [InlineData(BarcodeType.PPN, typeof(BarcodeDateTime), typeof(PpnDateParserBuilder))] //PPN BarcodeDateTimeParserBuilder
-    [InlineData(BarcodeType.MSI, typeof(ProductCode), typeof(MsiProductCodeParserBuilder))] //MSI ProductCodeParserBuilder
-    [InlineData(BarcodeType.HIBC, typeof(ProductCode), typeof(HibcProductCodeParserBuilder))] //HIBC ProductCodeParserBuilder
-    [InlineData(BarcodeType.HIBC, typeof(BarcodeDateTime), typeof(HibcDateParserBuilder))] //HIBC HibcDateParserBuilder
-    [InlineData(BarcodeType.HIBC, typeof(string), typeof(HibcStringParserBuilder))] //HIBC HibcStringParserBuilder
-    [InlineData(BarcodeType.HIBC, typeof(int?), typeof(HibcIntegerParserBuilder))] //HIBC HibcIntegerParserBuilder
-    public void FactoryGeneratesCorrectFieldParserBuilderObject(BarcodeType barcodeType, Type objectType, Type expectedParserBuilderType)
+    [InlineData(BarcodeType.GS1, typeof(string), typeof(GS1StringParserBuilder), null)] //GS1 stringParserBuilder
+    [InlineData(BarcodeType.GS1, typeof(ProductCode), typeof(GS1ProductCodeParserBuilder), null)] //GS1 ProductCodeParserBuilder
+    [InlineData(BarcodeType.GS1, typeof(BarcodeDateTime), typeof(GS1DateParserBuilder), null)] //GS1 BarcodeDateTimeParserBuilder
+    [InlineData(BarcodeType.GS1, typeof(BarcodeDateTime), typeof(GS1DateParserBuilder), "yyyyMMdd")] //GS1 BarcodeDateTimeParserBuilder
+    [InlineData(BarcodeType.GS1, typeof(double?), typeof(GS1DoubleParserBuilder), null)] //GS1 GS1NullableDoubleParserBuilder
+    [InlineData(BarcodeType.EAN, typeof(ProductCode), typeof(EanProductCodeParserBuilder), null)] //EAN ProductCodeParserBuilder
+    [InlineData(BarcodeType.PPN, typeof(string), typeof(PpnStringParserBuilder), null)] //PPN stringParserBuilder
+    [InlineData(BarcodeType.PPN, typeof(ProductCode), typeof(PpnProductCodeParserBuilder), null)] //PPN ProductCodeParserBuilder
+    [InlineData(BarcodeType.PPN, typeof(BarcodeDateTime), typeof(PpnDateParserBuilder), null)] //PPN BarcodeDateTimeParserBuilder
+    [InlineData(BarcodeType.MSI, typeof(ProductCode), typeof(MsiProductCodeParserBuilder), null)] //MSI ProductCodeParserBuilder
+    [InlineData(BarcodeType.HIBC, typeof(ProductCode), typeof(HibcProductCodeParserBuilder), null)] //HIBC ProductCodeParserBuilder
+    [InlineData(BarcodeType.HIBC, typeof(BarcodeDateTime), typeof(HibcDateParserBuilder), null)] //HIBC HibcDateParserBuilder
+    [InlineData(BarcodeType.HIBC, typeof(string), typeof(HibcStringParserBuilder), null)] //HIBC HibcStringParserBuilder
+    [InlineData(BarcodeType.HIBC, typeof(int?), typeof(HibcIntegerParserBuilder), null)] //HIBC HibcIntegerParserBuilder
+    public void FactoryGeneratesCorrectFieldParserBuilderObject(BarcodeType barcodeType, Type objectType, Type expectedParserBuilderType, string? format)
     {
         //Arrange & Act
-        var result = FieldParserBuilderFactory.CreateFieldParserBuilder(barcodeType, objectType);
+        var result = FieldParserBuilderFactory.CreateFieldParserBuilder(barcodeType, objectType, format);
 
         //Assert
-        result.GetType().Should().Be(expectedParserBuilderType);
+        result.Should().BeOfType(expectedParserBuilderType);
+        result.FieldFormat.Should().Be(format);
     }
 
     [Fact]

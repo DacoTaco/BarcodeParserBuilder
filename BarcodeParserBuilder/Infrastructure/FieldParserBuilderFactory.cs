@@ -7,7 +7,7 @@ internal static class FieldParserBuilderFactory
     //array cache, this way the factory doesn't loop over the assembly every time, which is slow
     private static Type[]? _assemblyTypes { get; set; } = null;
 
-    public static IFieldParserBuilder CreateFieldParserBuilder(BarcodeType barcodeType, Type objectType)
+    public static IFieldParserBuilder CreateFieldParserBuilder(BarcodeType barcodeType, Type objectType, string? fieldFormat)
     {
         _assemblyTypes ??= Assembly
             .GetAssembly(typeof(IFieldParserBuilder))?
@@ -44,6 +44,8 @@ internal static class FieldParserBuilderFactory
         if (fieldParserBuilder is not IFieldParserBuilder parserBuilder)
             throw new ArgumentException($"Failed to create field parser builder of type {parserBuilderType}");
 
-        return (IFieldParserBuilder)fieldParserBuilder;
+        //pass the field format to the parser builder if its passed to the factory. some fields have a certain format that the field should adhere to.
+        parserBuilderType.GetProperty(nameof(IFieldParserBuilder.FieldFormat))!.SetValue(parserBuilder, fieldFormat);
+        return parserBuilder;
     }
 }

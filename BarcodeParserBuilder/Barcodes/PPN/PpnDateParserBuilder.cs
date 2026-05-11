@@ -32,7 +32,7 @@ internal class PpnDateParserBuilder : BaseFieldParserBuilder<BarcodeDateTime?>
             return true;
 
         if ((obj.StringValue.Length == 8 && obj.FormatString != BarcodeDateTime.PPNFormat) ||
-            (obj.StringValue.Length == 6 && obj.FormatString != BarcodeDateTime.GS1Format) ||
+            (obj.StringValue.Length == 6 && obj.FormatString != BarcodeDateTime.GS1DateShortFormat) ||
             !Validate(obj.StringValue))
             throw new PPNValidateException($"Invalid Barcode Value '{obj.StringValue}'.");
 

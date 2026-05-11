@@ -4,18 +4,18 @@ namespace BarcodeParserBuilder.Infrastructure;
 
 internal class BarcodeField<T> : IBarcodeField
 {
-    public BarcodeField(BarcodeType barcodeType, string identifier, int length) : this(barcodeType, identifier, length, length) { }
-    public BarcodeField(BarcodeType barcodeType, string identifier, int minLength, int? maxLength)
+    public BarcodeField(BarcodeType barcodeType, string identifier, int length) : this(barcodeType, identifier, length, length, null) { }
+    public BarcodeField(BarcodeType barcodeType, string identifier, int length, string? fieldFormat) : this(barcodeType, identifier, length, length, fieldFormat) { }
+    public BarcodeField(BarcodeType barcodeType, string identifier, int minLength, int? maxLength) : this(barcodeType, identifier, minLength, maxLength, null) { }
+    public BarcodeField(BarcodeType barcodeType, string identifier, int minLength, int? maxLength, string? fieldFormat)
     {
-        if (minLength < 0 ||
-            (maxLength.HasValue && maxLength.Value < 0) ||
-            (maxLength.HasValue && maxLength.Value < MinLength))
+        if (minLength < 0 || ((maxLength ?? 0) < 0) || ((maxLength ?? MinLength) < MinLength))
             throw new ArgumentException($"Invalid field size '({MinLength}{(MaxLength.HasValue ? $"-{MaxLength.Value}" : null)})' for '{identifier}'.");
 
         Identifier = identifier;
         MinLength = minLength;
         MaxLength = maxLength;
-        FieldParserBuilder = FieldParserBuilderFactory.CreateFieldParserBuilder(barcodeType, typeof(T));
+        FieldParserBuilder = FieldParserBuilderFactory.CreateFieldParserBuilder(barcodeType, typeof(T), fieldFormat);
     }
 
     public string Identifier { get; }
@@ -23,7 +23,7 @@ internal class BarcodeField<T> : IBarcodeField
     public int? MaxLength { get; }
     public bool FixedLength => MinLength == (MaxLength ?? -1);
     public object? Value { get; private set; }
-    private IFieldParserBuilder FieldParserBuilder { get; set; }
+    private IFieldParserBuilder FieldParserBuilder { get; }
 
     private bool ValidateLength(string? value)
     {

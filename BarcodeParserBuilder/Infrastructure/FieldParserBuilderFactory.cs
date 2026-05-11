@@ -27,16 +27,22 @@ internal static class FieldParserBuilderFactory
             ? typeof(Nullable<>).MakeGenericType(objectType)
             : objectType;*/
 
-        var parserBuilderType = (_assemblyTypes?.SingleOrDefault(t => t != null && t.IsClass &&
+        var parserBuilderType = (_assemblyTypes?.SingleOrDefault(t => t?.IsClass is true &&
                         !t.IsAbstract &&
                         t.Namespace == nameSpace &&
                         t.GetInterfaces().Contains(typeof(IFieldParserBuilder)) &&
-                        (t.BaseType?.GenericTypeArguments?.Contains(objectType) ?? false)))
-                        ?? throw new ArgumentException($"Failed to find FieldParserBuilder for barcode type {barcodeType} and variable type {objectType.Name}.");
+                        (t.BaseType?.GenericTypeArguments?.Contains(objectType) ?? false)));
+
+        if(parserBuilderType is null)
+        {
+            var nullableResultedType = Nullable.GetUnderlyingType(objectType);
+            var resultedTypeName = nullableResultedType?.Name ?? objectType.Name;
+            throw new ArgumentException($"Failed to find FieldParserBuilder for barcode type {barcodeType} and variable type {resultedTypeName}.");
+        }
 
         var fieldParserBuilder = Activator.CreateInstance(parserBuilderType);
-        if (fieldParserBuilder as IFieldParserBuilder == null)
-            throw new ArgumentException($"Failed to create field parser builder od type {parserBuilderType}");
+        if (fieldParserBuilder is not IFieldParserBuilder parserBuilder)
+            throw new ArgumentException($"Failed to create field parser builder of type {parserBuilderType}");
 
         return (IFieldParserBuilder)fieldParserBuilder;
     }

@@ -9,10 +9,12 @@ public class BarcodeDateTimeTestFixture
 {
     [Theory]
     [MemberData(nameof(ValidGS1DateStrings))]
-    public void CanParseGs1Dates(string value, DateTime expectedDateTime)
+    public void CanParseGs1Dates(string value, DateTime expectedDateTime, string? format = null)
     {
         //Arrange & Act
-        var result = BarcodeDateTime.Gs1Date(value);
+        var result = format == null
+            ? BarcodeDateTime.Gs1Date(value)
+            : BarcodeDateTime.Gs1Date(value, format);
 
         //Assert
         result.Should().NotBeNull();
@@ -20,36 +22,76 @@ public class BarcodeDateTimeTestFixture
         result.StringValue.Should().Be(value);
     }
 
-    public static TheoryData<string, DateTime> ValidGS1DateStrings() => new()
+    public static TheoryData<string, DateTime, string?> ValidGS1DateStrings() => new()
     {
         //GS1 - 00 day string
         {
             "991200",
-            new DateTime(2099, 12, 31)
+            new DateTime(2099, 12, 31),
+            null
         },
 
         //GS1 - Regular Date
         {
             "991231",
-            new DateTime(2099, 12, 31)
+            new DateTime(2099, 12, 31),
+            null
         },
 
         //GS1 - Regular Date(February)
         {
             "990200",
-            new DateTime(2099, 02, 28)
+            new DateTime(2099, 02, 28),
+            null
         },
 
         //GS1 - Leap-Year
         {
             "200229",
-            new DateTime(2020, 02, 29)
+            new DateTime(2020, 02, 29),
+            null
         },
 
         //GS1 - Leap-Year 00 days
         {
             "200200",
-            new DateTime(2020, 02, 29)
+            new DateTime(2020, 02, 29),
+            null
+        },
+
+        //GS1 - Long date format
+        {
+            "19200229",
+            new DateTime(1920, 02, 29),
+            null
+        },
+
+        //GS1 - Short DateTime format
+        {
+            "0102191840",
+            new DateTime(2001, 02, 19, 18, 40, 0),
+            null
+        },
+
+        //GS1 - Long DateTime format
+        {
+            "199902191840",
+            new DateTime(1999, 02, 19, 18, 40, 0),
+            null
+        },
+
+        //GS1 - Optional time format (date only, 6 chars)
+        {
+            "250110",
+            new DateTime(2025, 01, 10),
+            "yyMMdd/HHmm"
+        },
+
+        //GS1 - Optional time format (date + time, 10 chars)
+        {
+            "2506151430",
+            new DateTime(2025, 06, 15, 14, 30, 0),
+            "yyMMdd/HHmm"
         },
     };
 
@@ -66,15 +108,16 @@ public class BarcodeDateTimeTestFixture
     }
 
     [Theory]
-    [InlineData("0991212", "Invalid datetime value '0991212' for format 'yyMMdd'.")] //GS1 - Too long
-    [InlineData("99121", "Invalid datetime value '99121' for format 'yyMMdd'.")] //GS1 - Too short
-    [InlineData("111#3", "Invalid datetime value '111#3' for format 'yyMMdd'.")] //GS1 - Invalid Character
-    [InlineData("NONBER", "Invalid datetime value 'NONBER' for format 'yyMMdd'.")] //GS1 - No Digits
-    [InlineData("\0", "Invalid datetime value '\0' for format 'yyMMdd'.")] //GS1 - null character
-    public void CanDetectInvalidGs1Dates(string value, string expectedMessage)
+    [InlineData("0991212", null, "Invalid datetime value '0991212' for GS1 date formats.")] //GS1 - Too long
+    [InlineData("99121", null, "Invalid datetime value '99121' for GS1 date formats.")] //GS1 - Too short
+    [InlineData("111#3", null, "Invalid datetime value '111#3' for GS1 date formats.")] //GS1 - Invalid Character
+    [InlineData("NONBER", null, "Invalid datetime value 'NONBER' for format 'yyMMdd'.")] //GS1 - No Digits
+    [InlineData("\0", null, "Invalid datetime value '\0' for GS1 date formats.")] //GS1 - null character
+    [InlineData("20200202", "yyyyJJdd", "Invalid datetime format 'yyyyJJdd' for GS1 date(/time).")] //GS1 - Invalid Format
+    public void CanDetectInvalidGs1Dates(string value, string? format, string expectedMessage )
     {
         //Arrange & Act
-        Action parseDate = () => BarcodeDateTime.Gs1Date(value);
+        Action parseDate = () => BarcodeDateTime.Gs1Date(value, format!);
 
         //Assert
         parseDate.Should()

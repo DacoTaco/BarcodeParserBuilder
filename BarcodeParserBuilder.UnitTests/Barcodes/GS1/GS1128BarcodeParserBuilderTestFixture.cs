@@ -77,7 +77,7 @@ public class GS1128BarcodeParserBuilderTestFixture : BaseBarcodeTestFixture
         };
         gs1128Barcode.Fields["240"].SetValue("40600199T");
         gs1128Barcode.Fields["30"].SetValue(1);
-        gs1128Barcode.Fields["71"].SetValue("025862471");
+        gs1128Barcode.Fields["710"].SetValue("25862471");
 
         return new TheoryData<string, GS1128Barcode>()
         {

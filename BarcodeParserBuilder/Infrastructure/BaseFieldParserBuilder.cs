@@ -4,6 +4,7 @@ namespace BarcodeParserBuilder.Infrastructure;
 
 internal abstract class BaseFieldParserBuilder<T> : IFieldParserBuilder
 {
+    public string? FieldFormat { get; init; }
     public object? Parse(object? obj, int? minimumLength, int? maximumLength) => ValidateAndReTypeObject(obj, minimumLength, maximumLength);
     public object? Parse(string? value, int? minimumLength, int? maximumLength) => ValidateAndParseString(value, minimumLength, maximumLength);
     public string? Build(object? obj) => ValidateAndBuildString(obj);
@@ -37,9 +38,11 @@ internal abstract class BaseFieldParserBuilder<T> : IFieldParserBuilder
 
         var objType = obj.GetType();
         var resultedType = typeof(T);
+        var nullableResultedType = Nullable.GetUnderlyingType(resultedType);
+        var resultedTypeName = nullableResultedType?.Name ?? resultedType.Name;
 
         if (!resultedType.IsAssignableFrom(objType) || (T)obj == null)
-            throw new ValidateException($"Failed to validate object : received {objType.Name} but expected {resultedType.Name}");
+            throw new ValidateException($"Failed to validate object : received {objType.Name} but expected {$"{resultedTypeName}{(nullableResultedType != null ? "?" : "")}"}");
 
         if (!ValidateObject((T)obj) ||
             ((minimumLength.HasValue || maximumLength.HasValue) && !ValidateObjectLength((T)obj, null, null)))

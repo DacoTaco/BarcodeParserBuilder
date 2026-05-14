@@ -9,7 +9,7 @@ public class MsiBarcode(AimSymbologyIdentifier? identifier) : Barcode(identifier
     public override BarcodeType BarcodeType => BarcodeType.MSI;
     protected override FieldCollection BarcodeFields { get; } =
     [
-        new BarcodeField<ProductCode>(BarcodeType.MSI, nameof(ProductCode), 3, null),
+        new BarcodeField<ProductCode>(BarcodeType.MSI, nameof(ProductCode), 3, (int?)null),
         new BarcodeField<AimSymbologyIdentifier?>(BarcodeType.MSI, nameof(ReaderInformation), 3),
     ];
 
